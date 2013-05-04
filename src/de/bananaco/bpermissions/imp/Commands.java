@@ -151,7 +151,7 @@ public class Commands {
 	}
 
 	public void clearMeta(String value, CommandSender sender) {
-		getCalculable().getMeta().remove(value);
+		getCalculable().removeKey(value);
 		sender.sendMessage(format("Meta for "+calc.getName()+" "+getCalculable().getName()+" - cleared"));
 	}
 
