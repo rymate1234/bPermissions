@@ -1,6 +1,3 @@
-bPermissions
-============
-
 bPermissions 2.x - now under new management
 ===========================================
 ![bPermissions header thing](http://dev.bukkit.org/media/images/35/193/simple.png "It looked boring with just text")
