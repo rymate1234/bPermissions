@@ -260,7 +260,7 @@ public class YamlWorld extends World {
             user.setSorting(wm.getAutoSort());
 			String name = user.getName();
 			uconfig.set(USERS + "." + name + "." + PERMISSIONS, user.serialisePermissions(wm.getAutoSort()));
-			uconfig.set(USERS + "." + name + "." + GROUPS, user.serialiseGroups());
+			uconfig.set(USERS + "." + name + "." + GROUPS, user.serialiseGroups(wm.getAutoSort()));
 			// MetaData
 			Map<String, String> meta = user.getMeta();
 			if(meta.size() > 0) {
@@ -282,7 +282,7 @@ public class YamlWorld extends World {
             group.setSorting(wm.getAutoSort());
             String name = group.getName();
 			gconfig.set(GROUPS + "." + name + "." + PERMISSIONS, group.serialisePermissions(wm.getAutoSort()));
-			gconfig.set(GROUPS + "." + name + "." + GROUPS, group.serialiseGroups());
+			gconfig.set(GROUPS + "." + name + "." + GROUPS, group.serialiseGroups(wm.getAutoSort()));
 			// MetaData
 			Map<String, String> meta = group.getMeta();
 			if(meta.size() > 0) {

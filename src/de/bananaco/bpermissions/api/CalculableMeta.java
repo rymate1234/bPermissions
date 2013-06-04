@@ -27,7 +27,7 @@ public class CalculableMeta extends GroupCarrier {
 		
 		Map<String, Integer> pr = new HashMap<String, Integer>();
 		
-		for (String gr : serialiseGroups()) {
+		for (String gr : serialiseGroups(false)) {
 			Group group = WorldManager.getInstance().getWorld(getWorld()).getGroup(gr);
 			// Calculate down the tree of the child group
 			group.calculateEffectiveMeta();
