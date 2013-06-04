@@ -58,7 +58,7 @@ public abstract class Calculable extends CalculableMeta {
 		try {
 			Map<String, Integer> priorities = new HashMap<String, Integer>();
 			effectivePermissions.clear();
-			for (String gr : serialiseGroups()) {
+			for (String gr : serialiseGroups(false)) {
 				Group group = getWorldObject().getGroup(gr);
 				group.calculateEffectivePermissions();
 				for(Permission perm : group.getEffectivePermissions()) {

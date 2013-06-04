@@ -100,12 +100,14 @@ public abstract class GroupCarrier extends PermissionCarrier {
 	 * 
 	 * @return
 	 */
-	public List<String> serialiseGroups() {
+	public List<String> serialiseGroups(boolean sort) {
 		List<String> groups = new ArrayList<String>();
 		// Yes, we're lowercasing everything
 		List<Group> gr = new ArrayList<Group>(getGroups());
 		// also sort it
-		sortGroups(gr);
+        if (sort) {
+		    sortGroups(gr);
+        }
 		for(int i=0; i<gr.size(); i++) {
 			groups.add(gr.get(i).getNameLowerCase());
 		}

@@ -100,7 +100,7 @@ public class ApiLayer {
 		if(w == null || type == null || name == null)
 			return new String[0];
 		Calculable c = w.get(name, type);
-		List<String> g = c.serialiseGroups();
+		List<String> g = c.serialiseGroups(false);
 		String[] groups = g.toArray(new String[g.size()]);
 		return groups;
 	}
