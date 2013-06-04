@@ -22,6 +22,8 @@ public class Config {
 	private boolean offlineMode = false;
 	
 	private boolean trackLimit = false;
+
+    private boolean autoSort = false;
 		
 	public void load() {
 		try {
@@ -47,12 +49,15 @@ public class Config {
 		config.set("allow-offline-mode", config.get("allow-offline-mode", offlineMode));
 		config.set("use-global-files", config.get("use-global-files", useGlobalFiles));
 		config.set("track-limit", config.get("track-limit", trackLimit));
+        config.set("auto-sort", config.get("auto-sort", autoSort));
 		// then load it into memory
 		useGlobalFiles = config.getBoolean("use-global-files");
 		autoSave = config.getBoolean("auto-save");
 		trackType = config.getString("track-type");
 		offlineMode = config.getBoolean("allow-offline-mode");
 		trackLimit = config.getBoolean("track-limit");
+        autoSort = config.getBoolean("auto-sort");
+
 		// then load our PromotionTrack
 		if(trackType.equalsIgnoreCase("multi")) {
 			track = new MultiGroupPromotion();
@@ -85,5 +90,9 @@ public class Config {
 	public boolean getAllowOfflineMode() {
 		return offlineMode;
 	}
+
+    public boolean getAutoSorting() {
+        return autoSort;
+    }
 
 }

@@ -30,6 +30,8 @@ public class WorldManager {
 	Map<String, World> worlds = new HashMap<String, World>();
 	
 	private boolean autoSave = false;
+
+    private boolean autoSort = false;
 	
 	private boolean useGlobalFiles = false;
 	
@@ -57,8 +59,16 @@ public class WorldManager {
 	public boolean getAutoSave() {
 		return autoSave;
 	}
-	
-	public void setUseGlobalFiles(boolean useGlobalFiles) {
+
+    public void setAutoSort(boolean autoSave) {
+        this.autoSave = autoSave;
+    }
+
+    public boolean getAutoSort() {
+        return autoSave;
+    }
+
+    public void setUseGlobalFiles(boolean useGlobalFiles) {
 		this.useGlobalFiles = useGlobalFiles;
 	}
 	

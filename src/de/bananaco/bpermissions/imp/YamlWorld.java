@@ -257,8 +257,9 @@ public class YamlWorld extends World {
 			MetaData.sort(users);
 
 		for (Calculable user : users) {
+            user.setSorting(wm.getAutoSort());
 			String name = user.getName();
-			uconfig.set(USERS + "." + name + "." + PERMISSIONS, user.serialisePermissions());
+			uconfig.set(USERS + "." + name + "." + PERMISSIONS, user.serialisePermissions(wm.getAutoSort()));
 			uconfig.set(USERS + "." + name + "." + GROUPS, user.serialiseGroups());
 			// MetaData
 			Map<String, String> meta = user.getMeta();
@@ -278,8 +279,9 @@ public class YamlWorld extends World {
 			MetaData.sort(groups);
 
 		for (Calculable group : groups) {
-			String name = group.getName();
-			gconfig.set(GROUPS + "." + name + "." + PERMISSIONS, group.serialisePermissions());
+            group.setSorting(wm.getAutoSort());
+            String name = group.getName();
+			gconfig.set(GROUPS + "." + name + "." + PERMISSIONS, group.serialisePermissions(wm.getAutoSort()));
 			gconfig.set(GROUPS + "." + name + "." + GROUPS, group.serialiseGroups());
 			// MetaData
 			Map<String, String> meta = group.getMeta();

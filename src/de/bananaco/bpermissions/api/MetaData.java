@@ -154,7 +154,7 @@ public abstract class MetaData {
 	 * Used to enable/disable sorting globally
 	 * @param sorting
 	 */
-	public static void setSorting(boolean sorting) {
+	public void setSorting(boolean sorting) {
 		sort = sorting;
 	}
 	

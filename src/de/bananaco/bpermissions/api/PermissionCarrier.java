@@ -78,10 +78,11 @@ public abstract class PermissionCarrier extends WorldCarrier {
 	 * 
 	 * @return
 	 */
-	public List<String> serialisePermissions() {
+	public List<String> serialisePermissions(boolean sort) {
 		List<String> permissions = new ArrayList<String>(getPermissionsAsString());
 		// Using our new static awesomeness
-		sort(permissions);
+        if (sort)
+		    sort(permissions);
 		return permissions;
 	}
 	
