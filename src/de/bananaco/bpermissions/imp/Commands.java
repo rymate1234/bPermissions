@@ -91,7 +91,7 @@ public class Commands {
 	}
 
 	public void listGroups(CommandSender sender) {
-		List<String> groups = getCalculable().serialiseGroups();
+		List<String> groups = getCalculable().serialiseGroups(instance.getAutoSort());
 		String[] gr = groups.toArray(new String[groups.size()]);
 		String mgr = Arrays.toString(gr);
 		sender.sendMessage(format("The "+getCalculable().getType().getName()+" "+getCalculable().getName()+" has these groups:"));
@@ -110,7 +110,7 @@ public class Commands {
 	}
 
 	public void listPermissions(CommandSender sender) {
-		List<String> permissions = getCalculable().serialisePermissions();
+		List<String> permissions = getCalculable().serialisePermissions(instance.getAutoSort());
 		String[] pr = permissions.toArray(new String[permissions.size()]);
 		String mpr = Arrays.toString(pr);
 		sender.sendMessage(format("The "+getCalculable().getType().getName()+" "+getCalculable().getName()+" has these permissions:"));
