@@ -7,10 +7,13 @@ import java.util.Set;
 import de.bananaco.bpermissions.api.Calculable;
 import de.bananaco.bpermissions.api.CalculableType;
 import de.bananaco.bpermissions.api.World;
+import de.bananaco.bpermissions.api.WorldManager;
 
 public class Debugger {
 	
 	private static Debugger instance = new Debugger();
+        private static WorldManager wmInstance = WorldManager.getInstance();
+
 	private boolean debug = false;
 	
 	public static boolean setDebug(boolean debug) {
@@ -40,9 +43,9 @@ public class Debugger {
 		log("** PRINTING GROUP DEBUGGING INFO **");
 
 		for(Calculable group : groups) {
-			List<String> gs = group.serialiseGroups();
+			List<String> gs = group.serialiseGroups(wmInstance.getAutoSort());
 			String[] ga = gs.toArray(new String[gs.size()]);
-			List<String> ps = group.serialisePermissions();
+			List<String> ps = group.serialisePermissions(wmInstance.getAutoSort());
 			String[] pa = ps.toArray(new String[ps.size()]);
 			// Define the variables
 			String name = group.getName();
@@ -59,9 +62,9 @@ public class Debugger {
 		log("** PRINTING USER DEBUGGING INFO **");
 		
 		for(Calculable user : users) {
-			List<String> gs = user.serialiseGroups();
+			List<String> gs = user.serialiseGroups(wmInstance.getAutoSort());
 			String[] ga = gs.toArray(new String[gs.size()]);
-			List<String> ps = user.serialisePermissions();
+			List<String> ps = user.serialisePermissions(wmInstance.getAutoSort());
 			String[] pa = ps.toArray(new String[ps.size()]);
 			// Define the variables
 			String name = user.getName();

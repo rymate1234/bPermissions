@@ -354,12 +354,27 @@ public class Permissions extends JavaPlugin {
 				} else {
 					cmd.setValue(args[1], args[2], sender);
 				}
+			} else if(args.length > 3 && args[0].equalsIgnoreCase("meta")) {
+				if(calc == null) {
+					sendMessage(sender, "Nothing is selected!");
+				} else if (calc.getType() != type) {
+					sendMessage(sender, "Please select a "+type.getName()+", you currently have a "+opposite.getName()+" selected.");
+				} else {
+                                        StringBuilder prefixMaker = new StringBuilder();
+                                        for (int i = 2; i < args.length; i++) {
+                                            prefixMaker.append(args[i]);
+                                            prefixMaker.append(" ");
+                                        }
+                                        String prefix = prefixMaker.toString();
+					cmd.setValue(args[1], prefix, sender);
+				}
 			}
 			else {
 				sendMessage(sender, "Too many arguments.");
 			}
 			return true;
 		}
+                
 		if(command.getName().equalsIgnoreCase("exec")) {
 			String name = "null";
 			CalculableType type = CalculableType.USER;
@@ -499,7 +514,7 @@ public class Permissions extends JavaPlugin {
 	public void showPromoteOutput(CommandSender sender, String player) {
 		sender.sendMessage("The player: "+ChatColor.GREEN+player+ChatColor.WHITE+" now has these groups");
 		for(World world : WorldManager.getInstance().getAllWorlds()) {
-			List<String> groups = world.getUser(player).serialiseGroups();
+			List<String> groups = world.getUser(player).serialiseGroups(config.getAutoSorting());
 			String[] g = groups.toArray(new String[groups.size()]);
 			String gr = Arrays.toString(g);
 			sender.sendMessage("In world: "+world.getName()+" "+gr);
