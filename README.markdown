@@ -1,6 +1,7 @@
 bPermissions 2.x - now under new management
 ===========================================
 ![bPermissions header thing](http://dev.bukkit.org/media/images/35/193/simple.png "It looked boring with just text")
+
 Welcome to bPermissions, a Superperms Manager for Bukkit! bPermissions focuses on being unique from the rest of the Permission managers. It's very simple to set up and use, it's lightning fast, fully featured, and has a great support team!
 
 Since codename_B is now focusing on the new 3.x branch of bPermissions, he has handed over control over 2.x to me (rymate1234).

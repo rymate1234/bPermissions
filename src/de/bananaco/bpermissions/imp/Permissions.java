@@ -363,7 +363,8 @@ public class Permissions extends JavaPlugin {
                                         StringBuilder prefixMaker = new StringBuilder();
                                         for (int i = 2; i < args.length; i++) {
                                             prefixMaker.append(args[i]);
-                                            prefixMaker.append(" ");
+                                            if (i != args.length - 1)
+                                                prefixMaker.append(" ");
                                         }
                                         String prefix = prefixMaker.toString();
 					cmd.setValue(args[1], prefix, sender);
