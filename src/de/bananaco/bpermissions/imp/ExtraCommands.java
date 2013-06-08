@@ -37,7 +37,13 @@ public class ExtraCommands {
 				c.addPermission(perm.nameLowerCase(), perm.isTrue());
 			} else if(action.equalsIgnoreCase("rmperm")) {
 				c.removePermission(value);
-			}
+			} else if (action.equalsIgnoreCase("setprefix")) {
+                                c.setValue("prefix", value);
+                        } else if (action.equalsIgnoreCase("setsuffix")) {
+                                c.setValue("suffix", value);
+                        } else if (action.equalsIgnoreCase("setpriority")) {
+                                c.setValue("priority", value);
+                        }
 		}
 	}
 
