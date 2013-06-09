@@ -58,6 +58,59 @@ Promotion tracks
 
 3. Want someone to be able to use all tracks? Give them tracks.* --  it lets someone with that node promote anyone along any track name
 
+bPermissions and EssentialsChat
+---------------------------
+Allow me to put this issue to bed. Essentials Chat + bPermissions works for prefix and color.
+
+This guide is for current users of EssentialsChat and want to use bPermissions along with it.
+
+Players have colored rank prefixes and faction chat modes are also colored. All text can be colored by the players too using color codes such as &c.
+
+bPermissions\world\groups.yml (* code snippet *)
+
+	default: default
+	groups:
+	## Peasant ##
+	  default:
+		permissions:
+		- group.default
+		- group.userannouncer
+		- group.userauction
+		groups:
+		- userannouncer
+		- userauction
+		meta:
+		  priority: '100'
+	## Citizen ##
+	  rank1:
+		permissions:
+		- group.default
+		- group.rank1
+		groups:
+		- default
+		meta:
+		  priority: '200'
+It has nothing configured for prefix but the group names are important (default, rank1)
+
+Essentials\config.yml (* Code Snippet *)
+
+	change-displayname: true
+	#add-prefix-suffix: false
+	player-commands:
+	  - chat.color
+	  - chat.format
+	  - chat.shout
+	  - chat.question
+	chat:
+	  radius: 0
+	  group-formats:
+		default: '&8&lPeasant &r&8{DISPLAYNAME}&7:&r {MESSAGE}'
+		rank1: '&8&lCitizen &r&7{DISPLAYNAME}&7:&r {MESSAGE}'
+		moderator: '&e&l[Mod] &r&3{DISPLAYNAME}&7:&r {MESSAGE}'
+		admin: '&c&l[Admin] &r&e{DISPLAYNAME}&7:&r {MESSAGE}'
+		
+Please direct all other Essentials support to their official support networks.
+
 How do I get support?
 ---------------------
 First, we __highly recommend__ you go read the [FAQ page](http://dev.bukkit.org/server-mods/bpermissions/pages/bpermissions-faq/). If the answer isn't there, there's a few options of support.
