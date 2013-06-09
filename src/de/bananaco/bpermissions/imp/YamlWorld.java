@@ -202,6 +202,9 @@ public class YamlWorld extends World {
             }
         }
         wm.setAutoSave(autoSave);
+        if (wm.getAutoSave()) {
+            save();
+        }
     }
 
     public boolean save() {
