@@ -288,7 +288,7 @@ public class YamlWorld extends World {
 
         for (Calculable group : groups) {     
             group.setSorting(sorting);
-            String name = group.getName();
+            String name = group.getName().toLowerCase();
             gconfig.set(GROUPS + "." + name + "." + PERMISSIONS, group.serialisePermissions(sorting));
             gconfig.set(GROUPS + "." + name + "." + GROUPS, group.serialiseGroups(sorting));
             // MetaData
