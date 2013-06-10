@@ -25,6 +25,7 @@ import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.imp.loadmanager.MainThread;
+import org.bukkit.ChatColor;
 /**
  * Handles all the superperms registering/unregistering
  * for PermissionAttachments (it's basically just somewhere
@@ -97,6 +98,12 @@ public class SuperPermissionHandler implements Listener {
 		// WHAT IS THIS I DONT EVEN
 		long finish = System.currentTimeMillis()-time;
 		Debugger.log("Setup superperms for "+player.getName()+". took "+finish+"ms.");
+                
+                //Support for the '*' node
+                if (player.hasPermission("*") && !player.isOp()) {
+                    player.sendMessage(ChatColor.BLUE + "[bPermissions] " + ChatColor.RED + 
+                            "Tell the owner that the \"*\" doesn't work with bPermissions!");
+                }
 	}
 	
 	@EventHandler
