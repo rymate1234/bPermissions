@@ -33,8 +33,8 @@ public class YamlWorld extends World {
     protected static final String PERMISSIONS = "permissions";
     protected static final String META = "meta";
     protected static final String USERS = "users";
-    protected YamlConfiguration uconfig = new YamlConfiguration();
-    protected YamlConfiguration gconfig = new YamlConfiguration();
+    protected YamlConfiguration uconfig;// = new YamlConfiguration();
+    protected YamlConfiguration gconfig;// = new YamlConfiguration();
     private final File ufile;
     private final File gfile;
     protected final Permissions permissions;
@@ -245,21 +245,22 @@ public class YamlWorld extends World {
             ufile.createNewFile();
             gfile.createNewFile();
         }
-        
-        uconfig = new YamlConfiguration();
-        gconfig = new YamlConfiguration();
+        boolean sorting = wm.getAutoSort();
+
+        if (sorting) {
+            uconfig = new YamlConfiguration();
+            gconfig = new YamlConfiguration();
+        }
 
         YamlConfiguration uconfig = this.uconfig;
         YamlConfiguration gconfig = this.gconfig;
-        
+
         String def = getDefaultGroup();
         gconfig.set("default", def);
 
         Set<Calculable> usr = getAll(CalculableType.USER);
         Debugger.log(usr.size() + " users saved.");
-        
-        boolean sorting = wm.getAutoSort();
-                
+
         // Sort them :D
         List<Calculable> users = new ArrayList<Calculable>(usr);
         if (wm.getAutoSort()) {
@@ -285,11 +286,12 @@ public class YamlWorld extends World {
         // Sort them :D
         @SuppressWarnings({"rawtypes", "unchecked"})
         List<Group> groups = new ArrayList(grp);
+        
         if (sorting) {
             MetaData.sortGroups(groups);
         }
 
-        for (Calculable group : groups) {     
+        for (Calculable group : groups) {
             group.setSorting(sorting);
             String name = group.getName().toLowerCase();
             gconfig.set(GROUPS + "." + name + "." + PERMISSIONS, group.serialisePermissions(sorting));
