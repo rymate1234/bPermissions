@@ -293,7 +293,12 @@ public class YamlWorld extends World {
 
         for (Calculable group : groups) {
             group.setSorting(sorting);
-            String name = group.getName().toLowerCase();
+            String name;
+            if (sorting) {
+                name = group.getName().toLowerCase();
+            } else {
+                name = group.getName();
+            }
             gconfig.set(GROUPS + "." + name + "." + PERMISSIONS, group.serialisePermissions(sorting));
             gconfig.set(GROUPS + "." + name + "." + GROUPS, group.serialiseGroups(sorting));
             // MetaData
