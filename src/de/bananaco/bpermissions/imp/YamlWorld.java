@@ -246,7 +246,7 @@ public class YamlWorld extends World {
             gfile.createNewFile();
         }
         boolean sorting = wm.getAutoSort();
-
+		String def = getDefaultGroup();
         if (sorting) {
             uconfig = new YamlConfiguration();
             gconfig = new YamlConfiguration();
@@ -255,7 +255,6 @@ public class YamlWorld extends World {
         YamlConfiguration uconfig = this.uconfig;
         YamlConfiguration gconfig = this.gconfig;
 
-        String def = getDefaultGroup();
         gconfig.set("default", def);
 
         Set<Calculable> usr = getAll(CalculableType.USER);
