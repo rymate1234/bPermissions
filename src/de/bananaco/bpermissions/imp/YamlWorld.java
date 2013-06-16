@@ -247,6 +247,7 @@ public class YamlWorld extends World {
         }
         boolean sorting = wm.getAutoSort();
 		String def = getDefaultGroup();
+                
         if (sorting) {
             uconfig = new YamlConfiguration();
             gconfig = new YamlConfiguration();
@@ -267,7 +268,6 @@ public class YamlWorld extends World {
         }
 
         for (Calculable user : users) {
-            user.setSorting(sorting);
             String name = user.getName();
             uconfig.set(USERS + "." + name + "." + PERMISSIONS, user.serialisePermissions(sorting));
             uconfig.set(USERS + "." + name + "." + GROUPS, user.serialiseGroups(sorting));
@@ -291,7 +291,6 @@ public class YamlWorld extends World {
         }
 
         for (Calculable group : groups) {
-            group.setSorting(sorting);
             String name;
             if (sorting) {
                 name = group.getName().toLowerCase();

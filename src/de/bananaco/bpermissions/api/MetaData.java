@@ -151,22 +151,6 @@ public abstract class MetaData {
 	}
 	
 	/**
-	 * Used to enable/disable sorting globally
-	 * @param sorting
-	 */
-	public void setSorting(boolean sorting) {
-		sort = sorting;
-	}
-	
-	/**
-	 * Shows wether sorting is enabled or not
-	 * @return boolean
-	 */
-	public boolean getSorting() {
-		return sort;
-	}
-	
-	/**
 	 * Returns the priority of the metadata
 	 * @return priority
 	 */
