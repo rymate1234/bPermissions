@@ -197,6 +197,9 @@ public class ApiLayer {
 			return "";
 		Calculable c = w.get(name, type);
 		String v = c.getEffectiveValue(key);
+                if (v == null) {
+                    return "";
+                }
 		// Add support for prefix/suffix from global files
 		if(v.equals("") && wm.getUseGlobalFiles()) {
 			w = wm.getDefaultWorld();
