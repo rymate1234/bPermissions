@@ -1,5 +1,5 @@
 name: bPermissions
-version: 2.10.1
+version: 2.10.6
 author: codename_B
 website: http://bpermissions.com/
 main: de.bananaco.bpermissions.imp.Permissions
@@ -32,5 +32,9 @@ commands:
     aliases: [d, de]
     description: demote a player
     usage: /<command> player (track) (world)
+  setgroup:
+    aliases: [sg]
+    description: Set a player's group!
+    usage: /<command> player (group)
 
 

@@ -14,20 +14,9 @@ public class TestMain {
 		WorldManager.getInstance().setDefaultWorld(global);
 		WorldManager.getInstance().setUseGlobalFiles(true);
 		
-		CalculableTest ct = new CalculableTest(world);
-		ct.customNodesTest();
-		/*
-		ct.globalPermsTest();
-		ct.heroChatTest();
-		ct.slipcorTest3();
-		ct.slipcorTest2();
-		ct.ApiLayerTest();
-		ct.gv1222PrefixTest();
-		ct.negativeInheritanceCheck();
-		ct.nullPassCheck();
-		ct.test100LevelInheritance();
-		ct.testPermissions();
-		*/
+    CalculableTest ct = new CalculableTest(world);
+    ct.testCraziness();
+		
 		
 	}
 
