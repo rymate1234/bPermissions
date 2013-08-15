@@ -2,6 +2,8 @@ package de.bananaco.bpermissions.imp;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -135,19 +137,22 @@ public class SuperPermissionHandler implements Listener {
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPreLogin(AsyncPlayerPreLoginEvent event) {
-		for(World world : wm.getAllWorlds()) {
-			User user = world.getUser(event.getName());
-			try {
-				user.calculateEffectivePermissions();
-				user.calculateEffectiveMeta();
-			} catch (Exception e) {
-				System.err.println(e.getStackTrace()[0].toString());
-			}
-			Debugger.log("PlayerPreLogin setup: "+user.getName());
-		}
-	}
+  @EventHandler(priority=EventPriority.LOWEST)
+  public void onPreLogin(final AsyncPlayerPreLoginEvent event) {
+    Callable r = new Callable()
+    {
+      public Object call() throws Exception {
+        for (de.bananaco.bpermissions.api.World world : SuperPermissionHandler.this.wm.getAllWorlds()) {
+          User user = world.getUser(event.getName());
+          user.calculateEffectivePermissions();
+          user.calculateEffectiveMeta();
+          Debugger.log("PlayerPreLogin setup: " + user.getName());
+        }
+        return null;
+      }
+    };
+    Bukkit.getScheduler().callSyncMethod(Permissions.instance, r);
+  }
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerLogin(PlayerLoginEvent event) {
