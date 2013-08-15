@@ -135,6 +135,34 @@ public class CalculableTest {
 		}
 	}
 	
+	  public void testCraziness()
+  {
+    ApiLayer.addPermission(this.world.getName(), CalculableType.GROUP, "default", Permission.loadFromString("nouse.woodsword"));
+    ApiLayer.addPermission(this.world.getName(), CalculableType.GROUP, "default", Permission.loadFromString("nouse.stonesword"));
+    ApiLayer.addPermission(this.world.getName(), CalculableType.GROUP, "default", Permission.loadFromString("nouse.goldsword"));
+    ApiLayer.addPermission(this.world.getName(), CalculableType.GROUP, "default", Permission.loadFromString("nouse.woodaxe"));
+
+    ApiLayer.setValue(this.world.getName(), CalculableType.GROUP, "master_swordsman", "priority", "1000");
+    ApiLayer.setValue(this.world.getName(), CalculableType.GROUP, "expert_swordsman", "priority", "500");
+    ApiLayer.setValue(this.world.getName(), CalculableType.GROUP, "novice_swordsman", "priority", "250");
+    ApiLayer.setValue(this.world.getName(), CalculableType.GROUP, "novice_lumberjack", "priority", "250");
+
+    ApiLayer.addPermission(this.world.getName(), CalculableType.GROUP, "novice_lumberjack", Permission.loadFromString("^nouse.woodaxe"));
+    ApiLayer.addPermission(this.world.getName(), CalculableType.GROUP, "novice_swordsman", Permission.loadFromString("^nouse.woodsword"));
+    ApiLayer.addPermission(this.world.getName(), CalculableType.GROUP, "expert_swordsman", Permission.loadFromString("^nouse.stonesword"));
+    ApiLayer.addPermission(this.world.getName(), CalculableType.GROUP, "master_swordsman", Permission.loadFromString("^nouse.goldsword"));
+
+    System.out.println("true: " + ApiLayer.hasPermission(this.world.getName(), CalculableType.USER, "codename_B", "nouse.woodaxe"));
+    ApiLayer.addGroup(this.world.getName(), CalculableType.USER, "codename_B", "novice_swordsman");
+    System.out.println("true: " + ApiLayer.hasPermission(this.world.getName(), CalculableType.USER, "codename_B", "nouse.woodaxe"));
+    ApiLayer.addGroup(this.world.getName(), CalculableType.USER, "codename_B", "expert_swordsman");
+    System.out.println("true: " + ApiLayer.hasPermission(this.world.getName(), CalculableType.USER, "codename_B", "nouse.woodaxe"));
+    ApiLayer.addGroup(this.world.getName(), CalculableType.USER, "codename_B", "master_swordsman");
+    System.out.println("true: " + ApiLayer.hasPermission(this.world.getName(), CalculableType.USER, "codename_B", "nouse.woodaxe"));
+    ApiLayer.addGroup(this.world.getName(), CalculableType.USER, "codename_B", "novice_lumberjack");
+    System.out.println("false: " + ApiLayer.hasPermission(this.world.getName(), CalculableType.USER, "codename_B", "nouse.woodaxe"));
+  }
+	
 	public void slipcorTest2() {
 		printLine();
 		System.out.println("slipcor test2 begin!");

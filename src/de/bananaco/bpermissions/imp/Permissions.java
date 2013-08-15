@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.Calculable;
 import de.bananaco.bpermissions.api.CalculableType;
 import de.bananaco.bpermissions.api.World;
@@ -152,9 +153,9 @@ public class Permissions extends JavaPlugin {
 		return ChatColor.BLUE+"[bPermissions] "+vary+message;
 	}
 
-	public static boolean hasPermission(Player player, String node) {
-		return WorldManager.getInstance().getWorld(player.getWorld().getName()).getUser(player.getName()).hasPermission(node);
-	}
+  public static boolean hasPermission(Player player, String node) {
+    return ApiLayer.hasPermission(player.getWorld().getName(), CalculableType.USER, player.getName(), node);
+  }
 
 	public void sendMessage(CommandSender sender, String message) {
 		sender.sendMessage(format(message));
