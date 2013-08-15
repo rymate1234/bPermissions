@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -13,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.Calculable;
 import de.bananaco.bpermissions.api.CalculableType;
 import de.bananaco.bpermissions.api.World;
@@ -109,18 +111,22 @@ public class Permissions extends JavaPlugin {
 		mt.setStarted(true);
 		// setup all players
 		final World world = this.world;
-		mt.schedule(new TaskRunnable() {
-			public void run() {
-				Bukkit.getScheduler().scheduleSyncDelayedTask(instance, new Runnable() {
-					public void run() {
-						world.setupAll();
-					}
-				}, 0);
-			}
-			public TaskType getType() {
-				return TaskType.SERVER;
-			}
-		});
+		mt.schedule(new TaskRunnable()
+    {
+      public void run() {
+        Bukkit.getScheduler().callSyncMethod(Permissions.instance, new Callable()
+        {
+          public Object call() throws Exception {
+            Debugger.log("Setting up all players...");
+            return Boolean.valueOf(Permissions.this.world.setupAll());
+          }
+        });
+      }
+
+      public TaskRunnable.TaskType getType() {
+        return TaskRunnable.TaskType.SERVER;
+      }
+    });
 	}
 
 	public static void printDinosaurs() {
@@ -147,9 +153,9 @@ public class Permissions extends JavaPlugin {
 		return ChatColor.BLUE+"[bPermissions] "+vary+message;
 	}
 
-	public static boolean hasPermission(Player player, String node) {
-		return WorldManager.getInstance().getWorld(player.getWorld().getName()).getUser(player.getName()).hasPermission(node);
-	}
+  public static boolean hasPermission(Player player, String node) {
+    return ApiLayer.hasPermission(player.getWorld().getName(), CalculableType.USER, player.getName(), node);
+  }
 
 	public void sendMessage(CommandSender sender, String message) {
 		sender.sendMessage(format(message));
@@ -389,6 +395,23 @@ public class Permissions extends JavaPlugin {
 			ExtraCommands.execute(name, type, action, value, world);
 			//ApiLayer.update();
 		}
+                        /*
+         * A new, easier way to set a players group!
+         */
+        if (command.getName().equalsIgnoreCase("setgroup")) {
+            if (args.length < 2) {
+                sendMessage(sender, "Not enough arguments!");
+                return false;
+            }
+            String name = args[0];
+            CalculableType type = CalculableType.USER;
+            String action = "setgroup";
+            String value = args[1];
+            String world = null;
+
+            ExtraCommands.execute(name, type, action, value, world);
+            sendMessage(sender, "The player " + name + " is now " + value + "!");
+        }
 		/*
 		 * And now your standard "permissions" command
 		 */

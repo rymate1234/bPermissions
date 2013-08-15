@@ -32,38 +32,32 @@ public class MainThread extends Thread implements TaskThread {
 	 * Internal method, check scheduler
 	 */
 	private synchronized void check() {
-		try {
-			if(hasTasks()) {
-				TaskRunnable run = null;
-				List<Runnable> tasks = null;
-				if(getTasks(TaskType.LOAD).size() > 0) {
-					tasks = getTasks(TaskType.LOAD);
-				} else if((getTasks(TaskType.SAVE).size() > 0)) {
-					tasks = getTasks(TaskType.SAVE);
-				} else if((getTasks(TaskType.SERVER).size() > 0)) {
-					tasks = getTasks(TaskType.SERVER);
-				}
-				// switch
-				if(tasks != null) {
-					run = (TaskRunnable) tasks.get(0);
-					tasks.remove(0);
-					final TaskRunnable r = run;
-					if(r.getType() == TaskType.SERVER || r.getType() == TaskType.SAVE) {
-						// one save at a time
-						r.run();
-					} else {
-					new Thread() {
-						public void run() {
-							r.run();
-						}
-					}.start();
-					}
-				}
-				
-			} else {
-				sleep(10);
-			}
-		} catch (Exception e) {
+    try
+    {
+      if (hasTasks()) {
+        TaskRunnable run = null;
+        List tasks = null;
+        if (getTasks(TaskRunnable.TaskType.LOAD).size() > 0)
+          tasks = getTasks(TaskRunnable.TaskType.LOAD);
+        else if (getTasks(TaskRunnable.TaskType.SAVE).size() > 0)
+          tasks = getTasks(TaskRunnable.TaskType.SAVE);
+        else if (getTasks(TaskRunnable.TaskType.SERVER).size() > 0) {
+          tasks = getTasks(TaskRunnable.TaskType.SERVER);
+        }
+
+        if (tasks != null) {
+          run = (TaskRunnable)tasks.get(0);
+          tasks.remove(0);
+          TaskRunnable r = run;
+
+          r.run();
+        }
+      }
+      else
+      {
+        sleep(10L);
+      }
+    }catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

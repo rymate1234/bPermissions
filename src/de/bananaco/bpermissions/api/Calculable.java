@@ -141,6 +141,12 @@ public abstract class Calculable extends CalculableMeta {
 	}
 
 	public static boolean hasPermission(String node, Map<String, Boolean> perms) {
+	    if (node == null) {
+      System.err.println("NODE IS NULL");
+      return false;
+    }
+
+    node = node.toLowerCase();
 		if(perms.containsKey(node))
 			return perms.get(node);
 

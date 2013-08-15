@@ -243,11 +243,15 @@ public class YamlWorld extends World {
 			gfile.createNewFile();
 		}
 
-		YamlConfiguration uconfig = this.uconfig;
-		YamlConfiguration gconfig = this.gconfig;
+    YamlConfiguration uconfig = new YamlConfiguration();
+    YamlConfiguration gconfig = new YamlConfiguration();
 
-		String def = getDefaultGroup();
-		gconfig.set("default", def);
+    String def = getDefaultGroup();
+    gconfig.set("default", def);
+
+    uconfig.setDefaults(this.uconfig);
+    gconfig.setDefaults(this.gconfig);
+
 
 		Set<Calculable> usr = getAll(CalculableType.USER);
 		Debugger.log(usr.size()+" users saved.");
