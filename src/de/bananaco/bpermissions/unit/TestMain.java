@@ -16,7 +16,7 @@ public class TestMain {
 		
 		CalculableTest ct = new CalculableTest(world);
 		ct.customNodesTest();
-		/*
+		
 		ct.globalPermsTest();
 		ct.heroChatTest();
 		ct.slipcorTest3();
@@ -27,7 +27,7 @@ public class TestMain {
 		ct.nullPassCheck();
 		ct.test100LevelInheritance();
 		ct.testPermissions();
-		*/
+		
 		
 	}
 

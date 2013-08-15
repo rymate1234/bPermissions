@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -109,18 +110,22 @@ public class Permissions extends JavaPlugin {
 		mt.setStarted(true);
 		// setup all players
 		final World world = this.world;
-		mt.schedule(new TaskRunnable() {
-			public void run() {
-				Bukkit.getScheduler().scheduleSyncDelayedTask(instance, new Runnable() {
-					public void run() {
-						world.setupAll();
-					}
-				}, 0);
-			}
-			public TaskType getType() {
-				return TaskType.SERVER;
-			}
-		});
+		mt.schedule(new TaskRunnable()
+    {
+      public void run() {
+        Bukkit.getScheduler().callSyncMethod(Permissions.instance, new Callable()
+        {
+          public Object call() throws Exception {
+            Debugger.log("Setting up all players...");
+            return Boolean.valueOf(Permissions.this.world.setupAll());
+          }
+        });
+      }
+
+      public TaskRunnable.TaskType getType() {
+        return TaskRunnable.TaskType.SERVER;
+      }
+    });
 	}
 
 	public static void printDinosaurs() {
