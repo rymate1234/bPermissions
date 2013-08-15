@@ -395,6 +395,23 @@ public class Permissions extends JavaPlugin {
 			ExtraCommands.execute(name, type, action, value, world);
 			//ApiLayer.update();
 		}
+                        /*
+         * A new, easier way to set a players group!
+         */
+        if (command.getName().equalsIgnoreCase("setgroup")) {
+            if (args.length < 2) {
+                sendMessage(sender, "Not enough arguments!");
+                return false;
+            }
+            String name = args[0];
+            CalculableType type = CalculableType.USER;
+            String action = "setgroup";
+            String value = args[1];
+            String world = null;
+
+            ExtraCommands.execute(name, type, action, value, world);
+            sendMessage(sender, "The player " + name + " is now " + value + "!");
+        }
 		/*
 		 * And now your standard "permissions" command
 		 */

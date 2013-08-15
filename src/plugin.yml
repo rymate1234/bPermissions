@@ -32,5 +32,9 @@ commands:
     aliases: [d, de]
     description: demote a player
     usage: /<command> player (track) (world)
+  setgroup:
+    aliases: [sg]
+    description: Set a player's group!
+    usage: /<command> player (group)
 
 
