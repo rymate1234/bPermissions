@@ -424,7 +424,7 @@ public class Permissions extends JavaPlugin {
 							new ImportManager(this).importYML();
 						}
 						if(args[1].equalsIgnoreCase("pex")) {
-							new ImportManager(this).importPEX();
+							new ImportManager(this).pexImport();
 						}
 						if(args[1].equalsIgnoreCase("p3")) {
 							new ImportManager(this).importPermissions3();
