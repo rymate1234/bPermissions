@@ -22,14 +22,14 @@ import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
 
 public class ImportManager {
 
-	private WorldManager wm = WorldManager.getInstance();
-	private final JavaPlugin plugin;
-	
-	public ImportManager(JavaPlugin plugin) {
-		this.plugin = plugin;
-	}
-	
-	    public boolean pexImport() {
+    private WorldManager wm = WorldManager.getInstance();
+    private final JavaPlugin plugin;
+
+    public ImportManager(JavaPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    public boolean pexImport() {
         if (MainThread.getInstance() == null) {
             Debugger.log("MainThread cancelled");
             return false;
@@ -153,235 +153,259 @@ public class ImportManager {
         }
     }
 
-	public void importYML() throws Exception {
-		for (World world : plugin.getServer().getWorlds()) {
-			de.bananaco.bpermissions.api.World wd = wm.getWorld(world.getName());
-			File perms = new File("plugins/bPermissions/worlds/"
-					+ world.getName() + ".yml");
-			if(perms.exists()) {
-			System.out.println("Importing world: "+world.getName());
-			YamlConfiguration pConfig = new YamlConfiguration();//new Configuration(perms);
-			pConfig.load(perms);
-			// Here we grab the different bits and bobs
-			ConfigurationSection users = pConfig.getConfigurationSection("players");
-			ConfigurationSection groups = pConfig.getConfigurationSection("groups");
-			
-			// Load users
-			if(users != null && users.getKeys(false) != null && users.getKeys(false).size() > 0) {
-				Set<String> u = users.getKeys(false);
-				for(String usr : u) {
-					System.out.println("Importing user: "+usr);
-					List<String> g = users.getStringList(usr);
-					// Clear the groups in their list firstly
-					wd.getUser(usr).getGroupsAsString().clear();
-					// Another NPE Fix
-					if(g != null && g.size() > 0)
-					for(String group : g)
-						wd.getUser(usr).addGroup(group);
-				}
-			}
-			// Load groups
-			if(groups != null && groups.getKeys(false) != null && groups.getKeys(false).size() > 0) {
-				Set<String> g = groups.getKeys(false);
-				for(String grp : g) {
-					System.out.println("Importing group: "+grp);
-					List<String> p = groups.getStringList(grp);
-					if(p != null && p.size() > 0)
-						for(String perm : p)
-							wd.getGroup(grp).getPermissions().add(Permission.loadFromString(perm));
-				}
-			}
-			}
-			// Forgot to save after importing!
-			wd.save();
-		}
-		wm.cleanup();
-	}
-	
-	public void importGroupManager() throws Exception {
-		for(World world : plugin.getServer().getWorlds()) {
-			de.bananaco.bpermissions.api.World wd = wm.getWorld(world.getName());
-			
-			File users = new File("plugins/GroupManager/worlds/" + world.getName()
-					+ "/users.yml");
-			File groups = new File("plugins/GroupManager/worlds/" + world.getName()
-					+ "/groups.yml");
-			
-			if(users.exists() && groups.exists()) {
-				System.out.println("Importing world: "+world.getName());
+    public void importYML() throws Exception {
+        for (World world : plugin.getServer().getWorlds()) {
+            de.bananaco.bpermissions.api.World wd = wm.getWorld(world.getName());
+            File perms = new File("plugins/bPermissions/worlds/"
+                    + world.getName() + ".yml");
+            if (perms.exists()) {
+                System.out.println("Importing world: " + world.getName());
+                YamlConfiguration pConfig = new YamlConfiguration();//new Configuration(perms);
+                pConfig.load(perms);
+                // Here we grab the different bits and bobs
+                ConfigurationSection users = pConfig.getConfigurationSection("players");
+                ConfigurationSection groups = pConfig.getConfigurationSection("groups");
 
-				YamlConfiguration uConfig = new YamlConfiguration();
-				YamlConfiguration gConfig = new YamlConfiguration();
-				try {
-				uConfig.load(users);
-				gConfig.load(groups);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				ConfigurationSection usConfig = uConfig.getConfigurationSection("users");
-				ConfigurationSection grConfig = gConfig.getConfigurationSection("groups");
-				
-				Set<String> usersList = null;
-				if(usConfig != null)
-					usersList = usConfig.getKeys(false);
-				Set<String> groupsList = null;
-				if(grConfig != null)
-					groupsList = grConfig.getKeys(false);
-				
-				if (usersList != null)
-					for (String player : usersList) {
-						System.out.println("Importing user: "+player);
-						User user = wd.getUser(player);
-						try {
-						List<String> p = uConfig.getStringList("users."+player+".permissions");
-						List<String> i = uConfig.getStringList("users."+player+".subgroups");
-						i.add(uConfig.getString("users."+player+".group"));
-						
-						String prefix = uConfig.getString("users."+player+".info."+"prefix");
-						String suffix = uConfig.getString("users."+player+".info."+"suffix");
-						
-						if(p != null)
-							user.getPermissions().addAll(Permission.loadFromString(p));
-						if(i != null) {
-							user.getGroupsAsString().clear();
-							user.getGroupsAsString().addAll(i);
-						}
-						if(prefix != null)
-							user.setValue("prefix", prefix);
-						if(suffix != null)
-							user.setValue("suffix", suffix);
-						} catch (Exception e) {
-							System.err.println("Error importing user: "+player);
-						}
-					}
-				
-				if (groupsList != null)
-					for (String group : groupsList) {
-						System.out.println("Importing group: "+group);
-						Group gr = wd.getGroup(group);
-						try {
-						List<String> p = gConfig.getStringList("groups."+group+".permissions");
-						List<String> i = gConfig.getStringList("groups."+group+".inheritance");
-						
-						String prefix = gConfig.getString("groups."+group+".info."+"prefix");
-						String suffix = gConfig.getString("groups."+group+".info."+"suffix");
-						
-						if(gConfig.getBoolean("groups."+group+".default")) {
-							wd.setDefaultGroup(group);
-							System.out.println("DEFAULT GROUP DETECTED: "+group);
-						}
-						if(p != null)
-							gr.getPermissions().addAll(Permission.loadFromString(p));
-						if(i != null) {
-							List<String> fp = new ArrayList<String>();
-							for(int j=0; j<i.size(); j++) {
-								String fpp = i.get(j);
-								if(fpp.startsWith("g:")) {
-									// do nothing
-								} else {
-									fp.add(fpp);
-								}
-							}
-							i.clear();
-							i.addAll(fp);
-							gr.getGroupsAsString().addAll(i);
-						}
-						if(prefix != null)
-							gr.setValue("prefix", prefix);
-						if(suffix != null)
-							gr.setValue("suffix", suffix);
-						} catch (Exception e) {
-							System.err.println("Error importing group: "+group);
-						}
-					}
-				wd.save();
-				}
-			}
-			wm.cleanup();
-	}
-	
-	public void importPermissions3() throws Exception {
-		for (World world : plugin.getServer().getWorlds()) {
-			de.bananaco.bpermissions.api.World wd = wm.getWorld(world.getName());
-			
-			File users = new File("plugins/Permissions/" + world.getName()
-					+ "/users.yml");
-			File groups = new File("plugins/Permissions/" + world.getName()
-					+ "/groups.yml");
-			
-			if(users.exists() && groups.exists()) {
-			System.out.println("Importing world: "+world.getName());
+                // Load users
+                if (users != null && users.getKeys(false) != null && users.getKeys(false).size() > 0) {
+                    Set<String> u = users.getKeys(false);
+                    for (String usr : u) {
+                        System.out.println("Importing user: " + usr);
+                        List<String> g = users.getStringList(usr);
+                        // Clear the groups in their list firstly
+                        wd.getUser(usr).getGroupsAsString().clear();
+                        // Another NPE Fix
+                        if (g != null && g.size() > 0) {
+                            for (String group : g) {
+                                wd.getUser(usr).addGroup(group);
+                            }
+                        }
+                    }
+                }
+                // Load groups
+                if (groups != null && groups.getKeys(false) != null && groups.getKeys(false).size() > 0) {
+                    Set<String> g = groups.getKeys(false);
+                    for (String grp : g) {
+                        System.out.println("Importing group: " + grp);
+                        List<String> p = groups.getStringList(grp);
+                        if (p != null && p.size() > 0) {
+                            for (String perm : p) {
+                                wd.getGroup(grp).getPermissions().add(Permission.loadFromString(perm));
+                            }
+                        }
+                    }
+                }
+            }
+            // Forgot to save after importing!
+            wd.save();
+        }
+        wm.cleanup();
+    }
 
-			YamlConfiguration uConfig = new YamlConfiguration();
-			YamlConfiguration gConfig = new YamlConfiguration();
-			try {
-			uConfig.load(users);
-			gConfig.load(groups);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			ConfigurationSection usConfig = uConfig.getConfigurationSection("users");
-			ConfigurationSection grConfig = gConfig.getConfigurationSection("groups");
-			
-			Set<String> usersList = null;
-			if(usConfig != null)
-				usersList = usConfig.getKeys(false);
-			Set<String> groupsList = null;
-			if(grConfig != null)
-				groupsList = grConfig.getKeys(false);
-			
-			if (usersList != null)
-				for (String player : usersList) {
-					System.out.println("Importing user: "+player);
-					User user = wd.getUser(player);
-					try {
-					List<String> p = uConfig.getStringList("users."+player+".permissions");
-					List<String> i = uConfig.getStringList("users."+player+".groups");
-					
-					String prefix = uConfig.getString("users."+player+".info."+"prefix");
-					String suffix = uConfig.getString("users."+player+".info."+"suffix");
-					
-					if(p != null)
-						user.getPermissions().addAll(Permission.loadFromString(p));
-					if(i != null) {
-						user.getGroupsAsString().clear();
-						user.getGroupsAsString().addAll(i);
-					}
-					if(prefix != null)
-						user.setValue("prefix", prefix);
-					if(suffix != null)
-						user.setValue("suffix", suffix);
-					} catch (Exception e) {
-						System.err.println("Error importing user: "+player);
-					}
-				}
-			
-			if (groupsList != null)
-				for (String group : groupsList) {
-					System.out.println("Importing group: "+group);
-					Group gr = wd.getGroup(group);
-					try {
-					List<String> p = gConfig.getStringList("groups."+group+".permissions");
-					List<String> i = gConfig.getStringList("groups."+group+".inheritance");
-					
-					String prefix = gConfig.getString("groups."+group+".info."+"prefix");
-					String suffix = gConfig.getString("groups."+group+".info."+"suffix");
-					if(p != null)
-						gr.getPermissions().addAll(Permission.loadFromString(p));
-					if(i != null)
-						gr.getGroupsAsString().addAll(i);
-					if(prefix != null)
-						gr.setValue("prefix", prefix);
-					if(suffix != null)
-						gr.setValue("suffix", suffix);
-					} catch (Exception e) {
-						System.err.println("Error importing group: "+group);
-					}
-				}
-			wd.save();
-			}
-		}
-		wm.cleanup();
-	}
-	
+    public void importGroupManager() throws Exception {
+        for (World world : plugin.getServer().getWorlds()) {
+            de.bananaco.bpermissions.api.World wd = wm.getWorld(world.getName());
+
+            File users = new File("plugins/GroupManager/worlds/" + world.getName()
+                    + "/users.yml");
+            File groups = new File("plugins/GroupManager/worlds/" + world.getName()
+                    + "/groups.yml");
+
+            if (users.exists() && groups.exists()) {
+                System.out.println("Importing world: " + world.getName());
+
+                YamlConfiguration uConfig = new YamlConfiguration();
+                YamlConfiguration gConfig = new YamlConfiguration();
+                try {
+                    uConfig.load(users);
+                    gConfig.load(groups);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                ConfigurationSection usConfig = uConfig.getConfigurationSection("users");
+                ConfigurationSection grConfig = gConfig.getConfigurationSection("groups");
+
+                Set<String> usersList = null;
+                if (usConfig != null) {
+                    usersList = usConfig.getKeys(false);
+                }
+                Set<String> groupsList = null;
+                if (grConfig != null) {
+                    groupsList = grConfig.getKeys(false);
+                }
+
+                if (usersList != null) {
+                    for (String player : usersList) {
+                        System.out.println("Importing user: " + player);
+                        User user = wd.getUser(player);
+                        try {
+                            List<String> p = uConfig.getStringList("users." + player + ".permissions");
+                            List<String> i = uConfig.getStringList("users." + player + ".subgroups");
+                            i.add(uConfig.getString("users." + player + ".group"));
+
+                            String prefix = uConfig.getString("users." + player + ".info." + "prefix");
+                            String suffix = uConfig.getString("users." + player + ".info." + "suffix");
+
+                            if (p != null) {
+                                user.getPermissions().addAll(Permission.loadFromString(p));
+                            }
+                            if (i != null) {
+                                user.getGroupsAsString().clear();
+                                user.getGroupsAsString().addAll(i);
+                            }
+                            if (prefix != null) {
+                                user.setValue("prefix", prefix);
+                            }
+                            if (suffix != null) {
+                                user.setValue("suffix", suffix);
+                            }
+                        } catch (Exception e) {
+                            System.err.println("Error importing user: " + player);
+                        }
+                    }
+                }
+
+                if (groupsList != null) {
+                    for (String group : groupsList) {
+                        System.out.println("Importing group: " + group);
+                        Group gr = wd.getGroup(group);
+                        try {
+                            List<String> p = gConfig.getStringList("groups." + group + ".permissions");
+                            List<String> i = gConfig.getStringList("groups." + group + ".inheritance");
+
+                            String prefix = gConfig.getString("groups." + group + ".info." + "prefix");
+                            String suffix = gConfig.getString("groups." + group + ".info." + "suffix");
+
+                            if (gConfig.getBoolean("groups." + group + ".default")) {
+                                wd.setDefaultGroup(group);
+                                System.out.println("DEFAULT GROUP DETECTED: " + group);
+                            }
+                            if (p != null) {
+                                gr.getPermissions().addAll(Permission.loadFromString(p));
+                            }
+                            if (i != null) {
+                                List<String> fp = new ArrayList<String>();
+                                for (int j = 0; j < i.size(); j++) {
+                                    String fpp = i.get(j);
+                                    if (fpp.startsWith("g:")) {
+                                        // do nothing
+                                    } else {
+                                        fp.add(fpp);
+                                    }
+                                }
+                                i.clear();
+                                i.addAll(fp);
+                                gr.getGroupsAsString().addAll(i);
+                            }
+                            if (prefix != null) {
+                                gr.setValue("prefix", prefix);
+                            }
+                            if (suffix != null) {
+                                gr.setValue("suffix", suffix);
+                            }
+                        } catch (Exception e) {
+                            System.err.println("Error importing group: " + group);
+                        }
+                    }
+                }
+                wd.save();
+            }
+        }
+        wm.cleanup();
+    }
+
+    public void importPermissions3() throws Exception {
+        for (World world : plugin.getServer().getWorlds()) {
+            de.bananaco.bpermissions.api.World wd = wm.getWorld(world.getName());
+
+            File users = new File("plugins/Permissions/" + world.getName()
+                    + "/users.yml");
+            File groups = new File("plugins/Permissions/" + world.getName()
+                    + "/groups.yml");
+
+            if (users.exists() && groups.exists()) {
+                System.out.println("Importing world: " + world.getName());
+
+                YamlConfiguration uConfig = new YamlConfiguration();
+                YamlConfiguration gConfig = new YamlConfiguration();
+                try {
+                    uConfig.load(users);
+                    gConfig.load(groups);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                ConfigurationSection usConfig = uConfig.getConfigurationSection("users");
+                ConfigurationSection grConfig = gConfig.getConfigurationSection("groups");
+
+                Set<String> usersList = null;
+                if (usConfig != null) {
+                    usersList = usConfig.getKeys(false);
+                }
+                Set<String> groupsList = null;
+                if (grConfig != null) {
+                    groupsList = grConfig.getKeys(false);
+                }
+
+                if (usersList != null) {
+                    for (String player : usersList) {
+                        System.out.println("Importing user: " + player);
+                        User user = wd.getUser(player);
+                        try {
+                            List<String> p = uConfig.getStringList("users." + player + ".permissions");
+                            List<String> i = uConfig.getStringList("users." + player + ".groups");
+
+                            String prefix = uConfig.getString("users." + player + ".info." + "prefix");
+                            String suffix = uConfig.getString("users." + player + ".info." + "suffix");
+
+                            if (p != null) {
+                                user.getPermissions().addAll(Permission.loadFromString(p));
+                            }
+                            if (i != null) {
+                                user.getGroupsAsString().clear();
+                                user.getGroupsAsString().addAll(i);
+                            }
+                            if (prefix != null) {
+                                user.setValue("prefix", prefix);
+                            }
+                            if (suffix != null) {
+                                user.setValue("suffix", suffix);
+                            }
+                        } catch (Exception e) {
+                            System.err.println("Error importing user: " + player);
+                        }
+                    }
+                }
+
+                if (groupsList != null) {
+                    for (String group : groupsList) {
+                        System.out.println("Importing group: " + group);
+                        Group gr = wd.getGroup(group);
+                        try {
+                            List<String> p = gConfig.getStringList("groups." + group + ".permissions");
+                            List<String> i = gConfig.getStringList("groups." + group + ".inheritance");
+
+                            String prefix = gConfig.getString("groups." + group + ".info." + "prefix");
+                            String suffix = gConfig.getString("groups." + group + ".info." + "suffix");
+                            if (p != null) {
+                                gr.getPermissions().addAll(Permission.loadFromString(p));
+                            }
+                            if (i != null) {
+                                gr.getGroupsAsString().addAll(i);
+                            }
+                            if (prefix != null) {
+                                gr.setValue("prefix", prefix);
+                            }
+                            if (suffix != null) {
+                                gr.setValue("suffix", suffix);
+                            }
+                        } catch (Exception e) {
+                            System.err.println("Error importing group: " + group);
+                        }
+                    }
+                }
+                wd.save();
+            }
+        }
+        wm.cleanup();
+    }
 }

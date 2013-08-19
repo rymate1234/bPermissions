@@ -27,7 +27,7 @@ public class ExtraCommands {
         }
         for (World w : worlds) {
             Calculable c = w.get(name, type);
-            
+
             if (action.equalsIgnoreCase("addgroup")) {
                 c.addGroup(value);
             } else if (action.equalsIgnoreCase("rmgroup")) {
@@ -43,7 +43,7 @@ public class ExtraCommands {
             } else if (action.equalsIgnoreCase("rmperm")) {
                 c.removePermission(value);
             }
-            
+
             try {
                 c.calculateEffectiveMeta();
                 c.calculateEffectivePermissions();
