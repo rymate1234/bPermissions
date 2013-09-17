@@ -4,7 +4,7 @@
     
     <groupId>de.bananaco</groupId>
     <artifactId>bPermissions</artifactId>
-    <version>dev-SNAPSHOT</version>
+    <version>v2.12-DEV</version>
     <packaging>jar</packaging>
     
     <name>bPermissions</name>

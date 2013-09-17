@@ -17,6 +17,7 @@ public class Config {
     private boolean autoSave = true;
     private boolean offlineMode = false;
     private boolean trackLimit = false;
+    private Object globalPlayerFiles = false;
 
     public void load() {
         try {
@@ -42,6 +43,7 @@ public class Config {
         config.set("debug-mode", Debugger.setDebug(config.getBoolean("debug-mode", Debugger.getDebug())));
         config.set("allow-offline-mode", config.get("allow-offline-mode", offlineMode));
         config.set("use-global-files", config.get("use-global-files", useGlobalFiles));
+        config.set("global-player-files", config.get("global-player-files", globalPlayerFiles));
         config.set("track-limit", config.get("track-limit", trackLimit));
         // then load it into memory
         useGlobalFiles = config.getBoolean("use-global-files");
@@ -49,6 +51,7 @@ public class Config {
         trackType = config.getString("track-type");
         offlineMode = config.getBoolean("allow-offline-mode");
         trackLimit = config.getBoolean("track-limit");
+        globalPlayerFiles = config.getBoolean("global-user-files");
         // then load our PromotionTrack
         if (trackType.equalsIgnoreCase("multi")) {
             track = new MultiGroupPromotion();
