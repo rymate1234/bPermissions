@@ -348,13 +348,21 @@ public class Permissions extends JavaPlugin {
                     }
                     //ApiLayer.update();
                 }
-            } else if (args.length == 3 && args[0].equalsIgnoreCase("meta")) {
+            } else if (args.length >= 3 && args[0].equalsIgnoreCase("meta")) {
                 if (calc == null) {
                     sendMessage(sender, "Nothing is selected!");
                 } else if (calc.getType() != type) {
                     sendMessage(sender, "Please select a " + type.getName() + ", you currently have a " + opposite.getName() + " selected.");
                 } else {
-                    cmd.setValue(args[1], args[2], sender);
+                    StringBuilder prefixMaker = new StringBuilder();
+                    for (int i = 2; i < args.length; i++) {
+                        prefixMaker.append(args[i]);
+                        if (i != args.length - 1) {
+                            prefixMaker.append(" ");
+                        }
+                    }
+                    String prefix = prefixMaker.toString();
+                    cmd.setValue(args[1], prefix, sender);
                 }
             } else {
                 sendMessage(sender, "Too many arguments.");
