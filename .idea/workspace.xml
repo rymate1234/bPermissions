@@ -7,8 +7,8 @@
     </list>
     <ignored path="bPermissions.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1379522820376" ignored="false" />
-    <file path="$PROJECT_DIR$/.idea/workspace.xml" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1379522820818" ignored="false" />
+    <file path="/Dummy.txt" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1379523021363" ignored="false" />
+    <file path="$PROJECT_DIR$/.idea/workspace.xml" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1379523022084" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,19 +87,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="bPermissions.iml" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="bPermissions.iml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bPermissions.iml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="72" selection-start="751" selection-end="751" vertical-scroll-proportion="0.30555555">
+            <state line="11" column="72" selection-start="751" selection-end="751" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pom.xml" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="pom.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="61" column="31" selection-start="2034" selection-end="2034" vertical-scroll-proportion="0.0">
+            <state line="61" column="31" selection-start="2034" selection-end="2034" vertical-scroll-proportion="0.75">
               <folding />
             </state>
           </provider>
@@ -451,7 +451,9 @@
               <set />
             </option>
             <option name="goals">
-              <list />
+              <list>
+                <option value="install" />
+              </list>
             </option>
             <option name="profilesMap">
               <map />
@@ -605,14 +607,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bPermissions.iml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="72" selection-start="751" selection-end="751" vertical-scroll-proportion="0.30555555">
+        <state line="11" column="72" selection-start="751" selection-end="751" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="31" selection-start="2034" selection-end="2034" vertical-scroll-proportion="0.0">
+        <state line="61" column="31" selection-start="2034" selection-end="2034" vertical-scroll-proportion="0.75">
           <folding />
         </state>
       </provider>
