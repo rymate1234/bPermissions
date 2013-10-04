@@ -96,6 +96,8 @@ public class Permissions extends JavaPlugin {
         //handler.setupAllPlayers();
         // Load our custom nodes (if any)
         new CustomNodes().load();
+        
+        printDinosaurs();
 
         // REMOVED
         // getServer().getScheduler().scheduleSyncRepeatingTask(this, new SuperPermissionHandler.SuperPermissionReloader(handler), 5, 5);
@@ -125,12 +127,13 @@ public class Permissions extends JavaPlugin {
     }
 
     public static void printDinosaurs() {
-        String dino = "            __ " + "\n"
+        String dino = 
+                  "            __ " + "\n"
                 + "           / _)" + "\n"
                 + "    .-^^^-/ /  " + "\n"
                 + " __/       /" + "\n"
                 + "<__.|_|-|_|" + "\n"
-                + "==DINOSAUR==";
+                + "==DINO DEV==";
         System.out.println("\n" + dino);
     }
 

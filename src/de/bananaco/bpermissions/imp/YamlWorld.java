@@ -33,6 +33,7 @@ public class YamlWorld extends World {
     protected static final String PERMISSIONS = "permissions";
     protected static final String META = "meta";
     protected static final String USERS = "users";
+    
     protected YamlConfiguration uconfig = null;//new YamlConfiguration();
     protected YamlConfiguration gconfig = null;//new YamlConfiguration();
     private final File ufile;
@@ -243,12 +244,12 @@ public class YamlWorld extends World {
             ufile.createNewFile();
             gfile.createNewFile();
         }
+        
+        String def = getDefaultGroup();
+        gconfig.set("default", def);
 
         YamlConfiguration uconfig = new YamlConfiguration();
         YamlConfiguration gconfig = new YamlConfiguration();
-
-        String def = getDefaultGroup();
-        gconfig.set("default", def);
 
         uconfig.setDefaults(this.uconfig);
         gconfig.setDefaults(this.gconfig);
