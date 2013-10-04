@@ -43,6 +43,7 @@ public class YamlWorld extends World {
     protected boolean error = false;
     // Only save if flagged true
     protected boolean save = false;
+    private boolean globalUsers = false;
 
     public YamlWorld(String world, Permissions permissions, File root) {
         super(world);
