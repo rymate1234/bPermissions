@@ -97,7 +97,7 @@ public class Permissions extends JavaPlugin {
         // Load our custom nodes (if any)
         new CustomNodes().load();
         
-        printDinosaurs();
+        //printDinosaurs();
 
         // REMOVED
         // getServer().getScheduler().scheduleSyncRepeatingTask(this, new SuperPermissionHandler.SuperPermissionReloader(handler), 5, 5);

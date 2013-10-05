@@ -7,6 +7,7 @@
     <list default="true" id="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/Calculable.java" afterPath="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/Calculable.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/GroupCarrier.java" afterPath="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/GroupCarrier.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Permissions.java" afterPath="$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Permissions.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/World.java" afterPath="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/World.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -137,19 +138,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Permissions.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="Permissions.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Permissions.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="272" column="17" selection-start="10564" selection-end="10564" vertical-scroll-proportion="-51.6">
+            <state line="99" column="10" selection-start="3560" selection-end="3560" vertical-scroll-proportion="0.21959858">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Commands.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Commands.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Commands.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="72" column="22" selection-start="2140" selection-end="2140" vertical-scroll-proportion="-0.29357797">
+            <state line="72" column="22" selection-start="2140" selection-end="2140" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -189,6 +190,7 @@
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/Calculable.java" />
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/World.java" />
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/GroupCarrier.java" />
+        <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Permissions.java" />
       </list>
     </option>
   </component>
@@ -603,7 +605,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -783,20 +785,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/util/Permission.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="22" selection-start="174" selection-end="174" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Permissions.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="272" column="17" selection-start="10564" selection-end="10564" vertical-scroll-proportion="-51.6">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/World.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="88" column="22" selection-start="2394" selection-end="2394" vertical-scroll-proportion="0.3325688">
@@ -806,7 +794,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Commands.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="72" column="22" selection-start="2140" selection-end="2140" vertical-scroll-proportion="-0.29357797">
+        <state line="72" column="22" selection-start="2140" selection-end="2140" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/util/Permission.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="22" selection-start="174" selection-end="174" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Permissions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="99" column="10" selection-start="3560" selection-end="3560" vertical-scroll-proportion="0.21959858">
           <folding />
         </state>
       </provider>
