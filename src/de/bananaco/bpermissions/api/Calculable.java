@@ -106,22 +106,25 @@ public abstract class Calculable extends CalculableMeta {
     }
 
     /**
-     * Returns the lowercased name of the calculable object
+     * DEPRECIATED FIX METHOD
+     * Used to return the lowercased name of the calculable object.
+     * Now it just returns the name. WILL BE REMOVED IN A FUTURE UPDATE
      *
      * @return String
      */
+    @Deprecated
     public String getNameLowerCase() {
-        return name.toLowerCase();
+        return getName();
     }
 
     @Override
     public int hashCode() {
-        return getNameLowerCase().hashCode();
+        return getName().hashCode();
     }
 
     @Override
     public String toString() {
-        return name.toLowerCase();
+        return name;
     }
 
     /**
