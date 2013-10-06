@@ -6,11 +6,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/CalculableWrapper.java" afterPath="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/CalculableWrapper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/ExtraCommands.java" afterPath="$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/ExtraCommands.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="bPermissions.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381076021930" ignored="false" />
+    <file path="/Dummy.txt" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381093400081" ignored="false" />
     <file path="$PROJECT_DIR$/../VanishNoPacket/pom.xml" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1379523391454" ignored="false" />
     <file path="$PROJECT_DIR$/../TagAPI/modules/vPre/pom.xml" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1379527650567" ignored="false" />
     <file path="$PROJECT_DIR$/../TagAPI/modules/TagAPI/pom.xml" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1379527650567" ignored="false" />
@@ -28,6 +29,7 @@
     <file path="/YamlWorld.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381070425285" ignored="false" />
     <file path="/CalculableWrapper.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381078397833" ignored="false" />
     <file path="/MetaData.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381078074323" ignored="false" />
+    <file path="/ExtraCommands.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381093761581" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,16 +129,16 @@
       <file leaf-file-name="Permissions.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Permissions.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="403" column="20" selection-start="17152" selection-end="17152" vertical-scroll-proportion="0.0">
+            <state line="408" column="12" selection-start="17319" selection-end="17319" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ExtraCommands.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="ExtraCommands.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/ExtraCommands.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="48" column="51" selection-start="1844" selection-end="1844" vertical-scroll-proportion="0.0">
+            <state line="54" column="34" selection-start="0" selection-end="2558" vertical-scroll-proportion="0.7688787">
               <folding />
             </state>
           </provider>
@@ -145,16 +147,16 @@
       <file leaf-file-name="Commands.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Commands.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="148" column="35" selection-start="5442" selection-end="5442" vertical-scroll-proportion="-28.12">
+            <state line="148" column="35" selection-start="5442" selection-end="5442" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CalculableWrapper.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="CalculableWrapper.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/CalculableWrapper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="76" column="45" selection-start="2096" selection-end="2096" vertical-scroll-proportion="0.47706422">
+            <state line="76" column="45" selection-start="2096" selection-end="2096" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -164,11 +166,7 @@
         <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/MetaData.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="103" column="7" selection-start="3180" selection-end="3180" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#672#680#0" expanded="true" />
-                <element signature="e#1946#1958#0" expanded="true" />
-                <element signature="e#3983#4013#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -213,6 +211,7 @@
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Commands.java" />
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/MetaData.java" />
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/CalculableWrapper.java" />
+        <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/ExtraCommands.java" />
       </list>
     </option>
   </component>
@@ -260,7 +259,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -400,6 +398,7 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -416,14 +415,14 @@
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="restartRequiresConfirmation" value="true" />
-    <property name="MemberChooser.showClasses" value="true" />
-    <property name="FullScreen" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
+    <property name="FullScreen" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="dynamic.classpath" value="false" />
-    <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="Downloaded.Files.Path" value="Z:\GitHub\bPermissions\lib" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RunManager" selected="Maven.build">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
@@ -462,19 +461,6 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method />
-    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -500,6 +486,19 @@
       <envs />
       <properties />
       <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -603,7 +602,6 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962137" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -617,6 +615,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962137" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962137" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -688,23 +687,7 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/util/CalculableType.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="12" selection-start="68" selection-end="68" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/ExtraCommands.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="51" selection-start="1844" selection-end="1844" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Permissions.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="403" column="20" selection-start="17152" selection-end="17152" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="3" column="12" selection-start="68" selection-end="68" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/YamlWorld.java">
@@ -721,23 +704,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/util/Calculable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="22" selection-start="150" selection-end="150" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/CalculableMeta.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6" column="13" selection-start="123" selection-end="123" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/CalculableType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="12" selection-start="51" selection-end="51" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -772,14 +741,12 @@
     </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.7.0_25/jre/lib/rt.jar!/java/lang/String.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="19" selection-start="158" selection-end="158" vertical-scroll-proportion="0.09174312">
-          <folding />
-        </state>
+        <state line="6" column="19" selection-start="158" selection-end="158" vertical-scroll-proportion="0.09174312" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Commands.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="148" column="35" selection-start="5442" selection-end="5442" vertical-scroll-proportion="-28.12">
+        <state line="148" column="35" selection-start="5442" selection-end="5442" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -787,17 +754,41 @@
     <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/MetaData.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="103" column="7" selection-start="3180" selection-end="3180" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#672#680#0" expanded="true" />
-            <element signature="e#1946#1958#0" expanded="true" />
-            <element signature="e#3983#4013#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/CalculableWrapper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="45" selection-start="2096" selection-end="2096" vertical-scroll-proportion="0.47706422">
+        <state line="76" column="45" selection-start="2096" selection-end="2096" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/util/Calculable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="22" selection-start="150" selection-end="150" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/CalculableType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="12" selection-start="51" selection-end="51" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Permissions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="408" column="12" selection-start="17319" selection-end="17319" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/ExtraCommands.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="54" column="34" selection-start="0" selection-end="2558" vertical-scroll-proportion="0.7688787">
           <folding />
         </state>
       </provider>

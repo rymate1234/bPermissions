@@ -10,6 +10,7 @@ import de.bananaco.bpermissions.api.Permission;
 import de.bananaco.bpermissions.api.RecursiveGroupException;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,8 +43,17 @@ public class ExtraCommands {
                 c.addPermission(perm.nameLowerCase(), perm.isTrue());
             } else if (action.equalsIgnoreCase("rmperm")) {
                 c.removePermission(value);
+            } else if (action.equalsIgnoreCase("setprefix")) {
+                c.setValue("prefix", value);
+            } else if (action.equalsIgnoreCase("setsuffix")) {
+                c.setValue("suffix", value);
+            } else if (action.equalsIgnoreCase("setpriority")) {
+                c.setValue("priority", value);
+            } else if (action.equalsIgnoreCase("rmprefix")) {
+                c.removeValue("prefix");
+            }    else if (action.equalsIgnoreCase("rmsuffix")) {
+                c.removeValue("suffix");
             }
-
             try {
                 c.calculateEffectiveMeta();
                 c.calculateEffectivePermissions();
