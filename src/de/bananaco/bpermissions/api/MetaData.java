@@ -100,6 +100,20 @@ public abstract class MetaData {
         }
     }
 
+    /**
+     * Remove a key from the metadata map
+     *
+     * @param key
+     */
+    public void removeValue(String key) {
+        values.remove(key);
+        try {
+            this.calculateEffectiveMeta();
+        } catch (RecursiveGroupException e) {
+            e.printStackTrace();
+        }
+    }
+
     public abstract void calculateEffectiveMeta() throws RecursiveGroupException;
 
     /**

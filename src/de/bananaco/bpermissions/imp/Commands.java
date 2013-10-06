@@ -146,12 +146,7 @@ public class Commands {
     }
 
     public void clearMeta(String value, CommandSender sender) {
-        getCalculable().getMeta().remove(value);
-        try {
-            getCalculable().calculateEffectiveMeta();
-        } catch (RecursiveGroupException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        getCalculable().removeValue(value);
         sender.sendMessage(format("Meta for " + calc.getName() + " " + getCalculable().getName() + " - cleared"));
     }
 }
