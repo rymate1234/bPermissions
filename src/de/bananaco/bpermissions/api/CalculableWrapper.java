@@ -82,7 +82,7 @@ public abstract class CalculableWrapper extends MapCalculable {
 
     @Override
     public void removeValue(String value) {
-        super.getMeta().remove(value);
+        super.removeValue(value);
         setDirty(true);
         setCalculablesWithGroupDirty();
         if (wm.getAutoSave()) {
