@@ -3,17 +3,10 @@ package de.bananaco.bpermissions.imp;
 import java.util.Arrays;
 import java.util.List;
 
+import de.bananaco.bpermissions.api.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import de.bananaco.bpermissions.api.Calculable;
-import de.bananaco.bpermissions.api.CalculableType;
-import de.bananaco.bpermissions.api.Group;
-import de.bananaco.bpermissions.api.Permission;
-import de.bananaco.bpermissions.api.User;
-import de.bananaco.bpermissions.api.World;
-import de.bananaco.bpermissions.api.WorldManager;
 
 public class Commands {
 
@@ -154,6 +147,11 @@ public class Commands {
 
     public void clearMeta(String value, CommandSender sender) {
         getCalculable().getMeta().remove(value);
+        try {
+            getCalculable().calculateEffectiveMeta();
+        } catch (RecursiveGroupException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         sender.sendMessage(format("Meta for " + calc.getName() + " " + getCalculable().getName() + " - cleared"));
     }
 }

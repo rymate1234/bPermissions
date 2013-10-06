@@ -17,7 +17,8 @@ public class Config {
     private boolean autoSave = true;
     private boolean offlineMode = false;
     private boolean trackLimit = false;
-    private Object globalPlayerFiles = false;
+    private boolean globalPlayerFiles = false;
+    private boolean autoSort = true;
 
     public void load() {
         try {
@@ -38,6 +39,7 @@ public class Config {
         config.load(file);
         // set the value to default
         config.set("auto-save", config.get("auto-save", autoSave));
+        config.set("auto-sort", config.get("auto-sort", autoSort));
         config.set("track-type", config.get("track-type", trackType));
         // set the debugger value to default
         config.set("debug-mode", Debugger.setDebug(config.getBoolean("debug-mode", Debugger.getDebug())));
@@ -52,6 +54,7 @@ public class Config {
         offlineMode = config.getBoolean("allow-offline-mode");
         trackLimit = config.getBoolean("track-limit");
         globalPlayerFiles = config.getBoolean("global-user-files");
+        autoSort = config.getBoolean("auto-sort");
         // then load our PromotionTrack
         if (trackType.equalsIgnoreCase("multi")) {
             track = new MultiGroupPromotion();
@@ -82,5 +85,13 @@ public class Config {
 
     public boolean getAllowOfflineMode() {
         return offlineMode;
+    }
+
+    public boolean getUseGlobalUsers() {
+        return globalPlayerFiles;
+    }
+
+    public boolean getAutoSort() {
+        return autoSort;
     }
 }

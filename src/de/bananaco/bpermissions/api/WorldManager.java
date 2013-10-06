@@ -28,6 +28,8 @@ public class WorldManager {
     private boolean autoSave = false;
     private boolean useGlobalFiles = false;
     protected boolean loaded = false;
+    private boolean useGlobalUsers;
+    private boolean autoSort;
 
     protected WorldManager() {
     }
@@ -174,5 +176,21 @@ public class WorldManager {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public void setUseGlobalUsers(boolean useGlobalUsers) {
+        this.useGlobalUsers = useGlobalUsers;
+    }
+
+    public boolean getUseGlobalUsers() {
+        return useGlobalUsers;
+    }
+
+    public boolean getAutoSort() {
+        return autoSort;
+    }
+
+    public void setAutoSort(boolean autoSort) {
+        this.autoSort = autoSort;
     }
 }

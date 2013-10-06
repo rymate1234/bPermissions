@@ -244,6 +244,8 @@ public class YamlWorld extends World {
             ufile.createNewFile();
             gfile.createNewFile();
         }
+
+        boolean autoSort = wm.getAutoSort();
         
         String def = getDefaultGroup();
         gconfig.set("default", def);

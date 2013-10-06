@@ -79,6 +79,8 @@ public class Permissions extends JavaPlugin {
         wm = WorldManager.getInstance();
         // Set the global file flag
         wm.setUseGlobalFiles(config.getUseGlobalFiles());
+        wm.setUseGlobalUsers(config.getUseGlobalUsers());
+        wm.setAutoSort(config.getAutoSort());
         handler = new SuperPermissionHandler(this);
         loader = new WorldLoader(this, mirrors);
         world = new DefaultWorld(this);
