@@ -8,12 +8,12 @@ import java.util.Set;
 
 /**
  * Adds a super easy to use static interface to bPermissions 2
- *
+ * <p/>
  * Needed imports:
- *
+ * <p/>
  * de.bananaco.bpermisisons.api.util.CalculableType Can be CalculableType.GROUP
  * or CalculableType.USER
- *
+ * <p/>
  * de.bananaco.bpermisisons.api.util.Permission Carries a String and a Boolean,
  * can be created when needed (new Permission(String, Boolean)) and will
  * override any existing permission by that name.
@@ -100,6 +100,7 @@ public class ApiLayer {
     /*
      * Used for getting values
      */
+
     /**
      * Used to get the groups of a user or a group as a String[] array
      *
@@ -118,6 +119,36 @@ public class ApiLayer {
         List<String> g = c.serialiseGroups();
         String[] groups = g.toArray(new String[g.size()]);
         return groups;
+    }
+
+    /*
+     * Used for getting values
+     */
+
+    /**
+     * Used to get the group of a user or a group with the highest priority
+     *
+     * @param world
+     * @param type
+     * @param name
+     * @return String
+     */
+    public static String getGroup(String world, CalculableType type, String name) {
+        World w = wm.getWorld(world);
+        // Null checks everywhere!
+        if (w == null || type == null || name == null) {
+            return "";
+        }
+        String groupName = "";
+        int priority = 0;
+        Calculable c = w.get(name, type);
+        for (String gr : c.serialiseGroups()) {
+            if (c.getPriority() > priority) {
+                groupName = c.getName();
+                priority = c.getPriority();
+            }
+        }
+        return groupName;
     }
 
     /**
@@ -144,7 +175,7 @@ public class ApiLayer {
     /**
      * Returns an effective set of the permissions including calculated
      * inheritance from global files!
-     *
+     * <p/>
      * Used internally and is also accessible to the world
      *
      * @param world
@@ -235,6 +266,7 @@ public class ApiLayer {
     /*
      * Used for setting values
      */
+
     /**
      * Used to add a single group to a user or a group
      *
