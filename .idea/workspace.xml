@@ -6,12 +6,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/ApiLayer.java" afterPath="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/ApiLayer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/YamlWorld.java" afterPath="$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/YamlWorld.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="bPermissions.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381161580797" ignored="false" />
+    <file path="/Dummy.txt" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381344267190" ignored="false" />
     <file path="$PROJECT_DIR$/../VanishNoPacket/pom.xml" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1379523391454" ignored="false" />
     <file path="$PROJECT_DIR$/../TagAPI/modules/vPre/pom.xml" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1379527650567" ignored="false" />
     <file path="$PROJECT_DIR$/../TagAPI/modules/TagAPI/pom.xml" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1379527650567" ignored="false" />
@@ -26,11 +26,18 @@
     <file path="/Config.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381070510266" ignored="false" />
     <file path="/WorldManager.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381067648954" ignored="false" />
     <file path="/Commands.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381077969247" ignored="false" />
-    <file path="/YamlWorld.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381070425285" ignored="false" />
+    <file path="/YamlWorld.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381355538646" ignored="false" />
     <file path="/CalculableWrapper.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381078397833" ignored="false" />
     <file path="/MetaData.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381078074323" ignored="false" />
     <file path="/ExtraCommands.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381093761581" ignored="false" />
     <file path="/ApiLayer.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381163366761" ignored="false" />
+    <file path="$PROJECT_DIR$/../bChatManager/src/main/java/net/rymate/bchatmanager/bChatListener.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381170563566" ignored="false" />
+    <file path="/bChatListener.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381170561550" ignored="false" />
+    <file path="$PROJECT_DIR$/../bChatManager/src/main/resources/plugin.yml" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381171373466" ignored="false" />
+    <file path="/plugin.yml" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381171323993" ignored="false" />
+    <file path="$PROJECT_DIR$/../bChatManager/pom.xml" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381172878386" ignored="false" />
+    <file path="$PROJECT_DIR$/../bChatManager/src/main/java/net/rymate/bchatmanager/bChatManager.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381172674761" ignored="false" />
+    <file path="/bChatManager.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381172652363" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,10 +143,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ApiLayer.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="YamlWorld.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/YamlWorld.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="167" column="46" selection-start="5937" selection-end="5937" vertical-scroll-proportion="0.89908254">
+              <folding>
+                <element signature="e#10760#10804#1" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ApiLayer.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/ApiLayer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="145" column="0" selection-start="5343" selection-end="5343" vertical-scroll-proportion="0.76376146">
+            <state line="163" column="34" selection-start="5899" selection-end="5899" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -149,15 +167,6 @@
         <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/ExtraCommands.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="33" column="41" selection-start="1125" selection-end="1125" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Commands.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Commands.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="148" column="35" selection-start="5442" selection-end="5442" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -196,7 +205,6 @@
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/Calculable.java" />
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/World.java" />
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/GroupCarrier.java" />
-        <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/YamlWorld.java" />
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Config.java" />
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/WorldManager.java" />
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Permissions.java" />
@@ -205,6 +213,7 @@
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/CalculableWrapper.java" />
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/ExtraCommands.java" />
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/ApiLayer.java" />
+        <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/YamlWorld.java" />
       </list>
     </option>
   </component>
@@ -252,6 +261,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
@@ -304,10 +314,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="bananaco" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="permissions" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -391,7 +397,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -604,7 +609,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18623266" sideWeight="0.6703786" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18569905" sideWeight="0.6703786" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962137" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -678,20 +683,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/SingleGroupPromotion.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="13" selection-start="563" selection-end="563" vertical-scroll-proportion="-2.0091743">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/WorldManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="17" selection-start="1669" selection-end="1700" vertical-scroll-proportion="0.42431194">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.7.0_25/jre/lib/rt.jar!/java/lang/String.class">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6" column="19" selection-start="158" selection-end="158" vertical-scroll-proportion="0.09174312" />
@@ -707,20 +698,6 @@
     <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/CalculableType.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="2" column="12" selection-start="51" selection-end="51" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/ExtraCommands.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="41" selection-start="1125" selection-end="1125" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Permissions.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="408" column="12" selection-start="17319" selection-end="17319" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -748,21 +725,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/Group.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="66" selection-start="596" selection-end="596" vertical-scroll-proportion="0.33027524">
-          <folding />
-        </state>
+        <state line="20" column="66" selection-start="596" selection-end="596" vertical-scroll-proportion="0.33027524" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/CalculableWrapper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="76" column="45" selection-start="2096" selection-end="2096" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Commands.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="148" column="35" selection-start="5442" selection-end="5442" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -783,8 +751,45 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/ApiLayer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="145" column="0" selection-start="5343" selection-end="5343" vertical-scroll-proportion="0.76376146">
+        <state line="163" column="34" selection-start="5899" selection-end="5899" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/WorldManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="81" column="31" selection-start="2309" selection-end="2309" vertical-scroll-proportion="0.8455378">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Commands.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="33" selection-start="807" selection-end="807" vertical-scroll-proportion="0.40366971">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/ExtraCommands.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="41" selection-start="1125" selection-end="1125" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Permissions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="408" column="12" selection-start="17319" selection-end="17319" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/YamlWorld.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="167" column="46" selection-start="5937" selection-end="5937" vertical-scroll-proportion="0.89908254">
+          <folding>
+            <element signature="e#10760#10804#1" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

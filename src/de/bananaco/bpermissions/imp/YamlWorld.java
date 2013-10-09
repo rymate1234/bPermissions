@@ -131,13 +131,17 @@ public class YamlWorld extends World {
          */
         ConfigurationSection usersConfig = uconfig
                 .getConfigurationSection(USERS);
+        Debugger.log("Loading users.yml...");
         if (usersConfig != null) {
             Set<String> names = usersConfig.getKeys(false);
             for (String name : names) {
                 List<String> nPerm = usersConfig.getStringList(name + "."
                         + PERMISSIONS);
+                Debugger.log("Perms loaded for " + name + ":" + nPerm);
                 List<String> nGroup = usersConfig.getStringList(name + "."
                         + GROUPS);
+                Debugger.log("Groups loaded for " + name + ":" + nGroup);
+
                 Set<Permission> perms = Permission.loadFromString(nPerm);
                 // Create the new user
                 User user = new User(name, nGroup, perms, getName(), this);
@@ -161,6 +165,7 @@ public class YamlWorld extends World {
         /*
          * Load the groups
          */
+        Debugger.log("Loading groups.yml...");
         ConfigurationSection groupsConfig = gconfig
                 .getConfigurationSection(GROUPS);
         if (groupsConfig != null) {
@@ -168,8 +173,13 @@ public class YamlWorld extends World {
             for (String name : names) {
                 List<String> nPerm = groupsConfig.getStringList(name + "."
                         + PERMISSIONS);
+                Debugger.log("Perms loaded for " + name + ":" + nPerm);
+
                 List<String> nGroup = groupsConfig.getStringList(name + "."
                         + GROUPS);
+                Debugger.log("Groups loaded for " + name + ":" + nGroup);
+
+
 
                 Set<Permission> perms = Permission.loadFromString(nPerm);
                 // Create the new group
@@ -261,6 +271,7 @@ public class YamlWorld extends World {
         Debugger.log(usr.size() + " users saved.");
         // Sort them :D
         List<Calculable> users = new ArrayList<Calculable>(usr);
+        Debugger.log("List of users: " + users);
         if (sort) {
             MetaData.sort(users);
         }
@@ -268,7 +279,9 @@ public class YamlWorld extends World {
         for (Calculable user : users) {
             String name = user.getName();
             uconfig.set(USERS + "." + name + "." + PERMISSIONS, user.serialisePermissions());
+            Debugger.log("Permissions for " + name + ": " + user.serialisePermissions());
             uconfig.set(USERS + "." + name + "." + GROUPS, user.serialiseGroups());
+            Debugger.log("Groups for " + name + ": " + user.serialiseGroups());
             // MetaData
             Map<String, String> meta = user.getMeta();
             if (meta.size() > 0) {
@@ -283,6 +296,7 @@ public class YamlWorld extends World {
         // Sort them :D
         @SuppressWarnings({"rawtypes", "unchecked"})
         List<Group> groups = new ArrayList(grp);
+        Debugger.log("List of groups: " + groups);
         if (sort) {
             MetaData.sort(groups);
         }
@@ -290,7 +304,9 @@ public class YamlWorld extends World {
         for (Calculable group : groups) {
             String name = group.getName();
             gconfig.set(GROUPS + "." + name + "." + PERMISSIONS, group.serialisePermissions());
+            Debugger.log("Permissions for " + name + ": " + group.serialisePermissions());
             gconfig.set(GROUPS + "." + name + "." + GROUPS, group.serialiseGroups());
+            Debugger.log("Groups for " + name + ": " + group.serialiseGroups());
             // MetaData
             Map<String, String> meta = group.getMeta();
             if (meta.size() > 0) {
