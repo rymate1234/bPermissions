@@ -137,10 +137,10 @@ public class YamlWorld extends World {
             for (String name : names) {
                 List<String> nPerm = usersConfig.getStringList(name + "."
                         + PERMISSIONS);
-                Debugger.log("Perms loaded for " + name + ":" + nPerm);
+                Debugger.log("Perms loaded for " + name + ": " + nPerm);
                 List<String> nGroup = usersConfig.getStringList(name + "."
                         + GROUPS);
-                Debugger.log("Groups loaded for " + name + ":" + nGroup);
+                Debugger.log("Groups loaded for " + name + ": " + nGroup);
 
                 Set<Permission> perms = Permission.loadFromString(nPerm);
                 // Create the new user
@@ -173,11 +173,11 @@ public class YamlWorld extends World {
             for (String name : names) {
                 List<String> nPerm = groupsConfig.getStringList(name + "."
                         + PERMISSIONS);
-                Debugger.log("Perms loaded for " + name + ":" + nPerm);
+                Debugger.log("Perms loaded for " + name + ": " + nPerm);
 
                 List<String> nGroup = groupsConfig.getStringList(name + "."
                         + GROUPS);
-                Debugger.log("Groups loaded for " + name + ":" + nGroup);
+                Debugger.log("Groups loaded for " + name + ": " + nGroup);
 
 
 
