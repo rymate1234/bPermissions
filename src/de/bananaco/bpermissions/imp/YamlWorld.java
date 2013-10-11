@@ -111,8 +111,11 @@ public class YamlWorld extends World {
             if (ufile.getParentFile() != null) {
                 ufile.getParentFile().mkdirs();
             }
+            Debugger.log("Loading and creating new files in " + ufile.getPath());
             ufile.createNewFile();
             gfile.createNewFile();
+        } else {
+            Debugger.log("Loading files in " + ufile.getPath());
         }
         uconfig = new YamlConfiguration();
         gconfig = new YamlConfiguration();
@@ -254,6 +257,7 @@ public class YamlWorld extends World {
             ufile.createNewFile();
             gfile.createNewFile();
         }
+        Debugger.log("Saving files in " + ufile.getPath());
 
         boolean autoSort = wm.getAutoSort();
         
