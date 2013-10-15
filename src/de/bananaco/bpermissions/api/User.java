@@ -3,6 +3,7 @@ package de.bananaco.bpermissions.api;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * User extends MapCalculable to make permission checks in the HasPermission
@@ -18,10 +19,9 @@ public class User extends CalculableWrapper {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public User(String name, List<String> groups, Set<Permission> permissions,
+    public User(String name, TreeSet<String> groups, Set<Permission> permissions,
             String world, World w) {
-        super(name, groups == null ? new HashSet() : new HashSet(groups),
-                permissions, world);
+        super(name, groups == null ? new TreeSet() : groups, permissions, world);
         this.w = w;
     }
 

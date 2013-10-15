@@ -3,6 +3,7 @@ package de.bananaco.bpermissions.api;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * This class wraps around the Calculable and effectively does the same job,
@@ -16,7 +17,7 @@ import java.util.Set;
 // temporary extend for backwards compatability
 public abstract class MapCalculable extends de.bananaco.bpermissions.api.util.Calculable {
 
-    public MapCalculable(String name, Set<String> groups,
+    public MapCalculable(String name, TreeSet<String> groups,
             Set<Permission> permissions, String world) {
         super(name, groups, permissions, world);
     }

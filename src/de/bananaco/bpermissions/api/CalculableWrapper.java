@@ -1,6 +1,7 @@
 package de.bananaco.bpermissions.api;
 
 import java.util.Set;
+import java.util.TreeSet;
 
 import de.bananaco.bpermissions.imp.Debugger;
 
@@ -8,8 +9,8 @@ public abstract class CalculableWrapper extends MapCalculable {
 
     private WorldManager wm = WorldManager.getInstance();
 
-    public CalculableWrapper(String name, Set<String> groups,
-            Set<Permission> permissions, String world) {
+    public CalculableWrapper(String name, TreeSet<String> groups,
+                             Set<Permission> permissions, String world) {
         super(name, groups, permissions, world);
 
     }

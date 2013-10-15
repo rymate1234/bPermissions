@@ -1,10 +1,6 @@
 package de.bananaco.bpermissions.api;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 //import org.bukkit.ChatColor;
 /**
@@ -21,8 +17,8 @@ public abstract class Calculable extends CalculableMeta {
     String name;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public Calculable(String name, Set<String> groups,
-            Set<Permission> permissions, String world) {
+    public Calculable(String name, TreeSet<String> groups,
+                      Set<Permission> permissions, String world) {
         super(groups, permissions, world);
         // TODO does this remove the ChatColor?
         this.name = name;

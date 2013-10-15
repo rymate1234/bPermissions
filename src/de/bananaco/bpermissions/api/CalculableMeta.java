@@ -3,13 +3,14 @@ package de.bananaco.bpermissions.api;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class CalculableMeta extends GroupCarrier {
 
     Map<String, String> effectiveMeta;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    protected CalculableMeta(Set<String> groups, Set<Permission> permissions,
+    protected CalculableMeta(TreeSet<String> groups, Set<Permission> permissions,
             String world) {
         super(groups, permissions, world);
         effectiveMeta = new HashMap();
