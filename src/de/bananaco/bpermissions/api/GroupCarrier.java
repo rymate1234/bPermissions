@@ -60,7 +60,7 @@ public abstract class GroupCarrier extends PermissionCarrier {
      * @param group
      */
     public void addGroup(String group) {
-        // group = group.toLowerCase(); SOME PEOPLE LIKE CAPITAL LETTERS
+        group = group.toLowerCase();
         groups.add(group);
     }
 
@@ -71,7 +71,7 @@ public abstract class GroupCarrier extends PermissionCarrier {
      * @param group
      */
     public void removeGroup(String group) {
-        // group = group.toLowerCase(); SOME PEOPLE LIKE CAPITAL LETTERS
+        group = group.toLowerCase();
         groups.remove(group);
     }
 
@@ -109,12 +109,12 @@ public abstract class GroupCarrier extends PermissionCarrier {
      */
     public List<String> serialiseGroups() {
         List<String> groups = new ArrayList<String>();
-
+        // Yes, we're lowercasing everything
         List<Group> gr = new ArrayList<Group>(getGroups());
         // also sort it
         sortGroups(gr);
         for (int i = 0; i < gr.size(); i++) {
-            groups.add(gr.get(i).getName());
+            groups.add(gr.get(i).getNameLowerCase());
         }
         return groups;
     }

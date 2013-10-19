@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+<<<<<<< HEAD
   <component name="BookmarkManager">
     <bookmark url="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/GroupCarrier.java" line="112" />
     <bookmark url="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Permissions.java" line="353" />
@@ -45,6 +46,17 @@
     <file path="$PROJECT_DIR$/../bChatManager/pom.xml" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381172878386" ignored="false" />
     <file path="$PROJECT_DIR$/../bChatManager/src/main/java/net/rymate/bchatmanager/bChatManager.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381172674761" ignored="false" />
     <file path="/bChatManager.java" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1381172652363" ignored="false" />
+=======
+  <component name="ChangeListManager">
+    <list default="true" id="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_bukkit_bukkit_1_6_2_R1_0.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
+    </list>
+    <ignored path="bPermissions.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <file path="/Dummy.txt" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1379523021363" ignored="false" />
+    <file path="$PROJECT_DIR$/.idea/workspace.xml" changelist="25aa2f89-9f49-41ce-a6c2-4a6c03753b0b" time="1379523022084" ignored="false" />
+>>>>>>> parent of 993a7db... DEATH TO LOWER CASE
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,6 +117,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
+<<<<<<< HEAD
       <file leaf-file-name="MultiGroupPromotion.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/MultiGroupPromotion.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -139,11 +152,18 @@
         <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/Calculable.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="71" column="24" selection-start="1983" selection-end="2694" vertical-scroll-proportion="0.0">
+=======
+      <file leaf-file-name=".gitignore" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+>>>>>>> parent of 993a7db... DEATH TO LOWER CASE
               <folding />
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="Permissions.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Permissions.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -168,25 +188,45 @@
         <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/ApiLayer.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="163" column="34" selection-start="5899" selection-end="5899" vertical-scroll-proportion="0.0">
+=======
+      <file leaf-file-name="YamlWorld.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/YamlWorld.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="169" column="41" selection-start="6116" selection-end="6116" vertical-scroll-proportion="0.0">
+>>>>>>> parent of 993a7db... DEATH TO LOWER CASE
               <folding />
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="ExtraCommands.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/ExtraCommands.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="33" column="41" selection-start="1125" selection-end="1125" vertical-scroll-proportion="0.0">
+=======
+      <file leaf-file-name="bPermissions.iml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bPermissions.iml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="72" selection-start="751" selection-end="751" vertical-scroll-proportion="0.0">
+>>>>>>> parent of 993a7db... DEATH TO LOWER CASE
               <folding />
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="CalculableWrapper.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/CalculableWrapper.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="76" column="45" selection-start="2096" selection-end="2096" vertical-scroll-proportion="0.0">
 >>>>>>> parent of da03e9c... Switch to TreeSets and TreeMaps
+=======
+      <file leaf-file-name="pom.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="61" column="31" selection-start="2034" selection-end="2034" vertical-scroll-proportion="0.75">
+>>>>>>> parent of 993a7db... DEATH TO LOWER CASE
               <folding />
             </state>
           </provider>
@@ -213,6 +253,7 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/bPermissions.iml" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/Calculable.java" />
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/World.java" />
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/GroupCarrier.java" />
@@ -225,6 +266,8 @@
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/ExtraCommands.java" />
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/api/ApiLayer.java" />
         <option value="$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/YamlWorld.java" />
+=======
+>>>>>>> parent of 993a7db... DEATH TO LOWER CASE
       </list>
     </option>
   </component>
@@ -257,7 +300,7 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectReloadState">
-    <option name="STATE" value="0" />
+    <option name="STATE" value="2" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
@@ -272,6 +315,11 @@
       <sortByType />
     </navigator>
     <panes>
+<<<<<<< HEAD
+=======
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+>>>>>>> parent of 993a7db... DEATH TO LOWER CASE
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -325,10 +373,6 @@
               <option name="myItemId" value="bananaco" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="permissions" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -349,10 +393,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="bpermissions" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="unit" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -423,19 +463,19 @@
     <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="MavenSettings" />
     <property name="MemberChooser.sorted" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../TagAPI/pom.xml" />
+    <property name="last_opened_file_path" value="$USER_HOME$/AppData/Local/GitHub/PortableGit_015aa71ef18c047ce8509ffb2f9e4bb0e3e73f13/bin/git.exe" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="restartRequiresConfirmation" value="true" />
-    <property name="Repository.Attach.Sources" value="false" />
-    <property name="FullScreen" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
+    <property name="FullScreen" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="Downloaded.Files.Path" value="Z:\GitHub\bPermissions\lib" />
-    <property name="options.splitter.details.proportions" value="0.2" />
-    <property name="options.searchVisible" value="true" />
     <property name="dynamic.classpath" value="false" />
+    <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="Downloaded.Files.Path" value="Z:\GitHub\bPermissions\lib" />
   </component>
   <component name="RunManager" selected="Maven.build">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
@@ -474,6 +514,19 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method />
+    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -499,19 +552,6 @@
       <envs />
       <properties />
       <listeners />
-      <method />
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -624,8 +664,13 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+<<<<<<< HEAD
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18569905" sideWeight="0.6703786" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962137" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+=======
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18623266" sideWeight="0.6703786" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32962137" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+>>>>>>> parent of 993a7db... DEATH TO LOWER CASE
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962137" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -699,6 +744,7 @@
   </component>
   <component name="editorHistoryManager">
 <<<<<<< HEAD
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/WorldCarrier.java">
 =======
     <entry file="jar://C:/Program Files/Java/jdk1.7.0_25/jre/lib/rt.jar!/java/lang/String.class">
@@ -753,6 +799,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="13" column="22" selection-start="459" selection-end="459" vertical-scroll-proportion="0.0">
 >>>>>>> parent of da03e9c... Switch to TreeSets and TreeMaps
+=======
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+>>>>>>> parent of 993a7db... DEATH TO LOWER CASE
           <folding />
         </state>
       </provider>
@@ -760,6 +811,7 @@
 <<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/PermissionCarrier.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state line="20" column="175" selection-start="571" selection-end="571" vertical-scroll-proportion="0.0">
           <folding />
         </state>
@@ -843,10 +895,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="28" column="33" selection-start="807" selection-end="807" vertical-scroll-proportion="0.40366971">
 >>>>>>> parent of da03e9c... Switch to TreeSets and TreeMaps
+=======
+        <state line="169" column="41" selection-start="6116" selection-end="6116" vertical-scroll-proportion="0.0">
+>>>>>>> parent of 993a7db... DEATH TO LOWER CASE
           <folding />
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
 <<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/MapCalculable.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -856,10 +912,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="33" column="41" selection-start="1125" selection-end="1125" vertical-scroll-proportion="0.0">
 >>>>>>> parent of da03e9c... Switch to TreeSets and TreeMaps
+=======
+    <entry file="file://$PROJECT_DIR$/bPermissions.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="72" selection-start="751" selection-end="751" vertical-scroll-proportion="0.0">
+>>>>>>> parent of 993a7db... DEATH TO LOWER CASE
           <folding />
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
 <<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/api/util/Calculable.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -869,6 +931,11 @@
     <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/MultiGroupPromotion.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="19" column="13" selection-start="563" selection-end="563" vertical-scroll-proportion="-1.3798627">
+=======
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="61" column="31" selection-start="2034" selection-end="2034" vertical-scroll-proportion="0.75">
+>>>>>>> parent of 993a7db... DEATH TO LOWER CASE
           <folding />
 =======
     <entry file="file://$PROJECT_DIR$/src/de/bananaco/bpermissions/imp/Permissions.java">

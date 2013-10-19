@@ -59,7 +59,7 @@ public abstract class World {
     public boolean contains(String name, CalculableType type) {
         name = ChatColor.stripColor(name);
         // A quick lowercase here
-        // name = name.toLowerCase(); NOT ANY MORE
+        name = name.toLowerCase();
         // And now we check
         if (type == CalculableType.USER) {
             return users.containsKey(name);
@@ -89,7 +89,7 @@ public abstract class World {
     public Calculable get(String name, CalculableType type) {
         name = ChatColor.stripColor(name);
         // A quick lowercase here
-        // name = name.toLowerCase(); NOPE
+        name = name.toLowerCase();
         // And now we check
         if (type == CalculableType.USER) {
             if (!users.containsKey(name)) {
@@ -171,9 +171,9 @@ public abstract class World {
      */
     public void add(Calculable calculable) {
         if (calculable.getType() == CalculableType.USER) {
-            users.put(calculable.getName(), (User) calculable);
+            users.put(calculable.getNameLowerCase(), (User) calculable);
         } else if (calculable.getType() == CalculableType.GROUP) {
-            groups.put(calculable.getName(), (Group) calculable);
+            groups.put(calculable.getNameLowerCase(), (Group) calculable);
         } else {
             System.err.println("Calculable not instance of User or Group!");
         }
