@@ -1,6 +1,11 @@
 package de.bananaco.bpermissions.api;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.ChatColor;
 
@@ -14,15 +19,15 @@ import de.bananaco.bpermissions.imp.Debugger;
  */
 public abstract class World {
 
-    private final TreeMap<String, Group> groups;
-    private final TreeMap<String, User> users;
+    private final Map<String, Group> groups;
+    private final Map<String, User> users;
     private final String world;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public World(String world) {
         this.world = world;
-        this.users = new TreeMap<String, User>(String.CASE_INSENSITIVE_ORDER);
-        this.groups = new TreeMap<String, Group>(String.CASE_INSENSITIVE_ORDER);
+        this.users = new HashMap();
+        this.groups = new HashMap();
     }
 
     /**

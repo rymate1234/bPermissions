@@ -98,7 +98,7 @@ public class Permissions extends JavaPlugin {
         //handler.setupAllPlayers();
         // Load our custom nodes (if any)
         new CustomNodes().load();
-
+        
         //printDinosaurs();
 
         // REMOVED
@@ -129,7 +129,7 @@ public class Permissions extends JavaPlugin {
     }
 
     public static void printDinosaurs() {
-        String dino =
+        String dino = 
                   "            __ " + "\n"
                 + "           / _)" + "\n"
                 + "    .-^^^-/ /  " + "\n"

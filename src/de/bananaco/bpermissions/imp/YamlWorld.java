@@ -2,7 +2,10 @@ package de.bananaco.bpermissions.imp;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -142,12 +145,9 @@ public class YamlWorld extends World {
                         + GROUPS);
                 Debugger.log("Groups loaded for " + name + ": " + nGroup);
 
-                TreeSet<String> groups = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
-                groups.addAll(nGroup);
-
                 Set<Permission> perms = Permission.loadFromString(nPerm);
                 // Create the new user
-                User user = new User(name, groups, perms, getName(), this);
+                User user = new User(name, nGroup, perms, getName(), this);
                 // MetaData
                 ConfigurationSection meta = usersConfig
                         .getConfigurationSection(name + "." + META);
@@ -182,12 +182,11 @@ public class YamlWorld extends World {
                         + GROUPS);
                 Debugger.log("Groups loaded for " + name + ": " + nGroup);
 
-                TreeSet<String> groups = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
-                groups.addAll(nGroup);
+
 
                 Set<Permission> perms = Permission.loadFromString(nPerm);
                 // Create the new group
-                Group group = new Group(name, groups, perms, getName(), this);
+                Group group = new Group(name, nGroup, perms, getName(), this);
                 // MetaData
                 ConfigurationSection meta = groupsConfig
                         .getConfigurationSection(name + "." + META);

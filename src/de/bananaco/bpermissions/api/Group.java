@@ -3,7 +3,6 @@ package de.bananaco.bpermissions.api;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * The Group object extends Calculable which allows recursive inheritance of
@@ -18,9 +17,9 @@ public class Group extends CalculableWrapper {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public Group(String name, TreeSet<String> groups, Set<Permission> permissions,
+    public Group(String name, List<String> groups, Set<Permission> permissions,
             String world, World w) {
-        super(name, groups == null ? new TreeSet() : groups,
+        super(name, groups == null ? new HashSet() : new HashSet(groups),
                 permissions, world);
         this.w = w;
     }
