@@ -33,7 +33,7 @@ commands:
     description: demote a player
     usage: /<command> player (track) (world)
   setgroup:
-    description: Set a player's group!
+    description: Set a player's group
     usage: /<command> player (group)
 
 
