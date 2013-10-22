@@ -8,25 +8,16 @@
     <packaging>jar</packaging>
     
     <name>bPermissions</name>
-    <url>https://github.com/codename-B/bPermissions</url>
+    <url>https://github.com/rymate1234/bPermissions</url>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    
-    <organization>
-        <name>BananaCode</name>
-        <url>https://github.com/codename-B</url>
-    </organization>
 
     <repositories>
         <repository>
             <id>Bukkit Repo</id>
             <url>http://repo.bukkit.org/content/groups/public/</url>
-        </repository>   
-        <repository>
-            <id>spout-repo</id>
-            <url>http://repo.spout.org/artifactory/repo</url>
         </repository>
     </repositories>
     
