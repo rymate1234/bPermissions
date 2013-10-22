@@ -33,7 +33,7 @@ public class YamlWorld extends World {
     protected static final String PERMISSIONS = "permissions";
     protected static final String META = "meta";
     protected static final String USERS = "users";
-    
+
     protected YamlConfiguration uconfig = null;//new YamlConfiguration();
     protected YamlConfiguration gconfig = null;//new YamlConfiguration();
     private final File ufile;
@@ -260,7 +260,7 @@ public class YamlWorld extends World {
         Debugger.log("Saving files in " + ufile.getPath());
 
         boolean autoSort = wm.getAutoSort();
-        
+
         String def = getDefaultGroup();
         gconfig.set("default", def);
 
