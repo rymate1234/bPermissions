@@ -19,6 +19,7 @@ public class Config {
     private boolean trackLimit = false;
     private boolean globalPlayerFiles = false;
     private boolean autoSort = true;
+    private boolean newCommands = true;
 
     public void load() {
         try {
@@ -40,6 +41,7 @@ public class Config {
         // set the value to default
         config.set("auto-save", config.get("auto-save", autoSave));
         config.set("auto-sort", config.get("auto-sort", autoSort));
+        config.set("new-commands", config.get("new-commands", newCommands));
         config.set("track-type", config.get("track-type", trackType));
         // set the debugger value to default
         config.set("debug-mode", Debugger.setDebug(config.getBoolean("debug-mode", Debugger.getDebug())));
@@ -49,6 +51,7 @@ public class Config {
         config.set("track-limit", config.get("track-limit", trackLimit));
         // then load it into memory
         useGlobalFiles = config.getBoolean("use-global-files");
+        newCommands = config.getBoolean("new-commands");
         autoSave = config.getBoolean("auto-save");
         trackType = config.getString("track-type");
         offlineMode = config.getBoolean("allow-offline-mode");
@@ -93,5 +96,9 @@ public class Config {
 
     public boolean getAutoSort() {
         return autoSort;
+    }
+
+    public boolean newCommands() {
+        return newCommands;
     }
 }

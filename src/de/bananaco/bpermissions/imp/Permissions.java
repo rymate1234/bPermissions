@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -98,9 +99,8 @@ public class Permissions extends JavaPlugin {
         //handler.setupAllPlayers();
         // Load our custom nodes (if any)
         new CustomNodes().load();
-        
-        //printDinosaurs();
 
+        //printDinosaurs();
         // REMOVED
         // getServer().getScheduler().scheduleSyncRepeatingTask(this, new SuperPermissionHandler.SuperPermissionReloader(handler), 5, 5);
         // And print a nice little message ;)		
@@ -129,8 +129,8 @@ public class Permissions extends JavaPlugin {
     }
 
     public static void printDinosaurs() {
-        String dino = 
-                  "            __ " + "\n"
+        String dino
+                = "            __ " + "\n"
                 + "           / _)" + "\n"
                 + "    .-^^^-/ /  " + "\n"
                 + " __/       /" + "\n"
@@ -303,74 +303,138 @@ public class Permissions extends JavaPlugin {
          * Much is repeated here
          */
         if (command.getName().equalsIgnoreCase("user") || command.getName().equalsIgnoreCase("group")) {
-            Calculable calc = cmd.getCalculable();
-            CalculableType type = command.getName().equalsIgnoreCase("user") ? CalculableType.USER : CalculableType.GROUP;
-            CalculableType opposite = !command.getName().equalsIgnoreCase("user") ? CalculableType.USER : CalculableType.GROUP;
-            /*
-             * Selecting, displaying, and executing commands on the Calculable
-             */
-            if (args.length == 0) {
-                if (calc == null) {
-                    sendMessage(sender, "Nothing is selected!");
-                } else {
-                    sendMessage(sender, "Currently selected " + calc.getType().getName() + ": " + calc.getName());
+            if (config.newCommands()) {
+                CalculableType type = command.getName().equalsIgnoreCase("user") ? CalculableType.USER : CalculableType.GROUP;
+                NewCommands newcmd = new NewCommands();
+                sendMessage(sender, "Args Length: " + args.length);
+
+                // Begin new commands
+                if (args.length < 3) {
+                    sendMessage(sender, "Not enough arguments!");
+                    return true;
                 }
-            } else if (args.length == 1) {
-                cmd.setCalculable(type, args[0], sender);
-            } else if (args.length == 2) {
-                if (calc == null) {
-                    sendMessage(sender, "Nothing is selected!");
-                } else if (calc.getType() != type) {
-                    sendMessage(sender, "Please select a " + type.getName() + ", you currently have a " + opposite.getName() + " selected.");
-                } else {
-                    String action = args[0];
-                    String value = args[1];
-                    if (action.equalsIgnoreCase("addgroup")) {
-                        cmd.addGroup(value, sender);
-                    } else if (action.equalsIgnoreCase("rmgroup")) {
-                        cmd.removeGroup(value, sender);
-                    } else if (action.equalsIgnoreCase("setgroup")) {
-                        cmd.setGroup(value, sender);
-                    } else if (action.equalsIgnoreCase("list")) {
-                        value = value.toLowerCase();
-                        if (value.equalsIgnoreCase("groups") || value.equalsIgnoreCase("group") || value.equalsIgnoreCase("g")) {
-                            cmd.listGroups(sender);
-                        } else if (value.startsWith("perm") || value.equalsIgnoreCase("p")) {
-                            cmd.listPermissions(sender);
+
+                // First we set the calculable it will be applied to
+                newcmd.setCalculable(type, args[0]);
+
+                // Then check if it's a single world or all worlds
+                if (args[args.length - 2].equalsIgnoreCase("in")) {
+                    sendMessage(sender, "Single world command");
+                    sendMessage(sender, args[args.length - 2] + " - " + args[args.length - 1]);
+                    newcmd.setWorld(args[args.length - 1], sender);
+                }
+
+                if (args[1].equalsIgnoreCase("set")) {
+                    if (args[2].endsWith("fix") || args[2].equalsIgnoreCase("priority")) {
+                        String meta = args[3];
+                        if (args.length > 6) {
+                            StringBuilder prefixMaker = new StringBuilder();
+                            for (int i = 2; i < args.length; i++) {
+                                prefixMaker.append(args[i]);
+                                if (i != args.length - 1) {
+                                    prefixMaker.append(" ");
+                                }
+                            }
+                            meta = prefixMaker.toString();
+                            meta = meta.replace("in " + newcmd.getWorld().getName(), "");
+
                         }
-                    } else if (action.equalsIgnoreCase("meta")) {
-                        cmd.showValue(value, sender);
-                    } else if (action.equalsIgnoreCase("cmeta")) {
-                        cmd.clearMeta(value, sender);
-                    } else if (action.equalsIgnoreCase("addperm")) {
-                        cmd.addPermission(value, sender);
-                    } else if (action.equalsIgnoreCase("rmperm")) {
-                        cmd.removePermission(value, sender);
-                    } else if (action.equals("has")) {
-                        cmd.hasPermission(value, sender);
-                    } else {
-                        sendMessage(sender, "Please consult the command documentation!");
+                        newcmd.setValue(args[2], meta, sender);
+                        sendMessage(sender, "Set " + args[0] + "'s " + args[2] + " to " + meta);
+                        return true;
                     }
-                    //ApiLayer.update();
-                }
-            } else if (args.length >= 3 && args[0].equalsIgnoreCase("meta")) {
-                if (calc == null) {
-                    sendMessage(sender, "Nothing is selected!");
-                } else if (calc.getType() != type) {
-                    sendMessage(sender, "Please select a " + type.getName() + ", you currently have a " + opposite.getName() + " selected.");
+
+                    if (args[2].equalsIgnoreCase("group")) {
+                        newcmd.setGroup(args[3], sender);
+                        sendMessage(sender, "Set " + args[0] + "'s group to " + args[3]);
+                        return true;
+                    }
+                } else if (args[1].equalsIgnoreCase("add")) {
+                    if (args[2].equalsIgnoreCase("group")) {
+                        newcmd.addGroup(args[3], sender);
+                        sendMessage(sender, "Added the group " + args[3] + " to " + args[0]);
+                        return true;
+                    }
+
+                } else if (args[1].equalsIgnoreCase("remove")) {
+
+                } else if (args[1].equalsIgnoreCase("show")) {
+
                 } else {
-                    StringBuilder prefixMaker = new StringBuilder();
-                    for (int i = 2; i < args.length; i++) {
-                        prefixMaker.append(args[i]);
-                        if (i != args.length - 1) {
-                            prefixMaker.append(" ");
-                        }
-                    }
-                    String prefix = prefixMaker.toString();
-                    cmd.setValue(args[1], prefix, sender);
+                    sendMessage(sender, "This isn't a valid command!");
+                    return true;
                 }
+
             } else {
-                sendMessage(sender, "Too many arguments.");
+                Calculable calc = cmd.getCalculable();
+                CalculableType type = command.getName().equalsIgnoreCase("user") ? CalculableType.USER : CalculableType.GROUP;
+                CalculableType opposite = !command.getName().equalsIgnoreCase("user") ? CalculableType.USER : CalculableType.GROUP;
+                /*
+                 * Selecting, displaying, and executing commands on the Calculable
+                 */
+                if (args.length == 0) {
+                    if (calc == null) {
+                        sendMessage(sender, "Nothing is selected!");
+                    } else {
+                        sendMessage(sender, "Currently selected " + calc.getType().getName() + ": " + calc.getName());
+                    }
+                } else if (args.length == 1) {
+                    cmd.setCalculable(type, args[0], sender);
+                } else if (args.length == 2) {
+                    if (calc == null) {
+                        sendMessage(sender, "Nothing is selected!");
+                    } else if (calc.getType() != type) {
+                        sendMessage(sender, "Please select a " + type.getName() + ", you currently have a " + opposite.getName() + " selected.");
+                    } else {
+                        String action = args[0];
+                        String value = args[1];
+                        if (action.equalsIgnoreCase("addgroup")) {
+                            cmd.addGroup(value, sender);
+                        } else if (action.equalsIgnoreCase("rmgroup")) {
+                            cmd.removeGroup(value, sender);
+                        } else if (action.equalsIgnoreCase("setgroup")) {
+                            cmd.setGroup(value, sender);
+                        } else if (action.equalsIgnoreCase("list")) {
+                            value = value.toLowerCase();
+                            if (value.equalsIgnoreCase("groups") || value.equalsIgnoreCase("group") || value.equalsIgnoreCase("g")) {
+                                cmd.listGroups(sender);
+                            } else if (value.startsWith("perm") || value.equalsIgnoreCase("p")) {
+                                cmd.listPermissions(sender);
+                            }
+                        } else if (action.equalsIgnoreCase("meta")) {
+                            cmd.showValue(value, sender);
+                        } else if (action.equalsIgnoreCase("cmeta")) {
+                            cmd.clearMeta(value, sender);
+                        } else if (action.equalsIgnoreCase("addperm")) {
+                            cmd.addPermission(value, sender);
+                        } else if (action.equalsIgnoreCase("rmperm")) {
+                            cmd.removePermission(value, sender);
+                        } else if (action.equals("has")) {
+                            cmd.hasPermission(value, sender);
+                        } else {
+                            sendMessage(sender, "Please consult the command documentation!");
+                        }
+                        //ApiLayer.update();
+                    }
+                } else if (args.length >= 3 && args[0].equalsIgnoreCase("meta")) {
+                    if (calc == null) {
+                        sendMessage(sender, "Nothing is selected!");
+                    } else if (calc.getType() != type) {
+                        sendMessage(sender, "Please select a " + type.getName() + ", you currently have a " + opposite.getName() + " selected.");
+                    } else {
+                        StringBuilder prefixMaker = new StringBuilder();
+                        for (int i = 2; i < args.length; i++) {
+                            prefixMaker.append(args[i]);
+                            if (i != args.length - 1) {
+                                prefixMaker.append(" ");
+                            }
+                        }
+                        String prefix = prefixMaker.toString();
+                        cmd.setValue(args[1], prefix, sender);
+                    }
+                } else {
+                    sendMessage(sender, "Too many arguments.");
+                }
             }
             return true;
         }
@@ -403,6 +467,7 @@ public class Permissions extends JavaPlugin {
             sender.sendMessage(message2);
             ExtraCommands.execute(name, type, action, value, world);
             //ApiLayer.update();
+
         }
         /*
          * A new, easier way to set a players group!
