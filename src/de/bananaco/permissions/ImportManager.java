@@ -17,8 +17,6 @@ import de.bananaco.bpermissions.api.Permission;
 import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.imp.Debugger;
-import de.bananaco.bpermissions.imp.loadmanager.MainThread;
-import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
 
 public class ImportManager {
 
@@ -30,127 +28,106 @@ public class ImportManager {
     }
 
     public boolean pexImport() {
-        if (MainThread.getInstance() == null) {
-            Debugger.log("MainThread cancelled");
-            return false;
-        }
         try {
-            // load async
-            MainThread.getInstance().schedule(new TaskRunnable() {
-                public void run() {
-                    try {
-                        importPEX();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+            File file = new File("plugins/PermissionsEx/permissions.yml");
+            // No point doing anything if the file doesn't exist
+            if (!file.exists()) {
+                System.err.println("File not exist");
+                return false;
+            }
+            YamlConfiguration perm = new YamlConfiguration();
+            perm.load(file);
+
+            World world = plugin.getServer().getWorlds().get(0);
+            de.bananaco.bpermissions.api.World wd = wm.getWorld(world.getName());
+
+            ConfigurationSection users = perm.getConfigurationSection("users");
+            ConfigurationSection groups = perm.getConfigurationSection("groups");
+
+            if (users.getKeys(false) != null && users.getKeys(false).size() > 0) {
+                System.out.println("Importing users....");
+                for (String user : users.getKeys(false)) {
+                    List<String> g = users.getStringList(user + ".group");
+                    List<String> p = users.getStringList(user + ".permissions");
+                    User u = wd.getUser(user);
+                    // Remove the existing groups
+                    u.getGroupsAsString().clear();
+                    // Add all the groups
+                    if (g != null && g.size() > 0) {
+                        for (String gr : g) {
+                            u.addGroup(gr);
+                        }
+                    }
+                    if (p != null && p.size() > 0) {
+                        for (String pr : p) {
+                            if (pr.startsWith("-")) {
+                                u.addPermission(pr.replace("-", ""), false);
+                            } else {
+                                u.addPermission(pr, true);
+                            }
+                        }
+                    }
+                    String prefix = users.getString(user + ".prefix");
+                    if (prefix != null) {
+                        u.setValue("prefix", prefix);
+                    }
+                    String suffix = users.getString(user + ".suffix");
+                    if (suffix != null) {
+                        u.setValue("suffix", suffix);
                     }
                 }
+                System.out.println("Done!");
+            }
 
-                public TaskRunnable.TaskType getType() {
-                    return TaskRunnable.TaskType.LOAD;
+            if (groups.getKeys(false) != null && groups.getKeys(false).size() > 0) {
+                System.out.println("Importing groups....");
+                for (String group : groups.getKeys(false)) {
+                    if (groups.getBoolean(group + ".default")) {
+                        wd.setDefaultGroup(group);
+                        System.out.println("DEFAULT GROUP DETECTED: " + group);
+                    }
+                    List<String> g = groups.getStringList(group + ".inheritance");
+                    List<String> p = groups.getStringList(group + ".permissions");
+                    Group u = wd.getGroup(group);
+                    // Remove the existing groups
+                    u.getGroupsAsString().clear();
+                    // Add all the groups
+                    if (g != null && g.size() > 0) {
+                        for (String gr : g) {
+                            u.addGroup(gr);
+                        }
+                    }
+                    if (p != null && p.size() > 0) {
+                        for (String pr : p) {
+                            if (pr.startsWith("-")) {
+                                u.addPermission(pr.replace("-", ""), false);
+                            } else {
+                                u.addPermission(pr, true);
+                            }
+                        }
+                    }
+                    String prefix = groups.getString(group + ".prefix");
+                    if (prefix != null) {
+                        u.setValue("prefix", prefix);
+                    }
+                    String suffix = groups.getString(group + ".suffix");
+                    if (suffix != null) {
+                        u.setValue("suffix", suffix);
+                    }
+                    String priority = groups.getString(group + ".options.rank");
+                    if (priority != null) {
+                        u.setValue("priority", priority);
+                    }
                 }
-            });
+                System.out.println("Done!");
+                wm.saveAll();
+            }
             // If it loaded correctly cancel the error
         } catch (Exception e) {
             Bukkit.getServer().broadcastMessage(ChatColor.RED + "PEX import failed! Check the server log!");
             e.printStackTrace();
         }
         return true;
-    }
-
-    protected synchronized void importPEX() throws Exception {
-        File file = new File("plugins/PermissionsEx/permissions.yml");
-        // No point doing anything if the file doesn't exist
-        if (!file.exists()) {
-            System.err.println("File not exist");
-            return;
-        }
-        YamlConfiguration perm = new YamlConfiguration();
-        perm.load(file);
-
-        World world = plugin.getServer().getWorlds().get(0);
-        de.bananaco.bpermissions.api.World wd = wm.getWorld(world.getName());
-
-        ConfigurationSection users = perm.getConfigurationSection("users");
-        ConfigurationSection groups = perm.getConfigurationSection("groups");
-
-        if (users.getKeys(false) != null && users.getKeys(false).size() > 0) {
-            System.out.println("Importing users....");
-            for (String user : users.getKeys(false)) {
-                List<String> g = users.getStringList(user + ".group");
-                List<String> p = users.getStringList(user + ".permissions");
-                User u = wd.getUser(user);
-                // Remove the existing groups
-                u.getGroupsAsString().clear();
-                // Add all the groups
-                if (g != null && g.size() > 0) {
-                    for (String gr : g) {
-                        u.addGroup(gr);
-                    }
-                }
-                if (p != null && p.size() > 0) {
-                    for (String pr : p) {
-                        if (pr.startsWith("-")) {
-                            u.addPermission(pr.replace("-", ""), false);
-                        } else {
-                            u.addPermission(pr, true);
-                        }
-                    }
-                }
-                String prefix = users.getString(user + ".prefix");
-                if (prefix != null) {
-                    u.setValue("prefix", prefix);
-                }
-                String suffix = users.getString(user + ".suffix");
-                if (suffix != null) {
-                    u.setValue("suffix", suffix);
-                }
-            }
-            System.out.println("Done!");
-        }
-
-        if (groups.getKeys(false) != null && groups.getKeys(false).size() > 0) {
-            System.out.println("Importing groups....");
-            for (String group : groups.getKeys(false)) {
-                if (groups.getBoolean(group + ".default")) {
-                    wd.setDefaultGroup(group);
-                    System.out.println("DEFAULT GROUP DETECTED: " + group);
-                }
-                List<String> g = groups.getStringList(group + ".inheritance");
-                List<String> p = groups.getStringList(group + ".permissions");
-                Group u = wd.getGroup(group);
-                // Remove the existing groups
-                u.getGroupsAsString().clear();
-                // Add all the groups
-                if (g != null && g.size() > 0) {
-                    for (String gr : g) {
-                        u.addGroup(gr);
-                    }
-                }
-                if (p != null && p.size() > 0) {
-                    for (String pr : p) {
-                        if (pr.startsWith("-")) {
-                            u.addPermission(pr.replace("-", ""), false);
-                        } else {
-                            u.addPermission(pr, true);
-                        }
-                    }
-                }
-                String prefix = groups.getString(group + ".prefix");
-                if (prefix != null) {
-                    u.setValue("prefix", prefix);
-                }
-                String suffix = groups.getString(group + ".suffix");
-                if (suffix != null) {
-                    u.setValue("suffix", suffix);
-                }
-                String priority = groups.getString(group + ".options.rank");
-                if (priority != null) {
-                    u.setValue("priority", priority);
-                }
-            }
-            System.out.println("Done!");
-            wm.saveAll();
-        }
     }
 
     public void importYML() throws Exception {
