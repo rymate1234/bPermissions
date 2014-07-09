@@ -19,6 +19,8 @@ import de.bananaco.bpermissions.api.Calculable;
 import de.bananaco.bpermissions.api.CalculableType;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
+import de.bananaco.bpermissions.imp.loadmanager.MainThread;
+import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
 import de.bananaco.bpermissions.unit.PermissionsTest;
 import de.bananaco.permissions.ImportManager;
 import de.bananaco.permissions.fornoobs.BackupPermissionsCommand;
@@ -37,12 +39,14 @@ public class Permissions extends JavaPlugin {
     private DefaultWorld world;
     private Config config;
     protected static JavaPlugin instance = null;
+    private MainThread mt;
 
     @Override
     public void onDisable() {
         // Cancel tasks
         getServer().getScheduler().cancelTasks(this);
 
+        mt.setRunning(false);
         System.out.println(blankFormat("Disabled"));
     }
 
@@ -54,6 +58,10 @@ public class Permissions extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // start main thread
+        mt = MainThread.getInstance();
+        mt.start();
+
         instance = this;
         // Only happens after onEnable(), prevent NPE's
         config = new Config();
@@ -85,16 +93,45 @@ public class Permissions extends JavaPlugin {
         // Register handler events
         getServer().getPluginManager().registerEvents(handler, this);
         // Setup all online players
-        handler.setupAllPlayers();
+        //handler.setupAllPlayers();
         // Load our custom nodes (if any)
         new CustomNodes().load();
-        
+
+        // REMOVED
+        // getServer().getScheduler().scheduleSyncRepeatingTask(this, new SuperPermissionHandler.SuperPermissionReloader(handler), 5, 5);
+        // And print a nice little message ;)		
+        Debugger.log(blankFormat("Enabled"));
+        // print dino
+        //printDinosaurs();
+
+        // set main thread enabled
+        mt.setStarted(true);
         // setup all players
         final World world = this.world;
-        this.world.setupAll();
-	
-        Debugger.log(blankFormat("Enabled"));
+        mt.schedule(new TaskRunnable() {
+            public void run() {
+                Bukkit.getScheduler().callSyncMethod(Permissions.instance, new Callable() {
+                    public Object call() throws Exception {
+                        Debugger.log("Setting up all players...");
+                        return Boolean.valueOf(Permissions.this.world.setupAll());
+                    }
+                });
+            }
 
+            public TaskRunnable.TaskType getType() {
+                return TaskRunnable.TaskType.SERVER;
+            }
+        });
+    }
+
+    public static void printDinosaurs() {
+        String dino = "            __ " + "\n"
+                + "           / _)" + "\n"
+                + "    .-^^^-/ /  " + "\n"
+                + " __/       /" + "\n"
+                + "<__.|_|-|_|" + "\n"
+                + "==DINOSAUR==";
+        System.out.println("\n" + dino);
     }
 
     public static String blankFormat(String message) {
@@ -439,15 +476,24 @@ public class Permissions extends JavaPlugin {
                     return true;
                 } else if (action.equalsIgnoreCase("reload")) {
                     // Reload all changes
-                    sendMessage(sender, "All worlds reloading..."); 
-                    
                     for (World world : wm.getAllWorlds()) {
                         world.load();
                     }
+                    // async -> sync
+                    mt.schedule(new TaskRunnable() {
+                        public void run() {
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(instance, new Runnable() {
+                                public void run() {
+                                    world.setupAll();
+                                }
+                            }, 0);
+                        }
 
-                    world.setupAll();
-  
-                    sendMessage(sender, "All worlds reloaded!");
+                        public TaskType getType() {
+                            return TaskType.SERVER;
+                        }
+                    });
+                    sendMessage(sender, "All worlds reloading!");
                     return true;
                 } else if (action.equalsIgnoreCase("cleanup")) {
                     sendMessage(sender, "Cleaning up files!");

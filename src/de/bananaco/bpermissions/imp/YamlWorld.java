@@ -20,6 +20,8 @@ import de.bananaco.bpermissions.api.Permission;
 import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
+import de.bananaco.bpermissions.imp.loadmanager.MainThread;
+import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
 
 /**
  * Here is the main YamlWorld class This loads from the default users.yml and
@@ -70,10 +72,26 @@ public class YamlWorld extends World {
     }
 
     public boolean load() {
+        if (MainThread.getInstance() == null) {
+            Debugger.log("MainThread cancelled");
+            return false;
+        }
         try {
-            clear();
-            loadUnsafe();
+            // load async
+            MainThread.getInstance().schedule(new TaskRunnable() {
+                public void run() {
+                    try {
+                        clear();
+                        loadUnsafe();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
 
+                public TaskType getType() {
+                    return TaskType.LOAD;
+                }
+            });
             // If it loaded correctly cancel the error
             error = false;
         } catch (Exception e) {
@@ -84,7 +102,7 @@ public class YamlWorld extends World {
         return true;
     }
 
-    protected void loadUnsafe() throws Exception {
+    protected synchronized void loadUnsafe() throws Exception {
         boolean autoSave = wm.getAutoSave();
         wm.setAutoSave(false);
         if (!ufile.exists()) {
@@ -187,6 +205,10 @@ public class YamlWorld extends World {
     }
 
     public boolean save() {
+        if (MainThread.getInstance() == null) {
+            Debugger.log("MainThread cancelled");
+            return false;
+        }
         if (error) {
             Bukkit.getServer().broadcastMessage(ChatColor.RED + "Permissions for world:" + this.getName() + " did not load correctly, please consult server.log.");
             return false;
@@ -194,7 +216,20 @@ public class YamlWorld extends World {
         save = true;
         // async again
         try {
-            saveUnsafe(false);
+            MainThread.getInstance().schedule(new TaskRunnable() {
+                public void run() {
+                    try {
+                        saveUnsafe(false);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                public TaskType getType() {
+                    return TaskType.SAVE;
+                }
+            });
+            save = false;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -216,6 +251,7 @@ public class YamlWorld extends World {
 
         uconfig.setDefaults(this.uconfig);
         gconfig.setDefaults(this.gconfig);
+
 
         Set<Calculable> usr = getAll(CalculableType.USER);
         Debugger.log(usr.size() + " users saved.");
