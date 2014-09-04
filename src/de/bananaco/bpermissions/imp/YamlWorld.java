@@ -1,17 +1,5 @@
 package de.bananaco.bpermissions.imp;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
-
 import de.bananaco.bpermissions.api.Calculable;
 import de.bananaco.bpermissions.api.CalculableType;
 import de.bananaco.bpermissions.api.Group;
@@ -22,6 +10,17 @@ import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.imp.loadmanager.MainThread;
 import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Here is the main YamlWorld class This loads from the default users.yml and
@@ -78,7 +77,8 @@ public class YamlWorld extends World {
         }
         try {
             // load async
-            MainThread.getInstance().schedule(new TaskRunnable() {
+            new BukkitRunnable() {
+                @Override
                 public void run() {
                     try {
                         clear();
@@ -87,11 +87,17 @@ public class YamlWorld extends World {
                         e.printStackTrace();
                     }
                 }
+            }.runTask(permissions);
 
-                public TaskType getType() {
-                    return TaskType.LOAD;
+            for (Player player : this.permissions.getServer().getOnlinePlayers()) {
+                String name = player.getName();
+                String world = player.getWorld().getName();
+                if (wm.getWorld(world) == this) {
+                    getUser(name).calculateEffectivePermissions();
+                    getUser(name).calculateEffectiveMeta();
                 }
-            });
+            }
+
             // If it loaded correctly cancel the error
             error = false;
         } catch (Exception e) {
@@ -193,14 +199,6 @@ public class YamlWorld extends World {
         Debugger.log(this.getAll(CalculableType.USER).size() + " users loaded.");
         Debugger.log(this.getAll(CalculableType.GROUP).size() + " groups loaded.");
 
-        for (Player player : this.permissions.getServer().getOnlinePlayers()) {
-            String name = player.getName();
-            String world = player.getWorld().getName();
-            if (wm.getWorld(world) == this) {
-                getUser(name).calculateEffectivePermissions();
-                getUser(name).calculateEffectiveMeta();
-            }
-        }
         wm.setAutoSave(autoSave);
     }
 
@@ -216,7 +214,8 @@ public class YamlWorld extends World {
         save = true;
         // async again
         try {
-            MainThread.getInstance().schedule(new TaskRunnable() {
+            new BukkitRunnable() {
+                @Override
                 public void run() {
                     try {
                         saveUnsafe(false);
@@ -224,11 +223,8 @@ public class YamlWorld extends World {
                         e.printStackTrace();
                     }
                 }
+            }.runTask(permissions);
 
-                public TaskType getType() {
-                    return TaskType.SAVE;
-                }
-            });
             save = false;
         } catch (Exception e) {
             e.printStackTrace();
@@ -251,7 +247,6 @@ public class YamlWorld extends World {
 
         uconfig.setDefaults(this.uconfig);
         gconfig.setDefaults(this.gconfig);
-
 
         Set<Calculable> usr = getAll(CalculableType.USER);
         Debugger.log(usr.size() + " users saved.");
