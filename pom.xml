@@ -21,13 +21,9 @@
 
     <repositories>
         <repository>
-            <id>Bukkit Repo</id>
-            <url>http://repo.bukkit.org/content/groups/public/</url>
+            <id>Spigot Repo</id>
+            <url>http://repo.md-5.net/content/groups/public/</url>
         </repository>   
-        <repository>
-            <id>spout-repo</id>
-            <url>http://repo.spout.org/artifactory/repo</url>
-        </repository>
     </repositories>
     
     <build>
@@ -57,9 +53,9 @@
     
     <dependencies>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.6.2-R0.1-SNAPSHOT</version>
+          <groupId>org.spigotmc</groupId>
+          <artifactId>spigot-api</artifactId>
+          <version>1.7.9-R0.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
