@@ -12,10 +12,8 @@ import de.bananaco.bpermissions.imp.loadmanager.MainThread;
 import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -78,7 +76,6 @@ public class YamlWorld extends World {
         try {
             // load async
             new BukkitRunnable() {
-                @Override
                 public void run() {
                     try {
                         clear();
@@ -215,7 +212,6 @@ public class YamlWorld extends World {
         // async again
         try {
             new BukkitRunnable() {
-                @Override
                 public void run() {
                     try {
                         saveUnsafe(false);
@@ -300,7 +296,7 @@ public class YamlWorld extends World {
 
     @Override
     public boolean setupAll() {
-        Player[] players = Bukkit.getOnlinePlayers();
+        Player[] players = (Player[]) Bukkit.getOnlinePlayers().toArray();
         for (Player player : players) {
             setupPlayer(player.getName());
         }

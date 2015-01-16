@@ -1,9 +1,6 @@
 package de.bananaco.bpermissions.imp;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -448,7 +445,7 @@ public class Permissions extends JavaPlugin {
                         }
                     }
                     if (args[0].equalsIgnoreCase("debugperms")) {
-                        Player[] players = Bukkit.getOnlinePlayers();
+                        Player[] players = (Player[]) Bukkit.getOnlinePlayers().toArray();
                         if (players.length == 0) {
                             System.err.println("You need some online players!");
                         } else {
@@ -459,7 +456,7 @@ public class Permissions extends JavaPlugin {
                         return true;
                     }
                     if (args[0].equalsIgnoreCase("debugset")) {
-                        Player[] players = Bukkit.getOnlinePlayers();
+                        Player[] players = (Player[]) Bukkit.getOnlinePlayers().toArray();
                         if (players.length == 0) {
                             System.err.println("You need some online players!");
                         } else {
