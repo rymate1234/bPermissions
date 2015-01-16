@@ -180,6 +180,26 @@ public abstract class World {
     }
 
     /**
+     * This removes the Calculable from either groups or users depending on if the
+     * calculable is an instance of either. This is not directly checked and
+     * instead getType() is relied upon to be correct. If the calculable is not
+     * an instance of a group or a user, it is not added. This means you cannot
+     * add base calculables (or any other class which extends calculable) to
+     * this.
+     *
+     * @param calculable
+     */
+    public void remove(Calculable calculable) {
+        if (calculable.getType() == CalculableType.USER) {
+            users.remove(calculable.getNameLowerCase(), (User) calculable);
+        } else if (calculable.getType() == CalculableType.GROUP) {
+            groups.remove(calculable.getNameLowerCase(), (Group) calculable);
+        } else {
+            System.err.println("Calculable not instance of User or Group!");
+        }
+    }
+
+    /**
      * Returns the world name
      *
      * @return String

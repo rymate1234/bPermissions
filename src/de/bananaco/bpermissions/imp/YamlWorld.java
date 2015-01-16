@@ -298,7 +298,7 @@ public class YamlWorld extends World {
     public boolean setupAll() {
         Collection<Player> players = (Collection<Player>) Bukkit.getOnlinePlayers();
         for (Player player : players) {
-            setupPlayer(player.getName());
+            setupPlayer(player.getUniqueId().toString());
         }
         // return true for success
         return true;

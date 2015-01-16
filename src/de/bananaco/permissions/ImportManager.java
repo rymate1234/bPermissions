@@ -315,97 +315,76 @@ public class ImportManager {
     }
 
     public void importPermissions3() throws Exception {
+
+    }
+
+    public void importUuid() throws Exception {
+        String GROUPS = "groups";
+        String PERMISSIONS = "permissions";
+        String META = "meta";
+        String USERS = "users";
         for (World world : plugin.getServer().getWorlds()) {
             de.bananaco.bpermissions.api.World wd = wm.getWorld(world.getName());
 
-            File users = new File("plugins/Permissions/" + world.getName()
-                    + "/users.yml");
-            File groups = new File("plugins/Permissions/" + world.getName()
-                    + "/groups.yml");
-
-            if (users.exists() && groups.exists()) {
-                System.out.println("Importing world: " + world.getName());
-
-                YamlConfiguration uConfig = new YamlConfiguration();
-                YamlConfiguration gConfig = new YamlConfiguration();
-                try {
-                    uConfig.load(users);
-                    gConfig.load(groups);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                ConfigurationSection usConfig = uConfig.getConfigurationSection("users");
-                ConfigurationSection grConfig = gConfig.getConfigurationSection("groups");
-
-                Set<String> usersList = null;
-                if (usConfig != null) {
-                    usersList = usConfig.getKeys(false);
-                }
-                Set<String> groupsList = null;
-                if (grConfig != null) {
-                    groupsList = grConfig.getKeys(false);
-                }
-
-                if (usersList != null) {
-                    for (String player : usersList) {
-                        System.out.println("Importing user: " + player);
-                        User user = wd.getUser(player);
-                        try {
-                            List<String> p = uConfig.getStringList("users." + player + ".permissions");
-                            List<String> i = uConfig.getStringList("users." + player + ".groups");
-
-                            String prefix = uConfig.getString("users." + player + ".info." + "prefix");
-                            String suffix = uConfig.getString("users." + player + ".info." + "suffix");
-
-                            if (p != null) {
-                                user.getPermissions().addAll(Permission.loadFromString(p));
-                            }
-                            if (i != null) {
-                                user.getGroupsAsString().clear();
-                                user.getGroupsAsString().addAll(i);
-                            }
-                            if (prefix != null) {
-                                user.setValue("prefix", prefix);
-                            }
-                            if (suffix != null) {
-                                user.setValue("suffix", suffix);
-                            }
-                        } catch (Exception e) {
-                            System.err.println("Error importing user: " + player);
-                        }
-                    }
-                }
-
-                if (groupsList != null) {
-                    for (String group : groupsList) {
-                        System.out.println("Importing group: " + group);
-                        Group gr = wd.getGroup(group);
-                        try {
-                            List<String> p = gConfig.getStringList("groups." + group + ".permissions");
-                            List<String> i = gConfig.getStringList("groups." + group + ".inheritance");
-
-                            String prefix = gConfig.getString("groups." + group + ".info." + "prefix");
-                            String suffix = gConfig.getString("groups." + group + ".info." + "suffix");
-                            if (p != null) {
-                                gr.getPermissions().addAll(Permission.loadFromString(p));
-                            }
-                            if (i != null) {
-                                gr.getGroupsAsString().addAll(i);
-                            }
-                            if (prefix != null) {
-                                gr.setValue("prefix", prefix);
-                            }
-                            if (suffix != null) {
-                                gr.setValue("suffix", suffix);
-                            }
-                        } catch (Exception e) {
-                            System.err.println("Error importing group: " + group);
-                        }
-                    }
-                }
-                wd.save();
+            File ufile = new File("plugins/bPermissions/" + world.getName() + "/users.yml");
+            File gfile = new File("plugins/bPermissions/" + world.getName() + "/groups.yml");
+            if (!ufile.exists()) {
+                return;
             }
+
+            YamlConfiguration uconfig = new de.bananaco.bpermissions.imp.YamlConfiguration();
+            YamlConfiguration gconfig = new de.bananaco.bpermissions.imp.YamlConfiguration();
+
+
+            long t = System.currentTimeMillis();
+            uconfig.load(ufile);
+            gconfig.load(gfile);
+            long f = System.currentTimeMillis();
+            Debugger.log("Loading files took " + (f - t) + "ms");
+
+            /*
+             * Load the users
+             */
+            ConfigurationSection usersConfig = uconfig.getConfigurationSection(USERS);
+            if (usersConfig != null) {
+                Set<String> names = usersConfig.getKeys(false);
+                for (String name : names) {
+                    List<String> nPerm = usersConfig.getStringList(name + "."
+                            + PERMISSIONS);
+                    List<String> nGroup = usersConfig.getStringList(name + "."
+                            + GROUPS);
+                    Set<Permission> perms = Permission.loadFromString(nPerm);
+                    // Create the new user
+                    User user = new User(name, nGroup, perms, world.getName(), wd);
+                    wd.remove(user);
+
+                    System.out.println(Bukkit.getServer().getOfflinePlayer(name).getUniqueId().toString());
+                    System.out.println(nGroup);
+                    System.out.println(perms);
+                    System.out.println(world.getName());
+                    System.out.println(wd);
+                    User uuidUser = new User(Bukkit.getServer().getOfflinePlayer(name).getUniqueId().toString(), nGroup, perms, world.getName(), wd);
+                    // MetaData
+                    ConfigurationSection meta = usersConfig
+                            .getConfigurationSection(name + "." + META);
+                    if (meta != null) {
+                        Set<String> keys = meta.getKeys(false);
+                        if (keys != null && keys.size() > 0) {
+                            for (String key : keys) {
+                                user.setValue(key, meta.get(key).toString());
+                            }
+                        }
+                    }
+                    // Upload to API
+                    wd.add(uuidUser);
+                }
+            } else {
+                Debugger.log("Empty ConfigurationSection:" + USERS + ":" + ufile.getPath());
+            }
+
+            wd.save();
+            wm.cleanup();
+
         }
-        wm.cleanup();
     }
 }

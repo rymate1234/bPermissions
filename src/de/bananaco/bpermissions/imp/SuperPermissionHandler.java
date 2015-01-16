@@ -88,7 +88,7 @@ public class SuperPermissionHandler implements Listener {
         // Grab the pre-calculated effectivePermissions from the User object
         // Then whack it onto the player
         // TODO wait for the bukkit team to get their finger out, we'll use our reflection here!		
-        Map<String, Boolean> perms = ApiLayer.getEffectivePermissions(player.getWorld().getName(), CalculableType.USER, player.getName());
+        Map<String, Boolean> perms = ApiLayer.getEffectivePermissions(player.getWorld().getName(), CalculableType.USER, player.getUniqueId().toString());
         setPermissions(player, plugin, perms);
 
         // Set the metadata?

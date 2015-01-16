@@ -505,6 +505,13 @@ public class Permissions extends JavaPlugin {
                     sendMessage(sender, "Creating backup!");
                     new BackupPermissionsCommand(this).backup();
                     return true;
+                } else if (args[0].equalsIgnoreCase("convert")){
+                    try {
+                        new ImportManager(this).importUuid();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return true;
                 }
             }
             return false;
