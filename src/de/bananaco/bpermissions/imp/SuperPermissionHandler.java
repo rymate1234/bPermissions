@@ -92,8 +92,8 @@ public class SuperPermissionHandler implements Listener {
         setPermissions(player, plugin, perms);
 
         // Set the metadata?
-        String prefix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getName(), "prefix");
-        String suffix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getName(), "suffix");
+        String prefix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getUniqueId().toString(), "prefix");
+        String suffix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getUniqueId().toString(), "suffix");
         // WTF
         player.setMetadata("prefix", new FixedMetadataValue(Permissions.instance, prefix));
         player.setMetadata("suffix", new FixedMetadataValue(Permissions.instance, suffix));
@@ -145,7 +145,7 @@ public class SuperPermissionHandler implements Listener {
         Callable r = new Callable() {
             public Object call() throws Exception {
                 for (de.bananaco.bpermissions.api.World world : SuperPermissionHandler.this.wm.getAllWorlds()) {
-                    User user = world.getUser(event.getName());
+                    User user = world.getUser(event.getUniqueId().toString());
                     user.calculateEffectivePermissions();
                     user.calculateEffectiveMeta();
                     Debugger.log("PlayerPreLogin setup: " + user.getName());

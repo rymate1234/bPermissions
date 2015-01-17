@@ -191,9 +191,9 @@ public abstract class World {
      */
     public void remove(Calculable calculable) {
         if (calculable.getType() == CalculableType.USER) {
-            users.remove(calculable.getNameLowerCase(), (User) calculable);
+            users.remove(calculable.getNameLowerCase());
         } else if (calculable.getType() == CalculableType.GROUP) {
-            groups.remove(calculable.getNameLowerCase(), (Group) calculable);
+            groups.remove(calculable.getNameLowerCase());
         } else {
             System.err.println("Calculable not instance of User or Group!");
         }

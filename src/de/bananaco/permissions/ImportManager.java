@@ -327,18 +327,15 @@ public class ImportManager {
             de.bananaco.bpermissions.api.World wd = wm.getWorld(world.getName());
 
             File ufile = new File("plugins/bPermissions/" + world.getName() + "/users.yml");
-            File gfile = new File("plugins/bPermissions/" + world.getName() + "/groups.yml");
             if (!ufile.exists()) {
                 return;
             }
 
             YamlConfiguration uconfig = new de.bananaco.bpermissions.imp.YamlConfiguration();
-            YamlConfiguration gconfig = new de.bananaco.bpermissions.imp.YamlConfiguration();
 
 
             long t = System.currentTimeMillis();
             uconfig.load(ufile);
-            gconfig.load(gfile);
             long f = System.currentTimeMillis();
             Debugger.log("Loading files took " + (f - t) + "ms");
 
@@ -347,6 +344,7 @@ public class ImportManager {
              */
             ConfigurationSection usersConfig = uconfig.getConfigurationSection(USERS);
             if (usersConfig != null) {
+                Bukkit.getLogger().info("Converting world: " + world.getName());
                 Set<String> names = usersConfig.getKeys(false);
                 for (String name : names) {
                     List<String> nPerm = usersConfig.getStringList(name + "."
@@ -354,15 +352,11 @@ public class ImportManager {
                     List<String> nGroup = usersConfig.getStringList(name + "."
                             + GROUPS);
                     Set<Permission> perms = Permission.loadFromString(nPerm);
-                    // Create the new user
+                    // remove the old user
                     User user = new User(name, nGroup, perms, world.getName(), wd);
                     wd.remove(user);
 
-                    System.out.println(Bukkit.getServer().getOfflinePlayer(name).getUniqueId().toString());
-                    System.out.println(nGroup);
-                    System.out.println(perms);
-                    System.out.println(world.getName());
-                    System.out.println(wd);
+                    // Create the new user!
                     User uuidUser = new User(Bukkit.getServer().getOfflinePlayer(name).getUniqueId().toString(), nGroup, perms, world.getName(), wd);
                     // MetaData
                     ConfigurationSection meta = usersConfig
@@ -371,13 +365,14 @@ public class ImportManager {
                         Set<String> keys = meta.getKeys(false);
                         if (keys != null && keys.size() > 0) {
                             for (String key : keys) {
-                                user.setValue(key, meta.get(key).toString());
+                                uuidUser.setValue(key, meta.get(key).toString());
                             }
                         }
                     }
-                    // Upload to API
                     wd.add(uuidUser);
                 }
+
+                Bukkit.getLogger().info("Converted world: " + world.getName());
             } else {
                 Debugger.log("Empty ConfigurationSection:" + USERS + ":" + ufile.getPath());
             }
