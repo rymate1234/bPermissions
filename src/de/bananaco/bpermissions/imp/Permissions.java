@@ -308,7 +308,17 @@ public class Permissions extends JavaPlugin {
                     sendMessage(sender, "Currently selected " + calc.getType().getName() + ": " + calc.getName());
                 }
             } else if (args.length == 1) {
-                cmd.setCalculable(type, args[0], sender);
+                if (command.getName().equalsIgnoreCase("user")) {
+                    String uuid;
+                    if (getServer().getPlayer(args[0]) != null) {
+                        uuid = getServer().getPlayer(args[0]).getUniqueId().toString();
+                    } else {
+                        uuid = getServer().getOfflinePlayer(args[0]).getUniqueId().toString();
+                    }
+                    cmd.setCalculable(type, uuid, sender);
+                } else {
+                    cmd.setCalculable(type, args[0], sender);
+                }
             } else if (args.length == 2) {
                 if (calc == null) {
                     sendMessage(sender, "Nothing is selected!");
