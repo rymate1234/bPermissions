@@ -10,8 +10,6 @@ import de.bananaco.bpermissions.api.Permission;
 import de.bananaco.bpermissions.api.RecursiveGroupException;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
-import org.bukkit.Bukkit;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,14 +24,6 @@ public class ExtraCommands {
             worlds.addAll(wm.getAllWorlds());
         } else {
             worlds.add(wm.getWorld(world));
-        }
-
-        if (type == CalculableType.USER) {
-            if (Bukkit.getPlayer(name) != null) {
-                name = Bukkit.getPlayer(name).getUniqueId().toString();
-            } else {
-                name = Bukkit.getOfflinePlayer(name).getUniqueId().toString();
-            }
         }
         for (World w : worlds) {
             Calculable c = w.get(name, type);
