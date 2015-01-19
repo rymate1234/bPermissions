@@ -518,20 +518,9 @@ public class Permissions extends JavaPlugin {
                     return true;
                 } else if (args[0].equalsIgnoreCase("convert")){
                     final ImportManager manager = new ImportManager(this);
-                    try {
-                        new BukkitRunnable() {
-                            public void run() {
-                                try {
-                                    manager.importUuid();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }.runTask(this);
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    ConvertRunnable runnable = new ConvertRunnable(manager);
+                    runnable.start();
                     return true;
                 }
             }
@@ -556,4 +545,35 @@ public class Permissions extends JavaPlugin {
         }
         return "CONSOLE";
     }
+
+    class ConvertRunnable implements Runnable {
+        private final ImportManager manager;
+        private String threadName = "converter";
+        private Thread t;
+
+        ConvertRunnable( ImportManager manager){
+            this.manager = manager;
+        }
+        public void run() {
+
+            System.out.println("Running " +  threadName );
+            try {
+                manager.importUuid();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        public void start ()
+        {
+            System.out.println("Starting " +  threadName );
+            if (t == null)
+            {
+                t = new Thread (this, threadName);
+                t.start ();
+            }
+        }
+
+    }
+
 }
