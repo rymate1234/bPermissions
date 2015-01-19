@@ -302,4 +302,8 @@ public abstract class World {
         // override to return true;
         return false;
     }
+
+    public void clearPlayers() {
+        users.clear();
+    }
 }

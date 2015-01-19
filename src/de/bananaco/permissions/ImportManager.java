@@ -349,6 +349,11 @@ public class ImportManager {
                 int size = names.size();
                 int total = 1;
                 for (String name : names) {
+                    if (total % 1000 == 0) {
+                        System.out.println("Pausing for 30 seconds due to rate limiting :(");
+                        System.gc();
+                        Thread.sleep(30000);
+                    }
                     System.out.println("Converting user " + total + " of " + size);
                     List<String> nPerm = usersConfig.getStringList(name + "."
                             + PERMISSIONS);
