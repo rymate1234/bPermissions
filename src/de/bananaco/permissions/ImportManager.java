@@ -346,7 +346,10 @@ public class ImportManager {
             if (usersConfig != null) {
                 Bukkit.getLogger().info("Converting world: " + world.getName());
                 Set<String> names = usersConfig.getKeys(false);
+                int size = names.size();
+                int total = 1;
                 for (String name : names) {
+                    System.out.println("Converting user " + total + " of " + size);
                     List<String> nPerm = usersConfig.getStringList(name + "."
                             + PERMISSIONS);
                     List<String> nGroup = usersConfig.getStringList(name + "."
@@ -370,6 +373,7 @@ public class ImportManager {
                         }
                     }
                     wd.add(uuidUser);
+                    total++;
                 }
 
                 Bukkit.getLogger().info("Converted world: " + world.getName());

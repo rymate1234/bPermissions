@@ -23,6 +23,7 @@ import de.bananaco.permissions.ImportManager;
 import de.bananaco.permissions.fornoobs.BackupPermissionsCommand;
 import de.bananaco.permissions.fornoobs.ForNoobs;
 import de.bananaco.permissions.interfaces.PromotionTrack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class Permissions extends JavaPlugin {
 
@@ -455,8 +456,8 @@ public class Permissions extends JavaPlugin {
                         }
                     }
                     if (args[0].equalsIgnoreCase("debugperms")) {
-                        Player[] players = (Player[]) Bukkit.getOnlinePlayers().toArray();
-                        if (players.length == 0) {
+                        Collection<Player> players = (Collection<Player>) Bukkit.getOnlinePlayers();
+                        if (players.size() == 0) {
                             System.err.println("You need some online players!");
                         } else {
                             for (Player player : players) {
@@ -516,8 +517,18 @@ public class Permissions extends JavaPlugin {
                     new BackupPermissionsCommand(this).backup();
                     return true;
                 } else if (args[0].equalsIgnoreCase("convert")){
+                    final ImportManager manager = new ImportManager(this);
                     try {
-                        new ImportManager(this).importUuid();
+                        new BukkitRunnable() {
+                            public void run() {
+                                try {
+                                    manager.importUuid();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }.runTask(this);
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

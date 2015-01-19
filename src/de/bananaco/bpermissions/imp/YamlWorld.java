@@ -9,7 +9,7 @@ import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.imp.loadmanager.MainThread;
-import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -296,7 +296,7 @@ public class YamlWorld extends World {
 
     @Override
     public boolean setupAll() {
-        Collection<Player> players = (Collection<Player>) Bukkit.getOnlinePlayers();
+       Collection<Player> players = (Collection<Player>) Bukkit.getOnlinePlayers();
         for (Player player : players) {
             setupPlayer(player.getUniqueId().toString());
         }
