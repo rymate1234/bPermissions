@@ -87,7 +87,7 @@ public class YamlWorld extends World {
             }.runTask(permissions);
 
             for (Player player : this.permissions.getServer().getOnlinePlayers()) {
-                String name = player.getName();
+                String name = player.getUniqueId().toString();
                 String world = player.getWorld().getName();
                 if (wm.getWorld(world) == this) {
                     getUser(name).calculateEffectivePermissions();
