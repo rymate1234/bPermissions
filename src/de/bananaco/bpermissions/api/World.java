@@ -1,11 +1,6 @@
 package de.bananaco.bpermissions.api;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -93,7 +88,9 @@ public abstract class World {
         name = name.toLowerCase();
         // And now we check
         if (type == CalculableType.USER) {
-            name = Bukkit.getOfflinePlayer(name).getUniqueId().toString();
+            if (!isUUID(name))
+                name = Bukkit.getOfflinePlayer(name).getUniqueId().toString();
+
             if (!users.containsKey(name)) {
                 add(new User(name, null, null, getName(), this));
                 // Don't forget to add the default group!
@@ -308,4 +305,16 @@ public abstract class World {
     public void clearPlayers() {
         users.clear();
     }
+
+
+    public boolean isUUID(String string) {
+        try {
+            UUID.fromString(string);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+
 }

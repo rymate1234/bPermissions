@@ -88,12 +88,12 @@ public class SuperPermissionHandler implements Listener {
         // Grab the pre-calculated effectivePermissions from the User object
         // Then whack it onto the player
         // TODO wait for the bukkit team to get their finger out, we'll use our reflection here!		
-        Map<String, Boolean> perms = ApiLayer.getEffectivePermissions(player.getWorld().getName(), CalculableType.USER, player.getUniqueId().toString());
+        Map<String, Boolean> perms = ApiLayer.getEffectivePermissions(player.getWorld().getName(), CalculableType.USER, player.getName());
         setPermissions(player, plugin, perms);
 
         // Set the metadata?
-        String prefix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getUniqueId().toString(), "prefix");
-        String suffix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getUniqueId().toString(), "suffix");
+        String prefix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getName(), "prefix");
+        String suffix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getName(), "suffix");
         // WTF
         player.setMetadata("prefix", new FixedMetadataValue(Permissions.instance, prefix));
         player.setMetadata("suffix", new FixedMetadataValue(Permissions.instance, suffix));
@@ -148,7 +148,7 @@ public class SuperPermissionHandler implements Listener {
                     User user = world.getUser(event.getUniqueId().toString());
                     user.calculateEffectivePermissions();
                     user.calculateEffectiveMeta();
-                    Debugger.log("PlayerPreLogin setup: " + user.getName());
+                    Debugger.log("PlayerPreLogin setup: " + user .getName());
                 }
                 return null;
             }
