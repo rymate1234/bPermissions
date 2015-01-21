@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import de.bananaco.bpermissions.imp.Debugger;
@@ -92,6 +93,7 @@ public abstract class World {
         name = name.toLowerCase();
         // And now we check
         if (type == CalculableType.USER) {
+            name = Bukkit.getOfflinePlayer(name).getUniqueId().toString();
             if (!users.containsKey(name)) {
                 add(new User(name, null, null, getName(), this));
                 // Don't forget to add the default group!
