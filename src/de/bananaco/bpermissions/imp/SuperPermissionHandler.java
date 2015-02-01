@@ -2,6 +2,7 @@ package de.bananaco.bpermissions.imp;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import org.bukkit.Bukkit;
@@ -9,15 +10,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.*;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 
@@ -40,15 +38,30 @@ import de.bananaco.bpermissions.imp.loadmanager.MainThread;
 public class SuperPermissionHandler implements Listener {
 
     private WorldManager wm = WorldManager.getInstance();
-    //private Map<Integer, PermissionAttachment> attachments = new HashMap<Integer, PermissionAttachment>();
+    private Map<UUID, PermissionAttachment> attachments = new HashMap<UUID, PermissionAttachment>();
     private Permissions plugin;
 
     /**
      * This is put in place until such a time as Bukkit pull 466 is implemented
      * https://github.com/Bukkit/Bukkit/pull/466
      */
-    public synchronized static void setPermissions(final Permissible p, final Plugin plugin, final Map<String, Boolean> perm) {
-        BukkitCompat.setPermissions(p, plugin, perm);
+    public void setPermissions(Player p, Plugin plugin, Map<String, Boolean> perm) {
+        //BukkitCompat.setPermissions(p, plugin, perm);
+        if (attachments.containsKey(p.getUniqueId())) {
+            PermissionAttachment old = attachments.get(p.getUniqueId());
+            p.removeAttachment(old);
+            attachments.remove(p.getUniqueId());
+        }
+        PermissionAttachment attachment = p.addAttachment(plugin);
+        for (String key : perm.keySet()) {
+            if (perm.get(key)) {
+                attachment.setPermission(key, true);
+            } else {
+                attachment.setPermission(key, false);
+            }
+        }
+        p.recalculatePermissions();
+        attachments.put(p.getUniqueId(), attachment);
     }
 
     // Main constructor
@@ -77,7 +90,6 @@ public class SuperPermissionHandler implements Listener {
      * bPermissions world, not a Bukkit world)
      *
      * @param player
-     * @param world
      */
     public void setupPlayer(Player player) {
         if (!plugin.isEnabled()) {
@@ -160,6 +172,16 @@ public class SuperPermissionHandler implements Listener {
     public void onPlayerLogin(PlayerLoginEvent event) {
         // Likewise, in theory this should be all we need to detect when a player joins
         setupPlayer(event.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player p = event.getPlayer();
+        if (attachments.containsKey(p.getUniqueId())) {
+            PermissionAttachment old = attachments.get(p.getUniqueId());
+            p.removeAttachment(old);
+            attachments.remove(p.getUniqueId());
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

@@ -486,21 +486,9 @@ public class Permissions extends JavaPlugin {
                     // Reload all changes
                     for (World world : wm.getAllWorlds()) {
                         world.load();
+                        world.setupAll();
                     }
-                    // async -> sync
-                    mt.schedule(new TaskRunnable() {
-                        public void run() {
-                            Bukkit.getScheduler().scheduleSyncDelayedTask(instance, new Runnable() {
-                                public void run() {
-                                    world.setupAll();
-                                }
-                            }, 0);
-                        }
 
-                        public TaskType getType() {
-                            return TaskType.SERVER;
-                        }
-                    });
                     sendMessage(sender, "All worlds reloading!");
                     return true;
                 } else if (action.equalsIgnoreCase("cleanup")) {

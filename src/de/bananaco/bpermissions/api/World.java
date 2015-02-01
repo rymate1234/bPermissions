@@ -96,12 +96,12 @@ public abstract class World {
                 // Don't forget to add the default group!
                 users.get(name).addGroup(getDefaultGroup());
                 // And calculate the effective Permissions!
-                //try {
-                //users.get(name).calculateEffectivePermissions();
-                //users.get(name).calculateEffectiveMeta();
-                //} catch (RecursiveGroupException e) {
-                //System.err.println(e.getMessage());
-                //}
+                try {
+                    users.get(name).calculateEffectivePermissions();
+                    users.get(name).calculateEffectiveMeta();
+                } catch (RecursiveGroupException e) {
+                    System.err.println(e.getMessage());
+                }
             }
             return users.get(name);
         } else if (type == CalculableType.GROUP) {

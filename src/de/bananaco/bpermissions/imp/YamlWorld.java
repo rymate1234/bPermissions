@@ -86,15 +86,6 @@ public class YamlWorld extends World {
                 }
             }.runTask(permissions);
 
-            for (Player player : this.permissions.getServer().getOnlinePlayers()) {
-                String name = player.getUniqueId().toString();
-                String world = player.getWorld().getName();
-                if (wm.getWorld(world) == this) {
-                    getUser(name).calculateEffectivePermissions();
-                    getUser(name).calculateEffectiveMeta();
-                }
-            }
-
             // If it loaded correctly cancel the error
             error = false;
         } catch (Exception e) {
@@ -195,6 +186,17 @@ public class YamlWorld extends World {
 
         Debugger.log(this.getAll(CalculableType.USER).size() + " users loaded.");
         Debugger.log(this.getAll(CalculableType.GROUP).size() + " groups loaded.");
+
+        for (Player player : this.permissions.getServer().getOnlinePlayers()) {
+            String name = player.getUniqueId().toString();
+            String world = player.getWorld().getName();
+            if (wm.getWorld(world) == this) {
+                getUser(name).calculateEffectivePermissions();
+                getUser(name).calculateEffectiveMeta();
+            }
+        }
+
+        Bukkit.getLogger().info("[bPermissions] Permissions for world " + super.getName() + " has loaded!");
 
         wm.setAutoSave(autoSave);
     }
@@ -311,7 +313,7 @@ public class YamlWorld extends World {
 
     @Override
     public boolean setupPlayer(String player) {
-        permissions.handler.setupPlayer(player);
+        permissions.handler.setupPlayer(Bukkit.getPlayer(UUID.fromString(player)));
         return true;
     }
 

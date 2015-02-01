@@ -55,12 +55,10 @@ public abstract class Calculable extends CalculableMeta {
      * @throws RecursiveGroupException
      */
     public void calculateEffectivePermissions() throws RecursiveGroupException {
-        if (!isDirty()) {
-            return;
-        }
         try {
             Map<String, Integer> priorities = new HashMap<String, Integer>();
             effectivePermissions.clear();
+            //System.out.println(serialiseGroups());
             for (String gr : serialiseGroups()) {
                 Group group = getWorldObject().getGroup(gr);
                 group.calculateEffectivePermissions();
