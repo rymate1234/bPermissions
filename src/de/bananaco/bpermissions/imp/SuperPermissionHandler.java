@@ -46,22 +46,7 @@ public class SuperPermissionHandler implements Listener {
      * https://github.com/Bukkit/Bukkit/pull/466
      */
     public void setPermissions(Player p, Plugin plugin, Map<String, Boolean> perm) {
-        //BukkitCompat.setPermissions(p, plugin, perm);
-        if (attachments.containsKey(p.getUniqueId())) {
-            PermissionAttachment old = attachments.get(p.getUniqueId());
-            p.removeAttachment(old);
-            attachments.remove(p.getUniqueId());
-        }
-        PermissionAttachment attachment = p.addAttachment(plugin);
-        for (String key : perm.keySet()) {
-            if (perm.get(key)) {
-                attachment.setPermission(key, true);
-            } else {
-                attachment.setPermission(key, false);
-            }
-        }
-        p.recalculatePermissions();
-        attachments.put(p.getUniqueId(), attachment);
+        BukkitCompat.setPermissions(p, plugin, perm);
     }
 
     // Main constructor
@@ -172,16 +157,6 @@ public class SuperPermissionHandler implements Listener {
     public void onPlayerLogin(PlayerLoginEvent event) {
         // Likewise, in theory this should be all we need to detect when a player joins
         setupPlayer(event.getPlayer());
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        Player p = event.getPlayer();
-        if (attachments.containsKey(p.getUniqueId())) {
-            PermissionAttachment old = attachments.get(p.getUniqueId());
-            p.removeAttachment(old);
-            attachments.remove(p.getUniqueId());
-        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
