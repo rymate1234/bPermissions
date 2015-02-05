@@ -1,10 +1,9 @@
 package de.bananaco.permissions;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import com.evilmidget38.UUIDFetcher;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -326,7 +325,7 @@ public class ImportManager {
         for (World world : plugin.getServer().getWorlds()) {
             de.bananaco.bpermissions.api.World wd = wm.getWorld(world.getName());
 
-            File ufile = new File("plugins/bPermissions/" + world.getName() + "/users.yml");
+            File ufile = new File("plugins/bPermissions/" + world.getName().toLowerCase() + "/users.yml");
             if (!ufile.exists()) {
                 return;
             }
@@ -346,14 +345,31 @@ public class ImportManager {
             if (usersConfig != null) {
                 Bukkit.getLogger().info("Converting world: " + world.getName());
                 Set<String> names = usersConfig.getKeys(false);
+                List<String> usersList = new ArrayList<>();
+                usersList.addAll(names);
+                UUIDFetcher fetcher = new UUIDFetcher(usersList);
+
+                Map<String, UUID> result = null;
+
+                try {
+                    result = fetcher.call();
+                } catch (Exception e) {
+                    plugin.getLogger().warning("Exception while running UUIDFetcher");
+                    e.printStackTrace();
+                    return;
+                }
+
+                Map<String, UUID> players = new HashMap<>();
+
+                // convert names to lower case...
+                for (String username : result.keySet()) {
+                    players.put(username.toLowerCase(), result.get(username));
+                }
+
                 int size = names.size();
                 int total = 1;
                 for (String name : names) {
-                    if (total % 1000 == 0) {
-                        System.out.println("Pausing for 30 seconds due to rate limiting :(");
-                        System.gc();
-                        Thread.sleep(30000);
-                    }
+                    UUID uniqueId = players.get(name);
                     System.out.println("Converting user " + total + " of " + size);
                     List<String> nPerm = usersConfig.getStringList(name + "."
                             + PERMISSIONS);
@@ -365,7 +381,7 @@ public class ImportManager {
                     wd.remove(user);
 
                     // Create the new user!
-                    User uuidUser = new User(Bukkit.getServer().getOfflinePlayer(name).getUniqueId().toString(), nGroup, perms, world.getName(), wd);
+                    User uuidUser = new User(uniqueId.toString(), nGroup, perms, world.getName(), wd);
                     // MetaData
                     ConfigurationSection meta = usersConfig
                             .getConfigurationSection(name + "." + META);
