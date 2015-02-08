@@ -332,7 +332,6 @@ public class ImportManager {
 
             YamlConfiguration uconfig = new de.bananaco.bpermissions.imp.YamlConfiguration();
 
-
             long t = System.currentTimeMillis();
             uconfig.load(ufile);
             long f = System.currentTimeMillis();
@@ -370,7 +369,12 @@ public class ImportManager {
                 int total = 1;
                 for (String name : names) {
                     UUID uniqueId = players.get(name);
-                    System.out.println("Converting user " + total + " of " + size);
+                    System.out.println("Converting user " + uniqueId + " - " + total + " of " + size);
+                    if (uniqueId == null) {
+                        System.out.println("UUID for " + name + " not found! Using alternative method to fetch UUID");
+                        System.out.println("Did he already change his username?");
+                        uniqueId = Bukkit.getServer().getOfflinePlayer(name).getUniqueId();
+                    }
                     List<String> nPerm = usersConfig.getStringList(name + "."
                             + PERMISSIONS);
                     List<String> nGroup = usersConfig.getStringList(name + "."

@@ -237,14 +237,14 @@ public class YamlWorld extends World {
             gfile.createNewFile();
         }
 
-        YamlConfiguration uconfig = new YamlConfiguration();
-        YamlConfiguration gconfig = new YamlConfiguration();
+        YamlConfiguration usaveconfig = new YamlConfiguration();
+        YamlConfiguration gsaveconfig = new YamlConfiguration();
+
+	usaveconfig.setDefaults(this.uconfig);
+	gsaveconfig.setDefaults(this.gconfig);
 
         String def = getDefaultGroup();
-        gconfig.set("default", def);
-
-        uconfig.setDefaults(this.uconfig);
-        gconfig.setDefaults(this.gconfig);
+        gsaveconfig.set("default", def);
 
         Set<Calculable> usr = getAll(CalculableType.USER);
         Debugger.log(usr.size() + " users saved.");
@@ -256,13 +256,13 @@ public class YamlWorld extends World {
 
         for (Calculable user : users) {
             String name = user.getName();
-            uconfig.set(USERS + "." + name + "." + PERMISSIONS, user.serialisePermissions());
-            uconfig.set(USERS + "." + name + "." + GROUPS, user.serialiseGroups());
+            usaveconfig.set(USERS + "." + name + "." + PERMISSIONS, user.serialisePermissions());
+            usaveconfig.set(USERS + "." + name + "." + GROUPS, user.serialiseGroups());
             // MetaData
             Map<String, String> meta = user.getMeta();
             if (meta.size() > 0) {
                 for (String key : meta.keySet()) {
-                    uconfig.set(USERS + "." + name + "." + META + "." + key, meta.get(key));
+                    usaveconfig.set(USERS + "." + name + "." + META + "." + key, meta.get(key));
                 }
             }
         }
@@ -278,20 +278,20 @@ public class YamlWorld extends World {
 
         for (Calculable group : groups) {
             String name = group.getName();
-            gconfig.set(GROUPS + "." + name + "." + PERMISSIONS, group.serialisePermissions());
-            gconfig.set(GROUPS + "." + name + "." + GROUPS, group.serialiseGroups());
+            gsaveconfig.set(GROUPS + "." + name + "." + PERMISSIONS, group.serialisePermissions());
+            gsaveconfig.set(GROUPS + "." + name + "." + GROUPS, group.serialiseGroups());
             // MetaData
             Map<String, String> meta = group.getMeta();
             if (meta.size() > 0) {
                 for (String key : meta.keySet()) {
-                    gconfig.set(GROUPS + "." + name + "." + META + "." + key, meta.get(key));
+                    gsaveconfig.set(GROUPS + "." + name + "." + META + "." + key, meta.get(key));
                 }
             }
         }
 
         long t = System.currentTimeMillis();
-        uconfig.save(ufile);
-        gconfig.save(gfile);
+        usaveconfig.save(ufile);
+        gsaveconfig.save(gfile);
         long f = System.currentTimeMillis();
         Debugger.log("Saving files took " + (f - t) + "ms");
     }
