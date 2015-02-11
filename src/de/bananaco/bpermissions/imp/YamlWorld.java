@@ -240,8 +240,8 @@ public class YamlWorld extends World {
         YamlConfiguration usaveconfig = new YamlConfiguration();
         YamlConfiguration gsaveconfig = new YamlConfiguration();
 
-	usaveconfig.setDefaults(this.uconfig);
-	gsaveconfig.setDefaults(this.gconfig);
+        usaveconfig.setDefaults(this.uconfig);
+        gsaveconfig.setDefaults(this.gconfig);
 
         String def = getDefaultGroup();
         gsaveconfig.set("default", def);

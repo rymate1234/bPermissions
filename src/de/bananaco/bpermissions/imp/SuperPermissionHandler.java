@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
+import de.bananaco.bpermissions.api.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,11 +20,6 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 
-import de.bananaco.bpermissions.api.ApiLayer;
-import de.bananaco.bpermissions.api.CalculableType;
-import de.bananaco.bpermissions.api.User;
-import de.bananaco.bpermissions.api.World;
-import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.imp.loadmanager.MainThread;
 
 /**
@@ -150,13 +146,27 @@ public class SuperPermissionHandler implements Listener {
                 return null;
             }
         };
-        Bukkit.getScheduler().callSyncMethod(Permissions.instance, r);
+        //Bukkit.getScheduler().callSyncMethod(Permissions.instance, r);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerLogin(PlayerLoginEvent event) {
+    public void onPlayerLogin(final PlayerLoginEvent event) {
         // Likewise, in theory this should be all we need to detect when a player joins
-        setupPlayer(event.getPlayer());
+        Runnable r = new Runnable() {
+            public void run() {
+                for (de.bananaco.bpermissions.api.World world : SuperPermissionHandler.this.wm.getAllWorlds()) {
+                    User user = world.getUser(event.getPlayer().getUniqueId().toString());
+                    try {
+                        user.calculateEffectivePermissions();
+                        user.calculateEffectiveMeta();
+                    } catch (RecursiveGroupException e) {
+                        e.printStackTrace();
+                    }
+                    Debugger.log("PlayerLogin setup: " + user .getName());
+                }
+            }
+        };
+        Bukkit.getScheduler().runTaskAsynchronously(Permissions.instance, r);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

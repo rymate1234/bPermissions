@@ -322,11 +322,18 @@ public class ImportManager {
         String PERMISSIONS = "permissions";
         String META = "meta";
         String USERS = "users";
-        for (World world : plugin.getServer().getWorlds()) {
+        List<World> worlds = plugin.getServer().getWorlds();
+
+        for (int i = 0; i < worlds.size(); i++) {
+            Bukkit.getLogger().info("------ Processing world " + (i + 1) + " of " + worlds.size() + " ------");
+            World world = worlds.get(i);
             de.bananaco.bpermissions.api.World wd = wm.getWorld(world.getName());
+
+            Bukkit.getLogger().info("Processed world " + (i + 1) + " of " + worlds.size() + ". Loading and converting.");
 
             File ufile = new File("plugins/bPermissions/" + world.getName().toLowerCase() + "/users.yml");
             if (!ufile.exists()) {
+                Bukkit.getLogger().info("Users yml not found for world " + world.getName());
                 return;
             }
 
@@ -369,10 +376,10 @@ public class ImportManager {
                 int total = 1;
                 for (String name : names) {
                     UUID uniqueId = players.get(name);
-                    System.out.println("Converting user " + uniqueId + " - " + total + " of " + size);
+                    plugin.getLogger().info("Converting user " + uniqueId + " - " + total + " of " + size);
                     if (uniqueId == null) {
-                        System.out.println("UUID for " + name + " not found! Using alternative method to fetch UUID");
-                        System.out.println("Did he already change his username?");
+                        plugin.getLogger().warning("UUID for " + name + " not found! Using alternative method to fetch UUID");
+                        plugin.getLogger().warning("Did he already change his username?");
                         uniqueId = Bukkit.getServer().getOfflinePlayer(name).getUniqueId();
                     }
                     List<String> nPerm = usersConfig.getStringList(name + "."
@@ -403,12 +410,17 @@ public class ImportManager {
 
                 Bukkit.getLogger().info("Converted world: " + world.getName());
             } else {
+                Bukkit.getLogger().info("Users yml of world is empty: " + world.getName());
                 Debugger.log("Empty ConfigurationSection:" + USERS + ":" + ufile.getPath());
             }
 
             wd.save();
             wm.cleanup();
 
+            Bukkit.getLogger().info("------ World " + (i + 1) + " of " + worlds.size() + " complete ------");
+
         }
+
+        Bukkit.getLogger().info("Conversion complete!");
     }
 }
