@@ -1,0 +1,5 @@
+ - Tab completion for groups with the groups and user command
+ - option to disable creation of groups by adding player to group
+ - global users.yml! Have all ranks global, but with different permissions in each world!
+ - reworked commands (see http://dev.bukkit.org/bukkit-plugins/bpermissions/?page=2#c4147)
+ - do more testing
