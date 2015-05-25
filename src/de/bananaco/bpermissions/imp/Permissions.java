@@ -2,6 +2,7 @@ package de.bananaco.bpermissions.imp;
 
 import java.util.*;
 import java.util.concurrent.Callable;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -12,7 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.bananaco.bpermissions.api.ApiLayer;
-import de.bananaco.bpermissions.api.Calculable;
 import de.bananaco.bpermissions.api.CalculableType;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
@@ -23,7 +23,6 @@ import de.bananaco.permissions.ImportManager;
 import de.bananaco.permissions.fornoobs.BackupPermissionsCommand;
 import de.bananaco.permissions.fornoobs.ForNoobs;
 import de.bananaco.permissions.interfaces.PromotionTrack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class Permissions extends JavaPlugin {
 
@@ -86,6 +85,12 @@ public class Permissions extends JavaPlugin {
         world.load();
         // Load the default Map for Commands
         commands = new HashMap<String, Commands>();
+        // Register Commands
+        OldUserGroupCommand oldUserGroupCommand = new OldUserGroupCommand(this, commands);
+        this.getCommand("group").setExecutor(oldUserGroupCommand);
+        this.getCommand("user").setExecutor(oldUserGroupCommand);
+        this.getCommand("world").setExecutor(oldUserGroupCommand);
+
         // Register loader events
         getServer().getPluginManager().registerEvents(loader, this);
         // Register handler events
@@ -258,6 +263,7 @@ public class Permissions extends JavaPlugin {
             sendMessage(sender, "You're not allowed to do that!");
             return true;
         }
+
         /*
          * Create an entry in the commands selection if one does not exist
          */
@@ -266,109 +272,8 @@ public class Permissions extends JavaPlugin {
         }
 
         Commands cmd = commands.get(getName(sender));
-        /*
-         * Selecting and displaying the currently selected world
-         */
-        if (command.getName().equalsIgnoreCase("world")) {
-            World world = cmd.getWorld();
-            if (args.length == 0) {
-                if (world == null) {
-                    sendMessage(sender, "No world selected.");
-                } else {
-                    sendMessage(sender, "Currently selected world: " + world.getName());
-                }
-            } else if (args.length == 1) {
-                cmd.setWorld(args[0], sender);
-            } else if (args.length == 3 && args[0].equalsIgnoreCase("mirror")) {
-                String worldFrom = args[1];
-                String worldTo = args[2];
-                mirrors.put(worldFrom, worldTo);
-                mrs.save();
-                sender.sendMessage(worldFrom + " mirrored to " + worldTo);
-            } else {
-                sendMessage(sender, "Too many arguments.");
-            }
-            return true;
-        }
-        /*
-         * User/group
-         * 
-         * Much is repeated here
-         */
-        if (command.getName().equalsIgnoreCase("user") || command.getName().equalsIgnoreCase("group")) {
-            Calculable calc = cmd.getCalculable();
-            CalculableType type = command.getName().equalsIgnoreCase("user") ? CalculableType.USER : CalculableType.GROUP;
-            CalculableType opposite = !command.getName().equalsIgnoreCase("user") ? CalculableType.USER : CalculableType.GROUP;
-            /*
-             * Selecting, displaying, and executing commands on the Calculable
-             */
-            if (args.length == 0) {
-                if (calc == null) {
-                    sendMessage(sender, "Nothing is selected!");
-                } else {
-                    sendMessage(sender, "Currently selected " + calc.getType().getName() + ": " + calc.getName());
-                }
-            } else if (args.length == 1) {
-                if (command.getName().equalsIgnoreCase("user")) {
-                    String uuid;
-                    if (getServer().getPlayer(args[0]) != null) {
-                        uuid = getServer().getPlayer(args[0]).getUniqueId().toString();
-                    } else {
-                        uuid = getServer().getOfflinePlayer(args[0]).getUniqueId().toString();
-                    }
-                    cmd.setCalculable(type, uuid, sender);
-                } else {
-                    cmd.setCalculable(type, args[0], sender);
-                }
-            } else if (args.length == 2) {
-                if (calc == null) {
-                    sendMessage(sender, "Nothing is selected!");
-                } else if (calc.getType() != type) {
-                    sendMessage(sender, "Please select a " + type.getName() + ", you currently have a " + opposite.getName() + " selected.");
-                } else {
-                    String action = args[0];
-                    String value = args[1];
-                    if (action.equalsIgnoreCase("addgroup")) {
-                        cmd.addGroup(value, sender);
-                    } else if (action.equalsIgnoreCase("rmgroup")) {
-                        cmd.removeGroup(value, sender);
-                    } else if (action.equalsIgnoreCase("setgroup")) {
-                        cmd.setGroup(value, sender);
-                    } else if (action.equalsIgnoreCase("list")) {
-                        value = value.toLowerCase();
-                        if (value.equalsIgnoreCase("groups") || value.equalsIgnoreCase("group") || value.equalsIgnoreCase("g")) {
-                            cmd.listGroups(sender);
-                        } else if (value.startsWith("perm") || value.equalsIgnoreCase("p")) {
-                            cmd.listPermissions(sender);
-                        }
-                    } else if (action.equalsIgnoreCase("meta")) {
-                        cmd.showValue(value, sender);
-                    } else if (action.equalsIgnoreCase("cmeta")) {
-                        cmd.clearMeta(value, sender);
-                    } else if (action.equalsIgnoreCase("addperm")) {
-                        cmd.addPermission(value, sender);
-                    } else if (action.equalsIgnoreCase("rmperm")) {
-                        cmd.removePermission(value, sender);
-                    } else if (action.equals("has")) {
-                        cmd.hasPermission(value, sender);
-                    } else {
-                        sendMessage(sender, "Please consult the command documentation!");
-                    }
-                    //ApiLayer.update();
-                }
-            } else if (args.length == 3 && args[0].equalsIgnoreCase("meta")) {
-                if (calc == null) {
-                    sendMessage(sender, "Nothing is selected!");
-                } else if (calc.getType() != type) {
-                    sendMessage(sender, "Please select a " + type.getName() + ", you currently have a " + opposite.getName() + " selected.");
-                } else {
-                    cmd.setValue(args[1], args[2], sender);
-                }
-            } else {
-                sendMessage(sender, "Too many arguments.");
-            }
-            return true;
-        }
+
+
         if (command.getName().equalsIgnoreCase("exec")) {
             String name = "null";
             CalculableType type = CalculableType.USER;

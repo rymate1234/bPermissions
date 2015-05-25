@@ -28,6 +28,7 @@ public class YamlWorld extends World {
 
     protected static final String GROUPS = "groups";
     protected static final String PERMISSIONS = "permissions";
+    protected static final String USERNAME = "username";
     protected static final String META = "meta";
     protected static final String USERS = "users";
     protected YamlConfiguration uconfig = null;//new YamlConfiguration();
@@ -257,6 +258,7 @@ public class YamlWorld extends World {
         for (Calculable user : users) {
             String name = user.getName();
             usaveconfig.set(USERS + "." + name + "." + PERMISSIONS, user.serialisePermissions());
+            usaveconfig.set(USERS + "." + name + "." + USERNAME, Bukkit.getOfflinePlayer(UUID.fromString(name)).getName());
             usaveconfig.set(USERS + "." + name + "." + GROUPS, user.serialiseGroups());
             // MetaData
             Map<String, String> meta = user.getMeta();
