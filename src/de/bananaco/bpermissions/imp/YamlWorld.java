@@ -47,6 +47,9 @@ public class YamlWorld extends World {
         this.permissions = permissions;
         if (wm.isUseGlobalUsers())
             this.ufile = new File(new File("plugins/bPermissions/global/"), "users.yml");
+        else
+            this.ufile = new File(root, "users.yml");
+
         this.gfile = new File(root, "groups.yml");
     }
 
