@@ -27,6 +27,7 @@ public class WorldManager {
     Map<String, World> worlds = new HashMap<String, World>();
     private boolean autoSave = false;
     private boolean useGlobalFiles = false;
+    private boolean useGlobalUsers = false;
     protected boolean loaded = false;
 
     protected WorldManager() {
@@ -133,7 +134,7 @@ public class WorldManager {
         if (mirrors.containsKey(name)) {
             return;
         }
-        if (name.equals("*")) {
+        if (name.equals("global")) {
             return;
         }
 
@@ -174,5 +175,13 @@ public class WorldManager {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public boolean isUseGlobalUsers() {
+        return useGlobalUsers;
+    }
+
+    public void setUseGlobalUsers(boolean useGlobalUsers) {
+        this.useGlobalUsers = useGlobalUsers;
     }
 }

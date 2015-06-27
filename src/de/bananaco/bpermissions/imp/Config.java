@@ -17,6 +17,7 @@ public class Config {
     private boolean autoSave = true;
     private boolean offlineMode = false;
     private boolean trackLimit = false;
+    private boolean useGlobalUsers = false;
 
     public void load() {
         try {
@@ -42,9 +43,11 @@ public class Config {
         config.set("debug-mode", Debugger.setDebug(config.getBoolean("debug-mode", Debugger.getDebug())));
         config.set("allow-offline-mode", config.get("allow-offline-mode", offlineMode));
         config.set("use-global-files", config.get("use-global-files", useGlobalFiles));
+        config.set("use-global-users", config.get("use-global-users", useGlobalUsers));
         config.set("track-limit", config.get("track-limit", trackLimit));
         // then load it into memory
         useGlobalFiles = config.getBoolean("use-global-files");
+        useGlobalUsers = config.getBoolean("use-global-users");
         autoSave = config.getBoolean("auto-save");
         trackType = config.getString("track-type");
         offlineMode = config.getBoolean("allow-offline-mode");
@@ -72,6 +75,8 @@ public class Config {
     public boolean getUseGlobalFiles() {
         return useGlobalFiles;
     }
+
+    public boolean getUseGlobalUsers() { return useGlobalUsers; }
 
     public PromotionTrack getPromotionTrack() {
         return track;
