@@ -78,7 +78,7 @@ public class WorldManager {
         if (name == null) {
             return getDefaultWorld();
         }
-        if (name.equals("*")) {
+        if (name.equals("global")) {
             return getDefaultWorld();
         }
 
