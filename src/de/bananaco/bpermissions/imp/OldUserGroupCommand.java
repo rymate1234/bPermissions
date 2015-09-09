@@ -3,6 +3,7 @@ package de.bananaco.bpermissions.imp;
 import de.bananaco.bpermissions.api.Calculable;
 import de.bananaco.bpermissions.api.CalculableType;
 import de.bananaco.bpermissions.api.World;
+import de.bananaco.bpermissions.api.WorldManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -79,10 +80,14 @@ public class OldUserGroupCommand extends BaseCommand {
             Calculable calc = cmd.getCalculable();
             CalculableType type = command.getName().equalsIgnoreCase("user") ? CalculableType.USER : CalculableType.GROUP;
             CalculableType opposite = !command.getName().equalsIgnoreCase("user") ? CalculableType.USER : CalculableType.GROUP;
+
             /*
              * Selecting, displaying, and executing commands on the Calculable
              */
-            if (args.length == 0) {
+
+            if ((WorldManager.getInstance().isUseGlobalUsers()) && (command.getName().equalsIgnoreCase("user")) && (!cmd.getWorld().getName().equalsIgnoreCase("global"))) {
+                sendMessage(sender, "You need to select the global world!");
+            } else if (args.length == 0) {
                 if (calc == null) {
                     sendMessage(sender, "Nothing is selected!");
                 } else {

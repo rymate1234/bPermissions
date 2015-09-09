@@ -45,7 +45,11 @@ public class YamlWorld extends World {
     public YamlWorld(String world, Permissions permissions, File root) {
         super(world);
         this.permissions = permissions;
-        this.ufile = new File(root, "users.yml");
+        if (wm.isUseGlobalUsers())
+            this.ufile = new File(new File("plugins/bPermissions/global/"), "users.yml");
+        else
+            this.ufile = new File(root, "users.yml");
+
         this.gfile = new File(root, "groups.yml");
     }
 
@@ -247,30 +251,33 @@ public class YamlWorld extends World {
         String def = getDefaultGroup();
         gsaveconfig.set("default", def);
 
-        Set<Calculable> usr = getAll(CalculableType.USER);
-        Debugger.log(usr.size() + " users saved.");
-        // Sort them :D
-        List<Calculable> users = new ArrayList<Calculable>(usr);
-        if (sort) {
-            MetaData.sort(users);
-        }
+        if (!wm.isUseGlobalUsers() || getName().equalsIgnoreCase("global")) {
+            Set<Calculable> usr = getAll(CalculableType.USER);
+            Debugger.log(usr.size() + " users saved.");
+            // Sort them :D
+            List<Calculable> users = new ArrayList<Calculable>(usr);
+            if (sort) {
+                MetaData.sort(users);
+            }
 
-        for (Calculable user : users) {
-            String name = user.getName();
-            usaveconfig.set(USERS + "." + name + "." + PERMISSIONS, user.serialisePermissions());
-            usaveconfig.set(USERS + "." + name + "." + USERNAME, Bukkit.getOfflinePlayer(UUID.fromString(name)).getName());
-            usaveconfig.set(USERS + "." + name + "." + GROUPS, user.serialiseGroups());
-            // MetaData
-            Map<String, String> meta = user.getMeta();
-            if (meta.size() > 0) {
-                for (String key : meta.keySet()) {
-                    usaveconfig.set(USERS + "." + name + "." + META + "." + key, meta.get(key));
+            for (Calculable user : users) {
+                String name = user.getName();
+                usaveconfig.set(USERS + "." + name + "." + PERMISSIONS, user.serialisePermissions());
+                usaveconfig.set(USERS + "." + name + "." + USERNAME, Bukkit.getOfflinePlayer(UUID.fromString(name)).getName());
+                usaveconfig.set(USERS + "." + name + "." + GROUPS, user.serialiseGroups());
+                // MetaData
+                Map<String, String> meta = user.getMeta();
+                if (meta.size() > 0) {
+                    for (String key : meta.keySet()) {
+                        usaveconfig.set(USERS + "." + name + "." + META + "." + key, meta.get(key));
+                    }
                 }
             }
         }
 
         Set<Calculable> grp = getAll(CalculableType.GROUP);
         Debugger.log(grp.size() + " groups saved.");
+
         // Sort them :D
         @SuppressWarnings({"rawtypes", "unchecked"})
         List<Group> groups = new ArrayList(grp);
@@ -292,7 +299,10 @@ public class YamlWorld extends World {
         }
 
         long t = System.currentTimeMillis();
-        usaveconfig.save(ufile);
+
+        if (!wm.isUseGlobalUsers() || getName().equalsIgnoreCase("global"))
+            usaveconfig.save(ufile);
+
         gsaveconfig.save(gfile);
         long f = System.currentTimeMillis();
         Debugger.log("Saving files took " + (f - t) + "ms");
