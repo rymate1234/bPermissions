@@ -11,6 +11,6 @@ import java.io.File;
 public class DefaultWorld extends YamlWorld {
 
     public DefaultWorld(Permissions permissions) {
-        super("*", permissions, new File("plugins/bPermissions/"));
+        super("global", permissions, new File("plugins/bPermissions/global"));
     }
 }
