@@ -262,6 +262,16 @@ public class YamlWorld extends World {
 
             for (Calculable user : users) {
                 String name = user.getName();
+
+                // don't save users with default settings
+                if (user.getMeta().size() == 0
+                        && user.getPermissions().size() == 0
+                        && (user.getGroupsAsString().size() == 0
+                        || (user.getGroupsAsString().size() == 1
+                        && user.getGroupsAsString().iterator().next().equals(getDefaultGroup())))) {
+                    continue;
+                }
+
                 usaveconfig.set(USERS + "." + name + "." + PERMISSIONS, user.serialisePermissions());
                 usaveconfig.set(USERS + "." + name + "." + USERNAME, Bukkit.getOfflinePlayer(UUID.fromString(name)).getName());
                 usaveconfig.set(USERS + "." + name + "." + GROUPS, user.serialiseGroups());

@@ -256,6 +256,8 @@ public abstract class World {
         // Iterate through the users
         for (String user : users.keySet()) {
             User u = users.get(user);
+
+
             if (u.getMeta().size() == 0
                     && u.getPermissions().size() == 0
                     && (u.getGroupsAsString().size() == 0
