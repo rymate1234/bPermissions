@@ -89,7 +89,7 @@ public class YamlWorld extends World {
                         e.printStackTrace();
                     }
                 }
-            }.runTask(permissions);
+            }.runTaskAsynchronously(permissions);
 
             // If it loaded correctly cancel the error
             error = false;
@@ -120,8 +120,6 @@ public class YamlWorld extends World {
         long t = System.currentTimeMillis();
         uconfig.load(ufile);
         gconfig.load(gfile);
-        long f = System.currentTimeMillis();
-        Debugger.log("Loading files took " + (f - t) + "ms");
 
         /*
          * Load the users
@@ -189,6 +187,9 @@ public class YamlWorld extends World {
             Debugger.log("Empty ConfigurationSection:" + GROUPS + ":" + gfile.getPath());
         }
 
+        long f = System.currentTimeMillis();
+        Debugger.log("Loading files for " + getName() + " took " + (f - t) + "ms");
+
         Debugger.log(this.getAll(CalculableType.USER).size() + " users loaded.");
         Debugger.log(this.getAll(CalculableType.GROUP).size() + " groups loaded.");
 
@@ -226,7 +227,7 @@ public class YamlWorld extends World {
                         e.printStackTrace();
                     }
                 }
-            }.runTask(permissions);
+            }.runTaskAsynchronously(permissions);
 
             save = false;
         } catch (Exception e) {
@@ -250,6 +251,8 @@ public class YamlWorld extends World {
 
         String def = getDefaultGroup();
         gsaveconfig.set("default", def);
+
+        long t = System.currentTimeMillis();
 
         if (!wm.isUseGlobalUsers() || getName().equalsIgnoreCase("global")) {
             Set<Calculable> usr = getAll(CalculableType.USER);
@@ -308,14 +311,13 @@ public class YamlWorld extends World {
             }
         }
 
-        long t = System.currentTimeMillis();
 
         if (!wm.isUseGlobalUsers() || getName().equalsIgnoreCase("global"))
             usaveconfig.save(ufile);
 
         gsaveconfig.save(gfile);
         long f = System.currentTimeMillis();
-        Debugger.log("Saving files took " + (f - t) + "ms");
+        Debugger.log("Saving files for " + getName() + " took " + (f - t) + "ms");
     }
 
     @Override
