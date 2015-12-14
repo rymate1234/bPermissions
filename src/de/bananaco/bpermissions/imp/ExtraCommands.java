@@ -12,6 +12,7 @@ import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 import org.bukkit.Bukkit;
 
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,10 +30,12 @@ public class ExtraCommands {
         }
 
         if (type == CalculableType.USER) {
-            if (Bukkit.getPlayer(name) != null) {
-                name = Bukkit.getPlayer(name).getUniqueId().toString();
-            } else {
-                name = Bukkit.getOfflinePlayer(name).getUniqueId().toString();
+            if (!name.matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")) {
+                if (Bukkit.getPlayer(name) != null) {
+                    name = Bukkit.getPlayer(name).getUniqueId().toString();
+                } else {
+                    name = Bukkit.getOfflinePlayer(name).getUniqueId().toString();
+                }
             }
         }
         for (World w : worlds) {

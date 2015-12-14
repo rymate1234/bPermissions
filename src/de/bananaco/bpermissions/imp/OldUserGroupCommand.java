@@ -96,10 +96,14 @@ public class OldUserGroupCommand extends BaseCommand {
             } else if (args.length == 1) {
                 if (command.getName().equalsIgnoreCase("user")) {
                     String uuid;
-                    if (plugin.getServer().getPlayer(args[0]) != null) {
-                        uuid = plugin.getServer().getPlayer(args[0]).getUniqueId().toString();
+                    if (!args[0].matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")) {
+                        if (plugin.getServer().getPlayer(args[0]) != null) {
+                            uuid = plugin.getServer().getPlayer(args[0]).getUniqueId().toString();
+                        } else {
+                            uuid = plugin.getServer().getOfflinePlayer(args[0]).getUniqueId().toString();
+                        }
                     } else {
-                        uuid = plugin.getServer().getOfflinePlayer(args[0]).getUniqueId().toString();
+                        uuid = args[0];
                     }
                     cmd.setCalculable(type, uuid, sender);
                 } else {
