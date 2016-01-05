@@ -57,6 +57,8 @@ public class ExtraCommands {
                 c.removePermission(value);
             }
 
+            wm.update();
+
             try {
                 c.calculateEffectiveMeta();
                 c.calculateEffectivePermissions();

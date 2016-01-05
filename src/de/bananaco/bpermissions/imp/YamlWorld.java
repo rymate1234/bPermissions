@@ -83,7 +83,7 @@ public class YamlWorld extends World {
             new BukkitRunnable() {
                 public void run() {
                     try {
-                        clear();
+                        //clear();
                         loadUnsafe();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -148,6 +148,7 @@ public class YamlWorld extends World {
                     }
                 }
                 // Upload to API
+                remove(user);
                 add(user);
             }
         } else {
@@ -181,6 +182,7 @@ public class YamlWorld extends World {
                     }
                 }
                 // Upload to API
+                remove(group);
                 add(group);
             }
         } else {
@@ -199,6 +201,7 @@ public class YamlWorld extends World {
             if (wm.getWorld(world) == this) {
                 getUser(name).calculateEffectivePermissions();
                 getUser(name).calculateEffectiveMeta();
+                setupPlayer(name);
             }
         }
 

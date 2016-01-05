@@ -1,9 +1,6 @@
 package de.bananaco.bpermissions.imp;
 
-import de.bananaco.bpermissions.api.Calculable;
-import de.bananaco.bpermissions.api.CalculableType;
-import de.bananaco.bpermissions.api.World;
-import de.bananaco.bpermissions.api.WorldManager;
+import de.bananaco.bpermissions.api.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -143,7 +140,7 @@ public class OldUserGroupCommand extends BaseCommand {
                     } else {
                         sendMessage(sender, "Please consult the command documentation!");
                     }
-                    //ApiLayer.update();
+                    ApiLayer.update();
                 }
             } else if (args.length == 3 && args[0].equalsIgnoreCase("meta")) {
                 if (calc == null) {

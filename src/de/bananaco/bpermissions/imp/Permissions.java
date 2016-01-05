@@ -373,11 +373,11 @@ public class Permissions extends JavaPlugin {
                         return true;
                     }
                     if (args[0].equalsIgnoreCase("debugset")) {
-                        Player[] players = (Player[]) Bukkit.getOnlinePlayers().toArray();
-                        if (players.length == 0) {
+                        Collection<Player> players = (Collection<Player>) Bukkit.getOnlinePlayers();
+                        if (players.size() == 0) {
                             System.err.println("You need some online players!");
                         } else {
-                            Player player = players[0];
+                            Player player = (Player) players.toArray()[0];
                             BukkitCompat.runTest(player, this);
                         }
                         return true;

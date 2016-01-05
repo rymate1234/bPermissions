@@ -46,6 +46,29 @@ public abstract class World {
     public abstract boolean save();
 
     /**
+     * This loads a single Calculable into the API
+     *
+     * Make sure you call .calculateEffectivePermissions for all the users once
+     * this is done!
+     *
+     * You can just call add(Calculable) here with the objects you create.
+     *
+     * @return boolean
+     */
+    public abstract boolean loadOne(String name, CalculableType type);
+
+    /**
+     * This saves a single Calculable into the storage
+     *
+     * This should be as efficient as possible, can even be threaded if you
+     * really desire. This is an attempt to increase compatability with
+     * everything!
+     *
+     * @return boolean
+     */
+    public abstract boolean saveOne(String name, CalculableType type);
+
+    /**
      * Used to check if the World contains an entry for said Calculable
      *
      * @param name
