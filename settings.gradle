@@ -1,0 +1,3 @@
+rootProject.name = 'bPermissions'
+include ':core'
+include ':bukkit'

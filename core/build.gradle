@@ -1,0 +1,15 @@
+group 'de.bananaco'
+version '2.12-DEV'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "com.googlecode.json-simple:json-simple:1.1.1"
+    compile "com.google.guava:guava:17.0"
+}

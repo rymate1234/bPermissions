@@ -1,0 +1,35 @@
+group 'de.banaco'
+version '2.12-DEV'
+
+buildscript {
+    repositories { jcenter() }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+description = """bPermissions"""
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+
+repositories {
+    maven { url "https://hub.spigotmc.org/nexus/content/groups/public/" }
+    maven { url "http://repo.bukkit.org/content/groups/public/" }
+    maven { url "http://repo.maven.apache.org/maven2" }
+}
+
+dependencies {
+    compile project(":core")
+    compile group: 'org.bukkit', name: 'bukkit', version: '1.8.7-R0.1-SNAPSHOT'
+}
+
+shadowJar {
+    dependencies {
+        include(dependency(':core'))
+    }
+}
