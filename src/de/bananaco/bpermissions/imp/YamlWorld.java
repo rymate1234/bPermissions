@@ -1,13 +1,6 @@
 package de.bananaco.bpermissions.imp;
 
-import de.bananaco.bpermissions.api.Calculable;
-import de.bananaco.bpermissions.api.CalculableType;
-import de.bananaco.bpermissions.api.Group;
-import de.bananaco.bpermissions.api.MetaData;
-import de.bananaco.bpermissions.api.Permission;
-import de.bananaco.bpermissions.api.User;
-import de.bananaco.bpermissions.api.World;
-import de.bananaco.bpermissions.api.WorldManager;
+import de.bananaco.bpermissions.api.*;
 import de.bananaco.bpermissions.imp.loadmanager.MainThread;
 
 import java.io.File;
@@ -124,21 +117,20 @@ public class YamlWorld extends World {
         /*
          * Load the users
          */
-        ConfigurationSection usersConfig = uconfig
-                .getConfigurationSection(USERS);
+        ConfigurationSection usersConfig = uconfig.getConfigurationSection(USERS);
         if (usersConfig != null) {
             Set<String> names = usersConfig.getKeys(false);
-            for (String name : names) {
-                List<String> nPerm = usersConfig.getStringList(name + "."
-                        + PERMISSIONS);
-                List<String> nGroup = usersConfig.getStringList(name + "."
-                        + GROUPS);
+            // for (String name : names) {
+            // experiment - only load online users
+            for (Player player : this.permissions.getServer().getOnlinePlayers()) {
+                String name = player.getUniqueId().toString();
+                List<String> nPerm = usersConfig.getStringList(name + "." + PERMISSIONS);
+                List<String> nGroup = usersConfig.getStringList(name + "." + GROUPS);
                 Set<Permission> perms = Permission.loadFromString(nPerm);
                 // Create the new user
                 User user = new User(name, nGroup, perms, getName(), this);
                 // MetaData
-                ConfigurationSection meta = usersConfig
-                        .getConfigurationSection(name + "." + META);
+                ConfigurationSection meta = usersConfig.getConfigurationSection(name + "." + META);
                 if (meta != null) {
                     Set<String> keys = meta.getKeys(false);
                     if (keys != null && keys.size() > 0) {
@@ -157,15 +149,12 @@ public class YamlWorld extends World {
         /*
          * Load the groups
          */
-        ConfigurationSection groupsConfig = gconfig
-                .getConfigurationSection(GROUPS);
+        ConfigurationSection groupsConfig = gconfig.getConfigurationSection(GROUPS);
         if (groupsConfig != null) {
             Set<String> names = groupsConfig.getKeys(false);
             for (String name : names) {
-                List<String> nPerm = groupsConfig.getStringList(name + "."
-                        + PERMISSIONS);
-                List<String> nGroup = groupsConfig.getStringList(name + "."
-                        + GROUPS);
+                List<String> nPerm = groupsConfig.getStringList(name + "." + PERMISSIONS);
+                List<String> nGroup = groupsConfig.getStringList(name + "." + GROUPS);
 
                 Set<Permission> perms = Permission.loadFromString(nPerm);
                 // Create the new group
@@ -321,6 +310,102 @@ public class YamlWorld extends World {
         gsaveconfig.save(gfile);
         long f = System.currentTimeMillis();
         Debugger.log("Saving files for " + getName() + " took " + (f - t) + "ms");
+    }
+
+    public boolean loadOne(String name, CalculableType type) {
+        if (!storeContains(name, type))
+            return false;
+
+        if (type == CalculableType.USER) {
+            /*
+             * Load as a user
+             */
+            ConfigurationSection usersConfig = uconfig.getConfigurationSection(USERS);
+            if (usersConfig != null) {
+                List<String> nPerm = usersConfig.getStringList(name + "." + PERMISSIONS);
+                List<String> nGroup = usersConfig.getStringList(name + "." + GROUPS);
+                Set<Permission> perms = Permission.loadFromString(nPerm);
+                // Create the new user
+                User user = new User(name, nGroup, perms, getName(), this);
+                // MetaData
+                ConfigurationSection meta = usersConfig.getConfigurationSection(name + "." + META);
+                if (meta != null) {
+                    Set<String> keys = meta.getKeys(false);
+                    if (keys != null && keys.size() > 0) {
+                        for (String key : keys) {
+                            user.setValue(key, meta.get(key).toString());
+                        }
+                    }
+                }
+                // Upload to API
+                remove(user);
+                add(user);
+            } else {
+                Debugger.log("Empty ConfigurationSection:" + USERS + ":" + ufile.getPath());
+                return false;
+            }
+
+            if (Bukkit.getPlayer(UUID.fromString(name)) != null) {
+                try {
+                    getUser(name).calculateEffectivePermissions();
+                    getUser(name).calculateEffectiveMeta();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                setupPlayer(name);
+            }
+        } else if (type == CalculableType.GROUP) {
+            /*
+             * Load a group
+             */
+            ConfigurationSection groupsConfig = gconfig.getConfigurationSection(GROUPS);
+            if (groupsConfig != null) {
+                List<String> nPerm = groupsConfig.getStringList(name + "." + PERMISSIONS);
+                List<String> nGroup = groupsConfig.getStringList(name + "." + GROUPS);
+
+                Set<Permission> perms = Permission.loadFromString(nPerm);
+                // Create the new group
+                Group group = new Group(name, nGroup, perms, getName(), this);
+                // MetaData
+                ConfigurationSection meta = groupsConfig.getConfigurationSection(name + "." + META);
+                if (meta != null) {
+                    Set<String> keys = meta.getKeys(false);
+                    if (keys != null && keys.size() > 0) {
+                        for (String key : keys) {
+                            group.setValue(key, meta.get(key).toString());
+                        }
+                    }
+                }
+                // Upload to API
+                remove(group);
+                add(group);
+            } else {
+                Debugger.log("Empty ConfigurationSection:" + GROUPS + ":" + gfile.getPath());
+            }
+        }
+        return true;
+    }
+
+    public boolean saveOne(String name, CalculableType type) {
+        return false;
+    }
+
+    @Override
+    public boolean storeContains(String name, CalculableType type) {
+        if (type == CalculableType.USER) {
+            ConfigurationSection usersConfig = uconfig.getConfigurationSection(USERS);
+            if (usersConfig != null) {
+                return usersConfig.getKeys(false).contains(name);
+            }
+            return false;
+        } else if (type == CalculableType.GROUP) {
+            ConfigurationSection groupsConfig = gconfig.getConfigurationSection(GROUPS);
+            if (groupsConfig != null) {
+                return groupsConfig.getKeys(false).contains(name);
+            }
+            return false;
+        }
+        return false;
     }
 
     @Override

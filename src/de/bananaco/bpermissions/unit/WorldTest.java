@@ -1,5 +1,6 @@
 package de.bananaco.bpermissions.unit;
 
+import de.bananaco.bpermissions.api.CalculableType;
 import de.bananaco.bpermissions.api.World;
 
 public class WorldTest extends World {
@@ -16,6 +17,21 @@ public class WorldTest extends World {
     @Override
     public boolean save() {
         return true;
+    }
+
+    @Override
+    public boolean loadOne(String name, CalculableType type) {
+        return true;
+    }
+
+    @Override
+    public boolean saveOne(String name, CalculableType type) {
+        return true;
+    }
+
+    @Override
+    public boolean storeContains(String name, CalculableType type) {
+        return false;
     }
 
     @Override

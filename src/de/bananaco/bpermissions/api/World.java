@@ -68,6 +68,18 @@ public abstract class World {
      */
     public abstract boolean saveOne(String name, CalculableType type);
 
+
+    /**
+     * This is a way of checking whether a Calculable is stored within
+     * the storage that this world uses.
+     *
+     * Will return true if the store cointains the Calculable
+     *
+     * @return boolean
+     */
+    public abstract boolean storeContains(String name, CalculableType type);
+
+
     /**
      * Used to check if the World contains an entry for said Calculable
      *
@@ -109,7 +121,11 @@ public abstract class World {
         name = ChatColor.stripColor(name);
         // A quick lowercase here
         name = name.toLowerCase();
-        // And now we check
+        // laod the Calculable if it isn't already
+        if (storeContains(name, type) && !contains(name, type)) {
+            loadOne(name, type);
+        }
+
         if (type == CalculableType.USER) {
             if (!isUUID(name))
                 name = Bukkit.getOfflinePlayer(name).getUniqueId().toString();
