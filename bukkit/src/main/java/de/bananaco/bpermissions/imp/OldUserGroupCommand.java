@@ -35,7 +35,8 @@ public class OldUserGroupCommand extends BaseCommand {
             sendMessage(sender, "You're not allowed to do that!");
             return true;
         }
-                /*
+
+        /*
          * Create an entry in the commands selection if one does not exist
          */
         if (!commands.containsKey(getName(sender))) {

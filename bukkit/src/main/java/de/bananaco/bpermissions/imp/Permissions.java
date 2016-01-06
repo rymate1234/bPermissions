@@ -129,16 +129,6 @@ public class Permissions extends JavaPlugin {
         });
     }
 
-    public static void printDinosaurs() {
-        String dino = "            __ " + "\n"
-                + "           / _)" + "\n"
-                + "    .-^^^-/ /  " + "\n"
-                + " __/       /" + "\n"
-                + "<__.|_|-|_|" + "\n"
-                + "==DINOSAUR==";
-        System.out.println("\n" + dino);
-    }
-
     public static String blankFormat(String message) {
         return "[bPermissions] " + message;
     }
