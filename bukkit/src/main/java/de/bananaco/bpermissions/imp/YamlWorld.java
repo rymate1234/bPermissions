@@ -363,8 +363,9 @@ public class YamlWorld extends World {
 
             if (Bukkit.getPlayer(UUID.fromString(name)) != null) {
                 try {
-                    getUser(name).calculateEffectivePermissions();
-                    getUser(name).calculateEffectiveMeta();
+                    UUID uuid = UUID.fromString(name);
+                    getUser(uuid).calculateEffectivePermissions();
+                    getUser(uuid).calculateEffectiveMeta();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -402,9 +403,9 @@ public class YamlWorld extends World {
         return true;
     }
 
-    public boolean saveOne(String name, CalculableType type) {
-        return false;
-    }
+    //public boolean saveOne(String name, CalculableType type) {
+    //    return false;
+    //}
 
     @Override
     public boolean storeContains(String name, CalculableType type) {

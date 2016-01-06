@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-//import org.bukkit.ChatColor;
 /**
  * This class contains the main calculations for a
  * GroupCarrier/PermissionCarrier.
