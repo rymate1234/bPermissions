@@ -100,17 +100,39 @@ public abstract class World {
         return false;
     }
 
+    /**
+     * Used to get a Group from this world via the group name
+     *
+     * @param name The name of a group
+     * @return Calculable (Group)
+     */
     public Group getGroup(String name) {
         name = stripColor(name);
         return (Group) get(name, CalculableType.GROUP);
     }
 
+
+    /**
+     * Used to get a User from this world via their username.
+     * This has been depreciated and may not exist in a future release,
+     * it's recommended to use getUser() with a UUID instead
+     *
+     * @param name The username of a player, or UUID as a string
+     * @return Calculable (User)
+     */
     @Deprecated
     public User getUser(String name) {
         name = stripColor(name);
         return (User) get(name, CalculableType.USER);
     }
 
+    /**
+     * Used to get a User from this world via their UUID
+     * This is the preferred method of doing so.
+     *
+     * @param uuid A users UUID
+     * @return Calculable (User)
+     */
     public User getUser(UUID uuid) {
         return (User) get(uuid.toString(), CalculableType.USER);
     }
@@ -189,6 +211,13 @@ public abstract class World {
         return entries;
     }
 
+    /**
+     * Used to grab a complete Map of the contained Calculable from the World.
+     * This may return null if there are no Calculable in the world
+     *
+     * @param type
+     * @return Set<Calculable>
+     */
     private Map<String, Calculable> getAllAsMap(CalculableType type) {
         try {
             if (type == CalculableType.USER) {
@@ -256,12 +285,6 @@ public abstract class World {
      * a clean load)
      */
     public void clear() {
-        //for(Calculable group : getAll(CalculableType.GROUP)) {
-        //	group.clear();
-        //}
-        //for(Calculable user : getAll(CalculableType.USER)) {
-        //	user.clear();
-        //}
         groups.clear();
         users.clear();
     }
@@ -373,7 +396,10 @@ public abstract class World {
 
 
     /**
-     * Strips the given message of all color codes - taken from Bukkit source code
+     * Strips the given message of all color codes - taken from the Bukkit source
+     * code.
+     *
+     * This allows the bPermissions core to be separate from an implementation
      *
      * @param input String to strip of color
      * @return A copy of the input string, without any coloring
