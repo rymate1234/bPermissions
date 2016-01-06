@@ -3,7 +3,6 @@ package de.bananaco.bpermissions.api;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import com.evilmidget38.UUIDFetcher;
 import de.bananaco.bpermissions.util.Debugger;
 
 /**
