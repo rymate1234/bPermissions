@@ -38,7 +38,7 @@ public abstract class World {
 
     /**
      * This should be as efficient as possible, can even be threaded if you
-     * really desire. This is an attempt to increase compatability with
+     * really desire. This is an attempt to increase compatibility with
      * everything!
      *
      * @return boolean
@@ -61,13 +61,14 @@ public abstract class World {
      * This saves a single Calculable into the storage
      *
      * This should be as efficient as possible, can even be threaded if you
-     * really desire. This is an attempt to increase compatability with
+     * really desire. This is an attempt to increase compatibility with
      * everything!
      *
+     * [REMOVED FOR NOW - UNUSED]
+     *
      * @return boolean
+     * public abstract boolean saveOne(String name, CalculableType type);
      */
-    public abstract boolean saveOne(String name, CalculableType type);
-
 
     /**
      * This is a way of checking whether a Calculable is stored within

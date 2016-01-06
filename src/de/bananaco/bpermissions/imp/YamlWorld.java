@@ -235,11 +235,11 @@ public class YamlWorld extends World {
             gfile.createNewFile();
         }
 
-        YamlConfiguration usaveconfig = new YamlConfiguration();
-        YamlConfiguration gsaveconfig = new YamlConfiguration();
+        YamlConfiguration usaveconfig = uconfig; //new YamlConfiguration();
+        YamlConfiguration gsaveconfig = gconfig; //new YamlConfiguration();
 
-        usaveconfig.setDefaults(this.uconfig);
-        gsaveconfig.setDefaults(this.gconfig);
+        //usaveconfig.setDefaults(this.uconfig);
+        //gsaveconfig.setDefaults(this.gconfig);
 
         String def = getDefaultGroup();
         gsaveconfig.set("default", def);

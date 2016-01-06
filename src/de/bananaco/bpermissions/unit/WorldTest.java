@@ -24,10 +24,10 @@ public class WorldTest extends World {
         return true;
     }
 
-    @Override
-    public boolean saveOne(String name, CalculableType type) {
-        return true;
-    }
+    //@Override
+    //public boolean saveOne(String name, CalculableType type) {
+    //    return true;
+    //}
 
     @Override
     public boolean storeContains(String name, CalculableType type) {
