@@ -54,6 +54,7 @@ public abstract class Calculable extends CalculableMeta {
      * @throws RecursiveGroupException
      */
     public void calculateEffectivePermissions() throws RecursiveGroupException {
+        calculateGroups();
         try {
             Map<String, Integer> priorities = new HashMap<String, Integer>();
             effectivePermissions.clear();

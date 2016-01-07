@@ -14,6 +14,7 @@ import java.util.Set;
 public abstract class GroupCarrier extends PermissionCarrier {
 
     private final Set<String> groups;
+    private final Set<Group> groupsCalculated;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     protected GroupCarrier(Set<String> groups, Set<Permission> permissions,
@@ -22,30 +23,38 @@ public abstract class GroupCarrier extends PermissionCarrier {
         if (groups == null) {
             groups = new HashSet();
         }
+        groupsCalculated = new HashSet();
+
         this.groups = groups;
     }
 
     /**
-     * Returns the groups that the object inherits Calculated via the parent
-     * object (this is a fresh object every call)
-     *
-     * @return Set<Group>
+     * Calculates the total list of groups that the object carries
      */
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public Set<Group> getGroups() {
-        Set<Group> groups = new HashSet();
+    public void calculateGroups() {
+        groupsCalculated.clear();
         for (String name : this.groups) {
             if (WorldManager.getInstance().getWorld(getWorld()) == null) {
                 System.err.println(getWorld() + " is null?");
             }
             Group group = (Group) WorldManager.getInstance().getWorld(getWorld()).get(name, CalculableType.GROUP);
-            groups.add(group);
+            groupsCalculated.add(group);
         }
-        return groups;
     }
 
     /**
-     * Returns the groups that the object inherits This is a direct reference to
+     * Returns the groups that were calculated via the calculateGroups()
+     * method.
+     *
+     * @return Set<Group>
+     */
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public Set<Group> getGroups() {
+        return groupsCalculated;
+    }
+
+    /**
+     * Returns the groups that the object inherits. This is a direct reference to
      * the object
      *
      * @return
