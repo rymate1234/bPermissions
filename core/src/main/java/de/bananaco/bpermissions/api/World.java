@@ -289,6 +289,24 @@ public abstract class World {
     }
 
     /**
+     * Used to clear the Map containing Group objects (useful for doing
+     * a clean load)
+     */
+    public void clearGroups() {
+        groups.clear();
+    }
+
+
+    /**
+     * Used to clear the Map containing User objects (useful for doing
+     * a clean load)
+     */
+    public void clearUsers() {
+        users.clear();
+    }
+
+
+    /**
      * Shows if the world is THIS world
      *
      * @param world

@@ -160,6 +160,7 @@ public class YamlWorld extends World {
          */
         ConfigurationSection groupsConfig = gconfig.getConfigurationSection(GROUPS);
         if (groupsConfig != null) {
+            clearGroups();
             Set<String> names = groupsConfig.getKeys(false);
             for (String name : names) {
                 List<String> nPerm = groupsConfig.getStringList(name + "." + PERMISSIONS);
