@@ -147,14 +147,12 @@ public abstract class World {
         name = stripColor(name);
         // A quick lowercase here
         name = name.toLowerCase();
-        // laod the Calculable if it isn't already
-        if (storeContains(name, type) && !contains(name, type)) {
-            loadOne(name, type);
-        }
 
         if (type == CalculableType.USER) {
             if (!isUUID(name))
                 name = getUUID(name).toString();
+
+            loadIfExists(name, type);
 
             if (!users.containsKey(name)) {
                 add(new User(name, null, null, getName(), this));
@@ -170,6 +168,8 @@ public abstract class World {
             }
             return users.get(name);
         } else if (type == CalculableType.GROUP) {
+            loadIfExists(name, type);
+
             if (!groups.containsKey(name)) {
                 add(new Group(name, null, null, getName(), this));
             }
@@ -399,6 +399,21 @@ public abstract class World {
             return true;
         } catch (Exception ex) {
             return false;
+        }
+    }
+
+
+    /**
+     * Method to load a Calculable into the memory if it exists and isn't loaded already
+     *
+     * @param name The name of the Calculable
+     * @param type The type of the Calculable
+     */
+    public void loadIfExists(String name, CalculableType type) {
+        if (!contains(name, type)) {
+            if (storeContains(name, type)) {
+                loadOne(name, type);
+            }
         }
     }
 
