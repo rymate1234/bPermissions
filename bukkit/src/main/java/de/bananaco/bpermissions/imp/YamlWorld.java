@@ -317,7 +317,6 @@ public class YamlWorld extends World {
             }
         }
 
-
         if (!wm.isUseGlobalUsers() || getName().equalsIgnoreCase("global"))
             usaveconfig.save(ufile);
 
@@ -327,6 +326,9 @@ public class YamlWorld extends World {
     }
 
     public boolean loadOne(String name, CalculableType type) {
+        if (contains(name, type))
+            return true;
+
         if (!storeContains(name, type))
             return false;
 
@@ -351,12 +353,23 @@ public class YamlWorld extends World {
                         }
                     }
                 }
-                // Upload to API
+                // Upload it to the API
                 remove(user);
                 add(user);
             } else {
                 Debugger.log("Empty ConfigurationSection:" + USERS + ":" + ufile.getPath());
                 return false;
+            }
+
+            if (Bukkit.getPlayer(UUID.fromString(name)) != null) {
+                try {
+                    UUID uuid = UUID.fromString(name);
+                    getUser(uuid).calculateEffectivePermissions();
+                    getUser(uuid).calculateEffectiveMeta();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                setupPlayer(name);
             }
         } else if (type == CalculableType.GROUP) {
             /*
