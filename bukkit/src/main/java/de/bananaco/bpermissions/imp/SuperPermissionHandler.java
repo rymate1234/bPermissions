@@ -134,23 +134,11 @@ public class SuperPermissionHandler implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPreLogin(final AsyncPlayerPreLoginEvent event) {
-        Callable r = new Callable() {
-            public Object call() throws Exception {
-                String uuid = event.getUniqueId().toString();
-                for (de.bananaco.bpermissions.api.World world : SuperPermissionHandler.this.wm.getAllWorlds()) {
-                    if (!world.contains(uuid, CalculableType.USER)) {
-                        world.loadOne(uuid, CalculableType.USER);
-                    }
-                    User user = world.getUser(uuid);
-                    user.calculateEffectivePermissions();
-                    user.calculateEffectiveMeta();
-                    Debugger.log("PlayerPreLogin setup: " + user .getName());
-                }
-                return null;
-            }
-        };
-        Bukkit.getScheduler().callSyncMethod(Permissions.instance, r);
+    public void onPreLogin(AsyncPlayerPreLoginEvent event) {
+        String uuid = event.getUniqueId().toString();
+        for (de.bananaco.bpermissions.api.World world : SuperPermissionHandler.this.wm.getAllWorlds()) {
+            world.loadIfExists(uuid, CalculableType.USER);
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -160,16 +148,12 @@ public class SuperPermissionHandler implements Listener {
             public void run() {
             String uuid = event.getPlayer().getUniqueId().toString();
             for (de.bananaco.bpermissions.api.World world : SuperPermissionHandler.this.wm.getAllWorlds()) {
-                if (!world.contains(uuid, CalculableType.USER)) {
-                    world.loadOne(uuid, CalculableType.USER);
-                } else {
-                    User user = world.getUser(uuid);
-                    try {
-                        user.calculateEffectivePermissions();
-                        user.calculateEffectiveMeta();
-                    } catch (RecursiveGroupException e) {
-                        e.printStackTrace();
-                    }
+                User user = (User) world.get(uuid, CalculableType.USER);
+                try {
+                    user.calculateEffectivePermissions();
+                    user.calculateEffectiveMeta();
+                } catch (RecursiveGroupException e) {
+                    e.printStackTrace();
                 }
                 Debugger.log("PlayerLogin setup: " + uuid);
             }
@@ -177,17 +161,5 @@ public class SuperPermissionHandler implements Listener {
             }
         };
         Bukkit.getScheduler().runTaskAsynchronously(Permissions.instance, r);
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerLogin(PlayerJoinEvent event) {
-        // Likewise, in theory this should be all we need to detect when a player joins
-    }
-
-    public void setupPlayer(String name) {
-        if (Bukkit.getPlayer(name) != null) {
-            Player player = Bukkit.getPlayer(name);
-            this.setupPlayer(player);
-        }
     }
 }

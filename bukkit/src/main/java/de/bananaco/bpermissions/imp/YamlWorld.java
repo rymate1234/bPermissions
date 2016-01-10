@@ -37,6 +37,9 @@ public class YamlWorld extends World {
     // Only save if flagged true
     protected boolean save = false;
 
+    private String[] usersArray;
+    private String[] groupsArray;
+
     public YamlWorld(String world, Permissions permissions, File root) {
         super(world);
         this.permissions = permissions;
@@ -46,6 +49,9 @@ public class YamlWorld extends World {
             this.ufile = new File(root, "users.yml");
 
         this.gfile = new File(root, "groups.yml");
+
+        this.usersArray = new String[0];
+        this.groupsArray = new String[0];
     }
 
     @Override
@@ -129,6 +135,7 @@ public class YamlWorld extends World {
         ConfigurationSection usersConfig = uconfig.getConfigurationSection(USERS);
         if (usersConfig != null) {
             Set<String> names = usersConfig.getKeys(false);
+            usersArray = names.toArray(new String[0]);
             // for (String name : names) {
             // experiment - only load online users
             for (Player player : this.permissions.getServer().getOnlinePlayers()) {
@@ -162,6 +169,8 @@ public class YamlWorld extends World {
         if (groupsConfig != null) {
             clearGroups();
             Set<String> names = groupsConfig.getKeys(false);
+            groupsArray = names.toArray(new String[0]);
+
             for (String name : names) {
                 List<String> nPerm = groupsConfig.getStringList(name + "." + PERMISSIONS);
                 List<String> nGroup = groupsConfig.getStringList(name + "." + GROUPS);
@@ -410,17 +419,9 @@ public class YamlWorld extends World {
     @Override
     public boolean storeContains(String name, CalculableType type) {
         if (type == CalculableType.USER) {
-            ConfigurationSection usersConfig = uconfig.getConfigurationSection(USERS);
-            if (usersConfig != null) {
-                return usersConfig.getKeys(false).contains(name);
-            }
-            return false;
+            return Arrays.asList(usersArray).contains(name);
         } else if (type == CalculableType.GROUP) {
-            ConfigurationSection groupsConfig = gconfig.getConfigurationSection(GROUPS);
-            if (groupsConfig != null) {
-                return groupsConfig.getKeys(false).contains(name);
-            }
-            return false;
+            return Arrays.asList(groupsArray).contains(name);
         }
         return false;
     }

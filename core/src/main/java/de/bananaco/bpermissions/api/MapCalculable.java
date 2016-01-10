@@ -1,5 +1,7 @@
 package de.bananaco.bpermissions.api;
 
+import de.bananaco.bpermissions.util.Debugger;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -54,7 +56,7 @@ public abstract class MapCalculable extends de.bananaco.bpermissions.api.util.Ca
         if (!dirty) {
             return;
         }
-        //long time = System.currentTimeMillis();
+        long time = System.currentTimeMillis();
         super.calculateEffectivePermissions();
         permissions.clear();
         for (Permission perm : getEffectivePermissions()) {
@@ -62,11 +64,10 @@ public abstract class MapCalculable extends de.bananaco.bpermissions.api.util.Ca
         }
         this.calculateEffectiveMeta();
         dirty = false;
-        //long finish = System.currentTimeMillis()-time;
-        // Don't need to print this anymore
-        //System.out.println("Calculated mapped permissions for "+getType().getName()+" "+getName()+". Took "+finish+"ms.");
-        //if(getType() == CalculableType.USER)
-        //	getWorldObject().setupPlayer(getName());
+        long finish = System.currentTimeMillis()-time;
+
+        Debugger.log("Calculated mapped permissions for " + getType().getName() + " " + getName() + ". Took " + finish + "ms.");
+
     }
 
     public boolean isDirty() {

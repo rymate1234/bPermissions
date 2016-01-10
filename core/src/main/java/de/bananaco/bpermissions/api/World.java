@@ -410,10 +410,8 @@ public abstract class World {
      * @param type The type of the Calculable
      */
     public void loadIfExists(String name, CalculableType type) {
-        if (!contains(name, type)) {
-            if (storeContains(name, type)) {
-                loadOne(name, type);
-            }
+        if (!contains(name, type) && storeContains(name, type)) {
+            loadOne(name, type);
         }
     }
 
