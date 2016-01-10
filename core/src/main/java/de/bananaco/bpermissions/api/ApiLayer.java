@@ -1,5 +1,7 @@
 package de.bananaco.bpermissions.api;
 
+import de.bananaco.bpermissions.util.Debugger;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -361,7 +363,7 @@ public class ApiLayer {
     }
 
     /**
-     * Returns wether the user or group has the permission node
+     * Returns whether the user or group has the permission node
      *
      * @param world
      * @param type
@@ -370,8 +372,14 @@ public class ApiLayer {
      * @return boolean
      */
     public static boolean hasPermission(String world, CalculableType type, String name, String node) {
-        // pass through to global checking etc
-        return Calculable.hasPermission(node, getEffectivePermissions(world, type, name));
+        World w = wm.getWorld(world);
+        if (w == null || type == null || name == null || node == null) {
+            return false;
+        }
+        Calculable c = w.get(name, type);
+        return c.hasPermission(node);
+
+        //return Calculable.hasPermission(, getEffectivePermissions(world, type, name));
     }
 
     /**
