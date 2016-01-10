@@ -358,17 +358,6 @@ public class YamlWorld extends World {
                 Debugger.log("Empty ConfigurationSection:" + USERS + ":" + ufile.getPath());
                 return false;
             }
-
-            if (Bukkit.getPlayer(UUID.fromString(name)) != null) {
-                try {
-                    UUID uuid = UUID.fromString(name);
-                    getUser(uuid).calculateEffectivePermissions();
-                    getUser(uuid).calculateEffectiveMeta();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                setupPlayer(name);
-            }
         } else if (type == CalculableType.GROUP) {
             /*
              * Load a group
