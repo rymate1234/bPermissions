@@ -55,9 +55,15 @@ public class Commands {
     public void setCalculable(CalculableType type, String c, CommandSender sender) {
         // If the world does not exist
         if (world == null) {
-            sender.sendMessage(format("Please select a loaded world!"));
-            return;
+            sender.sendMessage(format("No world selected, selecting the default world"));
+            sender.sendMessage(format("To select a world use: /world worldname"));
         }
+
+        if (instance.getUseGlobalFiles())
+            setWorld("global", sender);
+        else
+            setWorld(Bukkit.getServer().getWorlds().get(0).getName(), sender);
+
         calc = type;
         name = c;
         sender.sendMessage(format(getCalculable().getName() + " selected."));
