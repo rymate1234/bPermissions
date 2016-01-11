@@ -366,12 +366,12 @@ public class ApiLayer {
     public static boolean hasPermission(String world, CalculableType type, String name, String node) {
         long t = System.currentTimeMillis();
         World w = wm.getWorld(world);
+
         if (w == null || type == null || name == null || node == null) {
             return false;
         }
         Calculable c = w.get(name, type);
         boolean b = c.hasPermission(node);
-        long lEndTime = System.currentTimeMillis();
 
         long f = System.currentTimeMillis();
         Debugger.log("Elapsed milliseconds for hasPermission " + name + " - " + node +  " :" + (f - t) + "ms");
