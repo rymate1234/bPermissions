@@ -18,6 +18,7 @@ public abstract class Calculable extends CalculableMeta {
 
     Set<Permission> effectivePermissions;
     String name;
+    boolean hasCalculated = false;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public Calculable(String name, Set<String> groups,
@@ -61,7 +62,7 @@ public abstract class Calculable extends CalculableMeta {
             //System.out.println(serialiseGroups());
             for (String gr : serialiseGroups()) {
                 Group group = getWorldObject().getGroup(gr);
-                group.calculateEffectivePermissions();
+                group.calculateMappedPermissions();
                 for (Permission perm : group.getEffectivePermissions()) {
                     if (!priorities.containsKey(perm.nameLowerCase()) || priorities.get(perm.nameLowerCase()) < group.getPriority()) {
                         priorities.put(perm.nameLowerCase(), group.getPriority());
@@ -79,6 +80,7 @@ public abstract class Calculable extends CalculableMeta {
                 }
                 effectivePermissions.add(perm);
             }
+            hasCalculated = true;
             //print();
         } catch (StackOverflowError e) {
             throw new RecursiveGroupException(this);
@@ -91,7 +93,15 @@ public abstract class Calculable extends CalculableMeta {
      * @return Set<Permission>
      */
     public Set<Permission> getEffectivePermissions() {
-        return effectivePermissions;
+        try {
+            if (!hasCalculated)
+                this.calculateEffectivePermissions();
+
+            return effectivePermissions;
+        } catch (RecursiveGroupException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**

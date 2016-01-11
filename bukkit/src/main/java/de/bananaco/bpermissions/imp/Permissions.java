@@ -100,11 +100,18 @@ public class Permissions extends JavaPlugin {
         // Setup all online players
         //handler.setupAllPlayers();
         // Load our custom nodes (if any)
-        new CustomNodes().load();
+        mt.schedule(new TaskRunnable() {
+            public void run() {
+                new CustomNodes().load();
+            }
 
+            public TaskRunnable.TaskType getType() {
+                return TaskType.LOAD;
+            }
+        });
         // REMOVED
         // getServer().getScheduler().scheduleSyncRepeatingTask(this, new SuperPermissionHandler.SuperPermissionReloader(handler), 5, 5);
-        // And print a nice little message ;)		
+        // And print a nice little message ;)
         Debugger.log(blankFormat("Enabled"));
         // print dino
         //printDinosaurs();

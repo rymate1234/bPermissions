@@ -16,16 +16,19 @@ public abstract class World {
     private final Map<String, Group> groups;
     private final Map<String, User> users;
     private final String world;
+    private char COLOR_CHAR = '\u00A7';
+    private Pattern stripColorPattern;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public World(String world) {
         this.world = world;
         this.users = new HashMap();
         this.groups = new HashMap();
+        stripColorPattern = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-OR]");
     }
 
     /**
-     * Make sure you call .calculateEffectivePermissions for all the users once
+     * Make sure you call .calculateMappedPermissions for all the users once
      * this is done!
      *
      * You can just call add(Calculable) here with the objects you create.
@@ -46,7 +49,7 @@ public abstract class World {
     /**
      * This loads a single Calculable into the API
      *
-     * Make sure you call .calculateEffectivePermissions for all the users once
+     * Make sure you call .calculateMappedPermissions for all the users once
      * this is done!
      *
      * You can just call add(Calculable) here with the objects you create.
@@ -144,6 +147,9 @@ public abstract class World {
      * @return Calculable (Group/User)
      */
     public Calculable get(String name, CalculableType type) {
+        long t = System.currentTimeMillis();
+        Calculable c = null;
+
         name = stripColor(name);
         // A quick lowercase here
         name = name.toLowerCase();
@@ -152,30 +158,30 @@ public abstract class World {
             if (!isUUID(name))
                 name = getUUID(name).toString();
 
-            loadIfExists(name, type);
-
             if (!users.containsKey(name)) {
                 add(new User(name, null, null, getName(), this));
                 // Don't forget to add the default group!
                 users.get(name).addGroup(getDefaultGroup());
                 // And calculate the effective Permissions!
                 try {
-                    users.get(name).calculateEffectivePermissions();
+                    users.get(name).calculateMappedPermissions();
                     users.get(name).calculateEffectiveMeta();
                 } catch (RecursiveGroupException e) {
                     System.err.println(e.getMessage());
                 }
             }
-            return users.get(name);
-        } else if (type == CalculableType.GROUP) {
-            loadIfExists(name, type);
 
+            c = users.get(name);
+        } else if (type == CalculableType.GROUP) {
             if (!groups.containsKey(name)) {
                 add(new Group(name, null, null, getName(), this));
             }
-            return groups.get(name);
+            c = groups.get(name);
         }
-        return null;
+
+        long f = System.currentTimeMillis();
+        Debugger.log("Getting calculable " + name + " in " + getName() + " took " + (f - t) + "ms");
+        return c;
     }
 
     /**
@@ -434,13 +440,11 @@ public abstract class World {
      * @param input String to strip of color
      * @return A copy of the input string, without any coloring
      */
-    public static String stripColor(final String input) {
+    public String stripColor(final String input) {
         if (input == null) {
             return null;
         }
         char COLOR_CHAR = '\u00A7';
-        Pattern stripColorPattern = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-OR]");
-
         return stripColorPattern.matcher(input).replaceAll("");
     }
 

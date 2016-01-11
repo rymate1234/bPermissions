@@ -164,21 +164,13 @@ public class ApiLayer {
         w = world == null ? null : wm.getWorld(world);
         // do we apply globals?
         if (wm.getUseGlobalFiles()) {
-            try {
-                global.get(name, type).calculateEffectivePermissions();
-            } catch (RecursiveGroupException e) {
-                e.printStackTrace();
-            }
-            permissions.putAll(((MapCalculable) global.get(name, type)).getMappedPermissions());
+            Calculable c = global.get(name, type);
+            permissions.putAll(((MapCalculable) c).getMappedPermissions());
         }
         // now we apply the per-world stuff (or globals if w==null)
         if (w != null) {
-            try {
-                w.get(name, type).calculateEffectivePermissions();
-            } catch (RecursiveGroupException e) {
-                e.printStackTrace();
-            }
-            permissions.putAll(((MapCalculable) w.get(name, type)).getMappedPermissions());
+            Calculable c = w.get(name, type);
+            permissions.putAll(((MapCalculable) c).getMappedPermissions());
         }
         // custom node checking
         for (String key : new HashSet<String>(permissions.keySet())) {
@@ -372,14 +364,18 @@ public class ApiLayer {
      * @return boolean
      */
     public static boolean hasPermission(String world, CalculableType type, String name, String node) {
+        long t = System.currentTimeMillis();
         World w = wm.getWorld(world);
         if (w == null || type == null || name == null || node == null) {
             return false;
         }
         Calculable c = w.get(name, type);
-        return c.hasPermission(node);
+        boolean b = c.hasPermission(node);
+        long lEndTime = System.currentTimeMillis();
 
-        //return Calculable.hasPermission(, getEffectivePermissions(world, type, name));
+        long f = System.currentTimeMillis();
+        Debugger.log("Elapsed milliseconds for hasPermission " + name + " - " + node +  " :" + (f - t) + "ms");
+        return b;
     }
 
     /**

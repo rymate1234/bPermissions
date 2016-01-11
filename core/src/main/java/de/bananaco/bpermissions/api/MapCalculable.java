@@ -12,10 +12,10 @@ import java.util.Set;
  * Set<Permission>
  * for direct access and faster permission node checking.
  *
- * Currently only User extends MapCalculable and Group extends Calculable There
+ * Currently only User extends MapCalculable and Group extends Calculable. There
  * is no need for direct per-group permission checking
  */
-// temporary extend for backwards compatability
+// "temporary" extend for backwards compatability
 public abstract class MapCalculable extends de.bananaco.bpermissions.api.util.Calculable {
 
     public MapCalculable(String name, Set<String> groups,
@@ -27,7 +27,7 @@ public abstract class MapCalculable extends de.bananaco.bpermissions.api.util.Ca
 
     /**
      * Return the calculated map The map will be blank unless
-     * calculateEffectivePermissions has been called which admittedly is very
+     * calculateMappedPermissions has been called which admittedly is very
      * likely to have happened.
      *
      * @return Map<String, Boolean>
@@ -35,7 +35,7 @@ public abstract class MapCalculable extends de.bananaco.bpermissions.api.util.Ca
     public Map<String, Boolean> getMappedPermissions() {
         if (isDirty()) {
             try {
-                calculateEffectivePermissions();
+                calculateMappedPermissions();
             } catch (RecursiveGroupException e) {
                 e.printStackTrace();
             }
@@ -43,7 +43,7 @@ public abstract class MapCalculable extends de.bananaco.bpermissions.api.util.Ca
             try {
                 // force-dirty
                 dirty = true;
-                calculateEffectivePermissions();
+                calculateMappedPermissions();
             } catch (RecursiveGroupException e) {
                 e.printStackTrace();
             }
@@ -51,15 +51,13 @@ public abstract class MapCalculable extends de.bananaco.bpermissions.api.util.Ca
         return permissions;
     }
 
-    @Override
-    public void calculateEffectivePermissions() throws RecursiveGroupException {
+    public void calculateMappedPermissions() throws RecursiveGroupException {
         if (!dirty) {
             return;
         }
         long time = System.currentTimeMillis();
-        super.calculateEffectivePermissions();
         permissions.clear();
-        for (Permission perm : getEffectivePermissions()) {
+        for (Permission perm : super.getEffectivePermissions()) {
             permissions.put(perm.nameLowerCase(), perm.isTrue());
         }
         this.calculateEffectiveMeta();

@@ -73,7 +73,7 @@ public class MainThread extends Thread implements TaskThread {
         if (type == TaskType.SERVER) {
             return server;
         }
-        return null;
+        return new ArrayList<Runnable>();
     }
 
     // from the interface

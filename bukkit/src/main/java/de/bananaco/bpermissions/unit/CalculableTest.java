@@ -350,7 +350,7 @@ public class CalculableTest {
         world.add(group1);
 
         try {
-            user.calculateEffectivePermissions();
+            user.calculateMappedPermissions();
         } catch (Exception e) {
             e.printStackTrace();
         }

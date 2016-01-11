@@ -3,9 +3,9 @@ package de.bananaco.bpermissions.imp;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 
 import de.bananaco.bpermissions.api.*;
+import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
 import de.bananaco.bpermissions.util.Debugger;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -76,24 +76,36 @@ public class SuperPermissionHandler implements Listener {
         if (!plugin.isEnabled()) {
             return;
         }
-
-        long time = System.currentTimeMillis();
         // Grab the pre-calculated effectivePermissions from the User object
         // Then whack it onto the player
         // TODO wait for the bukkit team to get their finger out, we'll use our reflection here!		
-        Map<String, Boolean> perms = ApiLayer.getEffectivePermissions(player.getWorld().getName(), CalculableType.USER, player.getUniqueId().toString());
+        Map<String, Boolean> perms = ApiLayer.getEffectivePermissions(
+                player.getWorld().getName(),
+                CalculableType.USER,
+                player.getUniqueId().toString()
+        );
+
         setPermissions(player, plugin, perms);
 
         // Set the metadata?
-        String prefix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getUniqueId().toString(), "prefix");
-        String suffix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getUniqueId().toString(), "suffix");
+        String prefix = ApiLayer.getValue(
+                player.getWorld().getName(),
+                CalculableType.USER,
+                player.getUniqueId().toString(),
+                "prefix"
+        );
+
+        String suffix = ApiLayer.getValue(
+                player.getWorld().getName(),
+                CalculableType.USER,
+                player.getUniqueId().toString(),
+                "suffix"
+        );
+
         // WTF
         player.setMetadata("prefix", new FixedMetadataValue(Permissions.instance, prefix));
         player.setMetadata("suffix", new FixedMetadataValue(Permissions.instance, suffix));
 
-        // WHAT IS THIS I DONT EVEN
-        long finish = System.currentTimeMillis() - time;
-        Debugger.log("Setup superperms for " + player.getName() + ". took " + finish + "ms.");
     }
 
     @EventHandler
@@ -136,30 +148,39 @@ public class SuperPermissionHandler implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
         String uuid = event.getUniqueId().toString();
-        for (de.bananaco.bpermissions.api.World world : SuperPermissionHandler.this.wm.getAllWorlds()) {
+        for (de.bananaco.bpermissions.api.World world : wm.getAllWorlds()) {
             world.loadIfExists(uuid, CalculableType.USER);
+
+            User user = (User) world.get(uuid, CalculableType.USER);
+            try {
+                user.calculateMappedPermissions();
+                user.calculateEffectiveMeta();
+            } catch (RecursiveGroupException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLogin(final PlayerLoginEvent event) {
         // Likewise, in theory this should be all we need to detect when a player joins
-        Runnable r = new Runnable() {
-            public void run() {
-            String uuid = event.getPlayer().getUniqueId().toString();
-            for (de.bananaco.bpermissions.api.World world : SuperPermissionHandler.this.wm.getAllWorlds()) {
-                User user = (User) world.get(uuid, CalculableType.USER);
-                try {
-                    user.calculateEffectivePermissions();
-                    user.calculateEffectiveMeta();
-                } catch (RecursiveGroupException e) {
-                    e.printStackTrace();
-                }
-                Debugger.log("PlayerLogin setup: " + uuid);
+        TaskRunnable r = new TaskRunnable() {
+            @Override
+            public TaskType getType() {
+                return TaskType.SERVER;
             }
-            setupPlayer(event.getPlayer());
+
+            public void run() {
+                long time = System.currentTimeMillis();
+                String uuid = event.getPlayer().getUniqueId().toString();
+                Debugger.log("Begun setup for " + uuid);
+
+                setupPlayer(event.getPlayer());
+
+                long finish = System.currentTimeMillis() - time;
+                Debugger.log("Setup for " + uuid + ". took " + finish + "ms.");
             }
         };
-        Bukkit.getScheduler().runTaskAsynchronously(Permissions.instance, r);
+        MainThread.getInstance().schedule(r);
     }
 }

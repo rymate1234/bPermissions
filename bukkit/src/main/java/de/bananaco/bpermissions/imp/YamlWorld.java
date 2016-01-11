@@ -13,7 +13,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Here is the main YamlWorld class This loads from the default users.yml and
@@ -207,7 +206,7 @@ public class YamlWorld extends World {
             String name = player.getUniqueId().toString();
             String world = player.getWorld().getName();
             if (wm.getWorld(world) == this) {
-                getUser(name).calculateEffectivePermissions();
+                getUser(name).calculateMappedPermissions();
                 getUser(name).calculateEffectiveMeta();
                 setupPlayer(name);
             }
@@ -335,6 +334,8 @@ public class YamlWorld extends World {
     }
 
     public boolean loadOne(String name, CalculableType type) {
+        long t = System.currentTimeMillis();
+
         if (contains(name, type))
             return true;
 
@@ -373,7 +374,7 @@ public class YamlWorld extends World {
             if (Bukkit.getPlayer(UUID.fromString(name)) != null) {
                 try {
                     UUID uuid = UUID.fromString(name);
-                    getUser(uuid).calculateEffectivePermissions();
+                    getUser(uuid).calculateMappedPermissions();
                     getUser(uuid).calculateEffectiveMeta();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -409,6 +410,8 @@ public class YamlWorld extends World {
                 Debugger.log("Empty ConfigurationSection:" + GROUPS + ":" + gfile.getPath());
             }
         }
+        long f = System.currentTimeMillis();
+        Debugger.log("Loading single Calculable for " + getName() + " took " + (f - t) + "ms");
         return true;
     }
 
