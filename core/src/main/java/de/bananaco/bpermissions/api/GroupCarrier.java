@@ -71,6 +71,7 @@ public abstract class GroupCarrier extends PermissionCarrier {
     public void addGroup(String group) {
         group = group.toLowerCase();
         groups.add(group);
+        calculateGroups();
     }
 
     /**
@@ -82,6 +83,7 @@ public abstract class GroupCarrier extends PermissionCarrier {
     public void removeGroup(String group) {
         group = group.toLowerCase();
         groups.remove(group);
+        calculateGroups();
     }
 
     /**
