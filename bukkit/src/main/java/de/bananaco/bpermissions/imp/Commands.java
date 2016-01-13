@@ -2,6 +2,7 @@ package de.bananaco.bpermissions.imp;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -57,12 +58,12 @@ public class Commands {
         if (world == null) {
             sender.sendMessage(format("No world selected, selecting the default world"));
             sender.sendMessage(format("To select a world use: /world worldname"));
-        }
 
-        if (instance.getUseGlobalFiles())
-            setWorld("global", sender);
-        else
-            setWorld(Bukkit.getServer().getWorlds().get(0).getName(), sender);
+            if (instance.getUseGlobalFiles())
+                setWorld("global", sender);
+            else
+                setWorld(Bukkit.getServer().getWorlds().get(0).getName(), sender);
+        }
 
         calc = type;
         name = c;
@@ -117,12 +118,26 @@ public class Commands {
         sender.sendMessage(format("Removed " + permission + " from " + getCalculable().getName()));
     }
 
-    public void listPermissions(CommandSender sender) {
-        List<String> permissions = getCalculable().serialisePermissions();
-        String[] pr = permissions.toArray(new String[permissions.size()]);
-        String mpr = Arrays.toString(pr);
-        sender.sendMessage(format("The " + getCalculable().getType().getName() + " " + getCalculable().getName() + " has these permissions:"));
-        sender.sendMessage(mpr);
+    public void listPermissions(CommandSender sender, int page) {
+        Set<Permission> permissionsSet = (getCalculable()).getEffectivePermissions();
+        Permission[] permissions = permissionsSet.toArray(new Permission[permissionsSet.size()]);
+        int length = (int) (Math.round((permissions.length + 5) / 10.0) * 10.0);
+        int maxPages = length / 10;
+        int end = page * 10;
+        if (end > permissions.length)
+            end = permissions.length - 1;
+        int beginning = end - 10;
+
+        if (maxPages < page) {
+            sender.sendMessage(format("Page " + page + " doesn't exist!"));
+            return;
+        }
+
+        sender.sendMessage(format("Permissions for " + getCalculable().getType().getName() + " " + getCalculable().getName() + ": Page " + page + " of " + maxPages));
+        for (int i = beginning; i < end; i++) {
+            Permission permission = permissions[i];
+            sender.sendMessage(format(" - " + permission.name() + ": " + permission.isTrue()));
+        }
     }
 
     public void hasPermission(String node, CommandSender sender) {

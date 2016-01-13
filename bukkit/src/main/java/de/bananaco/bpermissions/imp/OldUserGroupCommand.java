@@ -107,7 +107,7 @@ public class OldUserGroupCommand extends BaseCommand {
                 } else {
                     cmd.setCalculable(type, args[0], sender);
                 }
-            } else if (args.length == 2) {
+            } else if (args.length >= 2) {
                 if (calc == null) {
                     sendMessage(sender, "Nothing is selected!");
                 } else if (calc.getType() != type) {
@@ -122,11 +122,15 @@ public class OldUserGroupCommand extends BaseCommand {
                     } else if (action.equalsIgnoreCase("setgroup")) {
                         cmd.setGroup(value, sender);
                     } else if (action.equalsIgnoreCase("list")) {
+                        int page = 1;
+                        if (args.length == 3)
+                            page = Integer.parseInt(args[2]);
+
                         value = value.toLowerCase();
                         if (value.equalsIgnoreCase("groups") || value.equalsIgnoreCase("group") || value.equalsIgnoreCase("g")) {
                             cmd.listGroups(sender);
                         } else if (value.startsWith("perm") || value.equalsIgnoreCase("p")) {
-                            cmd.listPermissions(sender);
+                            cmd.listPermissions(sender, page);
                         }
                     } else if (action.equalsIgnoreCase("meta")) {
                         cmd.showValue(value, sender);
