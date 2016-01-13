@@ -125,7 +125,7 @@ public class Permissions extends JavaPlugin {
                 Bukkit.getScheduler().callSyncMethod(Permissions.instance, new Callable() {
                     public Object call() throws Exception {
                         Debugger.log("Setting up all players...");
-                        return Boolean.valueOf(Permissions.this.world.setupAll());
+                        return Permissions.this.world.setupAll();
                     }
                 });
             }
@@ -301,7 +301,7 @@ public class Permissions extends JavaPlugin {
             sender.sendMessage(message);
             sender.sendMessage(message2);
             ExtraCommands.execute(name, type, action, value, world);
-            //ApiLayer.update();
+            ApiLayer.update();
         }
         /*
          * A new, easier way to set a players group!

@@ -56,11 +56,12 @@ public class ExtraCommands {
                 c.removePermission(value);
             }
 
-            wm.update();
-
             try {
+                c.calculateGroups();
                 c.calculateEffectiveMeta();
                 c.calculateEffectivePermissions();
+
+                wm.update();
             } catch (RecursiveGroupException ex) {
                 Logger.getLogger(ExtraCommands.class.getName()).log(Level.SEVERE, null, ex);
             }
