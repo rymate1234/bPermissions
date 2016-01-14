@@ -17,28 +17,26 @@ public abstract class GroupCarrier extends PermissionCarrier {
     private final Set<Group> groupsCalculated;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    protected GroupCarrier(Set<String> groups, Set<Permission> permissions,
-            String world) {
+    protected GroupCarrier(Set<String> groups, Set<Permission> permissions, String world) {
         super(permissions, world);
         if (groups == null) {
             groups = new HashSet();
         }
         groupsCalculated = new HashSet();
-        calculateGroups();
-
-
         this.groups = groups;
+
+        calculateGroups();
     }
 
     /**
      * Calculates the total list of groups that the object carries
      */
     public void calculateGroups() {
-        if (this.groups == null)
+        if (groups == null)
             return;
 
         groupsCalculated.clear();
-        for (String name : this.groups) {
+        for (String name : groups) {
             if (WorldManager.getInstance().getWorld(getWorld()) == null) {
                 System.err.println(getWorld() + " is null?");
             }
