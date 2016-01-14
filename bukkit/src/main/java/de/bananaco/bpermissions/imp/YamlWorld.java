@@ -202,15 +202,7 @@ public class YamlWorld extends World {
         Debugger.log(this.getAll(CalculableType.USER).size() + " users loaded.");
         Debugger.log(this.getAll(CalculableType.GROUP).size() + " groups loaded.");
 
-        for (Player player : this.permissions.getServer().getOnlinePlayers()) {
-            String name = player.getUniqueId().toString();
-            String world = player.getWorld().getName();
-            if (wm.getWorld(world) == this) {
-                getUser(name).calculateMappedPermissions();
-                getUser(name).calculateEffectiveMeta();
-                setupPlayer(name);
-            }
-        }
+        setupAll();
 
         Bukkit.getLogger().info("[bPermissions] Permissions for world " + super.getName() + " has loaded!");
 
@@ -431,9 +423,20 @@ public class YamlWorld extends World {
 
     @Override
     public boolean setupAll() {
-       Collection<Player> players = (Collection<Player>) Bukkit.getOnlinePlayers();
-        for (Player player : players) {
-            permissions.handler.setupPlayer(player);
+        for (Player player : this.permissions.getServer().getOnlinePlayers()) {
+            UUID name = player.getUniqueId();
+            String world = player.getWorld().getName();
+            if (wm.getWorld(world) == this) {
+                try {
+                    getUser(name).calculateGroups();
+                    getUser(name).calculateMappedPermissions();
+                    getUser(name).calculateEffectiveMeta();
+                    permissions.handler.setupPlayer(player);
+                } catch (RecursiveGroupException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
         }
         // return true for success
         return true;
