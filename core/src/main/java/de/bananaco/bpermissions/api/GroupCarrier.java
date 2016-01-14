@@ -24,6 +24,8 @@ public abstract class GroupCarrier extends PermissionCarrier {
             groups = new HashSet();
         }
         groupsCalculated = new HashSet();
+        calculateGroups();
+
 
         this.groups = groups;
     }
