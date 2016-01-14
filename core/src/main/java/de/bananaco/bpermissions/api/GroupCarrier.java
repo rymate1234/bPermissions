@@ -34,6 +34,9 @@ public abstract class GroupCarrier extends PermissionCarrier {
      * Calculates the total list of groups that the object carries
      */
     public void calculateGroups() {
+        if (this.groups == null)
+            return;
+
         groupsCalculated.clear();
         for (String name : this.groups) {
             if (WorldManager.getInstance().getWorld(getWorld()) == null) {
