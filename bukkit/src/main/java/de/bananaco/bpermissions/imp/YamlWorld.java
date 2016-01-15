@@ -429,6 +429,7 @@ public class YamlWorld extends World {
             if (wm.getWorld(world) == this) {
                 try {
                     getUser(name).calculateGroups();
+                    getUser(name).calculateEffectivePermissions();
                     getUser(name).calculateMappedPermissions();
                     getUser(name).calculateEffectiveMeta();
                     permissions.handler.setupPlayer(player);
