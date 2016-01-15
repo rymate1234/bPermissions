@@ -428,10 +428,12 @@ public class YamlWorld extends World {
             String world = player.getWorld().getName();
             if (wm.getWorld(world) == this) {
                 try {
-                    getUser(name).calculateGroups();
-                    getUser(name).calculateEffectivePermissions();
-                    getUser(name).calculateMappedPermissions();
-                    getUser(name).calculateEffectiveMeta();
+                    User user = getUser(name);
+                    user.setDirty(true);
+                    user.calculateGroups();
+                    user.calculateEffectivePermissions();
+                    user.calculateMappedPermissions();
+                    user.calculateEffectiveMeta();
                     permissions.handler.setupPlayer(player);
                 } catch (RecursiveGroupException e) {
                     e.printStackTrace();

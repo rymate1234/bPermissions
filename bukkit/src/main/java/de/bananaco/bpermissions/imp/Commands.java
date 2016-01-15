@@ -128,6 +128,12 @@ public class Commands {
             end = permissions.length - 1;
         int beginning = end - 10;
 
+        if (permissionsSet.size() < 10) {
+            maxPages = 1;
+            beginning = 0;
+            end = permissionsSet.size();
+        }
+
         if (maxPages < page) {
             sender.sendMessage(format("Page " + page + " doesn't exist!"));
             return;
