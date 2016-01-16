@@ -427,8 +427,8 @@ public class YamlWorld extends World {
 
     @Override
     public boolean setupAll() {
-        for (Player player : this.permissions.getServer().getOnlinePlayers()) {
-            World yamlWorld = this;
+        for (final Player player : this.permissions.getServer().getOnlinePlayers()) {
+            final World yamlWorld = this;
             TaskRunnable setupTask = new TaskRunnable() {
                 @Override
                 public TaskType getType() {
