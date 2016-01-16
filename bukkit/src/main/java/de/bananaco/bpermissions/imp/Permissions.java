@@ -167,8 +167,7 @@ public class Permissions extends JavaPlugin {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command,
-            String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         boolean allowed = true;
 
         if (sender instanceof Player) {
@@ -443,11 +442,11 @@ public class Permissions extends JavaPlugin {
         private String threadName = "converter";
         private Thread t;
 
-        ConvertRunnable( ImportManager manager){
+        ConvertRunnable( ImportManager manager ) {
             this.manager = manager;
         }
-        public void run() {
 
+        public void run() {
             System.out.println("Running " +  threadName );
             try {
                 manager.importUuid();
@@ -456,11 +455,9 @@ public class Permissions extends JavaPlugin {
             }
         }
 
-        public void start ()
-        {
+        public void start () {
             System.out.println("Starting " +  threadName );
-            if (t == null)
-            {
+            if (t == null) {
                 t = new Thread (this, threadName);
                 t.start ();
             }

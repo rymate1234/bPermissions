@@ -17,6 +17,7 @@ public class MainThread extends Thread implements TaskThread {
     private List<Runnable> load = new ArrayList<Runnable>();
     private List<Runnable> save = new ArrayList<Runnable>();
     private List<Runnable> server = new ArrayList<Runnable>();
+    private List<Runnable> playerSetup = new ArrayList<Runnable>();
     private boolean running = true;
     private boolean started = false;
 
@@ -35,12 +36,14 @@ public class MainThread extends Thread implements TaskThread {
             if (hasTasks()) {
                 TaskRunnable run = null;
                 List tasks = null;
-                if (getTasks(TaskRunnable.TaskType.LOAD).size() > 0) {
-                    tasks = getTasks(TaskRunnable.TaskType.LOAD);
-                } else if (getTasks(TaskRunnable.TaskType.SAVE).size() > 0) {
-                    tasks = getTasks(TaskRunnable.TaskType.SAVE);
-                } else if (getTasks(TaskRunnable.TaskType.SERVER).size() > 0) {
-                    tasks = getTasks(TaskRunnable.TaskType.SERVER);
+                if (getTasks(TaskType.LOAD).size() > 0) {
+                    tasks = getTasks(TaskType.LOAD);
+                } else if (getTasks(TaskType.PLAYER_SETUP).size() > 0) {
+                    tasks = getTasks(TaskType.SAVE);
+                } else if (getTasks(TaskType.SAVE).size() > 0) {
+                    tasks = getTasks(TaskType.SAVE);
+                } else if (getTasks(TaskType.SERVER).size() > 0) {
+                    tasks = getTasks(TaskType.SERVER);
                 }
 
                 if (tasks != null) {
@@ -70,6 +73,10 @@ public class MainThread extends Thread implements TaskThread {
         if (type == TaskType.SAVE) {
             return save;
         }
+        if (type == TaskType.PLAYER_SETUP) {
+            return playerSetup;
+        }
+
         if (type == TaskType.SERVER) {
             return server;
         }
@@ -89,6 +96,7 @@ public class MainThread extends Thread implements TaskThread {
         load.clear();
         save.clear();
         server.clear();
+        playerSetup.clear();
         if (!running) {
             thread.running = false;
             thread = null;

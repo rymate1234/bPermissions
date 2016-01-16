@@ -281,6 +281,8 @@ public class YamlWorld extends World {
                     continue;
                 }
 
+                user.calculateGroups();
+                user.calculateEffectivePermissions();
                 usaveconfig.set(USERS + "." + name + "." + PERMISSIONS, user.serialisePermissions());
                 usaveconfig.set(USERS + "." + name + "." + USERNAME, Bukkit.getOfflinePlayer(UUID.fromString(name)).getName());
                 usaveconfig.set(USERS + "." + name + "." + GROUPS, user.serialiseGroups());
@@ -306,6 +308,8 @@ public class YamlWorld extends World {
 
         for (Calculable group : groups) {
             String name = group.getName();
+            group.calculateGroups();
+            group.calculateEffectivePermissions();
             gsaveconfig.set(GROUPS + "." + name + "." + PERMISSIONS, group.serialisePermissions());
             gsaveconfig.set(GROUPS + "." + name + "." + GROUPS, group.serialiseGroups());
             // MetaData
@@ -424,22 +428,40 @@ public class YamlWorld extends World {
     @Override
     public boolean setupAll() {
         for (Player player : this.permissions.getServer().getOnlinePlayers()) {
-            UUID name = player.getUniqueId();
-            String world = player.getWorld().getName();
-            if (wm.getWorld(world) == this) {
-                try {
-                    User user = getUser(name);
-                    user.setDirty(true);
-                    user.calculateGroups();
-                    user.calculateEffectivePermissions();
-                    user.calculateMappedPermissions();
-                    user.calculateEffectiveMeta();
-                    permissions.handler.setupPlayer(player);
-                } catch (RecursiveGroupException e) {
-                    e.printStackTrace();
-                    return false;
+            World yamlWorld = this;
+            TaskRunnable setupTask = new TaskRunnable() {
+                @Override
+                public TaskType getType() {
+                    return TaskType.PLAYER_SETUP;
                 }
-            }
+
+                public void run() {
+                    UUID name = player.getUniqueId();
+                    String world = player.getWorld().getName();
+                    if (wm.getWorld(world) == yamlWorld) {
+                        try {
+                            User user = getUser(name);
+                            user.setDirty(true);
+                            user.calculateGroups();
+                            user.calculateEffectivePermissions();
+                            user.calculateMappedPermissions();
+                            user.calculateEffectiveMeta();
+                            Runnable r = new Runnable() {
+                                public void run() {
+                                    permissions.handler.setupPlayer(player);
+                                }
+                            };
+                            // must be sync
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(permissions, r, 1);
+
+                        } catch (RecursiveGroupException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            };
+
+            MainThread.getInstance().schedule(setupTask);
         }
         // return true for success
         return true;
