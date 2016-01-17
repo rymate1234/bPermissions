@@ -39,7 +39,7 @@ public class MainThread extends Thread implements TaskThread {
                 if (getTasks(TaskType.LOAD).size() > 0) {
                     tasks = getTasks(TaskType.LOAD);
                 } else if (getTasks(TaskType.PLAYER_SETUP).size() > 0) {
-                    tasks = getTasks(TaskType.SAVE);
+                    tasks = getTasks(TaskType.PLAYER_SETUP);
                 } else if (getTasks(TaskType.SAVE).size() > 0) {
                     tasks = getTasks(TaskType.SAVE);
                 } else if (getTasks(TaskType.SERVER).size() > 0) {
