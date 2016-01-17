@@ -46,7 +46,7 @@ public class MainThread extends Thread implements TaskThread {
                     tasks = getTasks(TaskType.SERVER);
                 }
 
-                if (tasks != null) {
+                if (tasks != null && tasks.size() > 0) {
                     run = (TaskRunnable) tasks.get(0);
                     tasks.remove(0);
                     TaskRunnable r = run;
@@ -79,7 +79,7 @@ public class MainThread extends Thread implements TaskThread {
         if (type == TaskType.SERVER) {
             return server;
         }
-        return null;
+        return new ArrayList<Runnable>();
     }
 
     // from the interface
