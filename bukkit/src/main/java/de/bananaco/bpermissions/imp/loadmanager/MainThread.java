@@ -76,16 +76,15 @@ public class MainThread extends Thread implements TaskThread {
         if (type == TaskType.PLAYER_SETUP) {
             return playerSetup;
         }
-
         if (type == TaskType.SERVER) {
             return server;
         }
-        return new ArrayList<Runnable>();
+        return null;
     }
 
     // from the interface
     public boolean hasTasks() {
-        return load.size() + save.size() + server.size() > 0;
+        return load.size() + save.size() + server.size() + playerSetup.size() > 0;
     }
 
     public boolean isRunning() {
