@@ -148,17 +148,30 @@ public class SuperPermissionHandler implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
         String uuid = event.getUniqueId().toString();
-        for (de.bananaco.bpermissions.api.World world : wm.getAllWorlds()) {
-            world.loadIfExists(uuid, CalculableType.USER);
-
-            User user = (User) world.get(uuid, CalculableType.USER);
-            try {
-                user.calculateMappedPermissions();
-                user.calculateEffectiveMeta();
-            } catch (RecursiveGroupException e) {
-                e.printStackTrace();
+        TaskRunnable r = new TaskRunnable() {
+            @Override
+            public TaskType getType() {
+                return TaskType.LOAD;
             }
-        }
+
+            public void run() {
+
+                for (de.bananaco.bpermissions.api.World world : wm.getAllWorlds()) {
+                    world.loadIfExists(uuid, CalculableType.USER);
+
+                    User user = (User) world.get(uuid, CalculableType.USER);
+                    try {
+                        user.calculateEffectivePermissions();
+                        user.calculateMappedPermissions();
+                        user.calculateEffectiveMeta();
+                    } catch (RecursiveGroupException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        MainThread.getInstance().schedule(r);
+
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
