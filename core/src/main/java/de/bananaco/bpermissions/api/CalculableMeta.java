@@ -20,7 +20,7 @@ public class CalculableMeta extends GroupCarrier {
      *
      * @throws RecursiveGroupException
      */
-    public void calculateEffectiveMeta() throws RecursiveGroupException {
+    public synchronized void calculateEffectiveMeta() throws RecursiveGroupException {
         try {
             // Implement meta priorities
             effectiveMeta.clear();

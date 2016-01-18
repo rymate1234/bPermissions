@@ -31,7 +31,7 @@ public abstract class GroupCarrier extends PermissionCarrier {
     /**
      * Calculates the total list of groups that the object carries
      */
-    public void calculateGroups() {
+    public synchronized void calculateGroups() {
         if (groups == null)
             return;
 
