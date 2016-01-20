@@ -371,6 +371,13 @@ public class ApiLayer {
             return false;
         }
         Calculable c = w.get(name, type);
+        if (!c.hasCalculated)
+            try {
+                c.calculateEffectivePermissions();
+            } catch (RecursiveGroupException e) {
+                e.printStackTrace();
+            }
+
         boolean b = c.hasPermission(node);
 
         long f = System.currentTimeMillis();
