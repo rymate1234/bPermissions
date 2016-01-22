@@ -1,4 +1,4 @@
-group 'de.banaco'
+group 'de.bananaco'
 version '2.12-DEV'
 
 buildscript {
