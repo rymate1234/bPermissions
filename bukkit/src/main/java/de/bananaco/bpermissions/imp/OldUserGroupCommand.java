@@ -107,7 +107,7 @@ public class OldUserGroupCommand extends BaseCommand {
                 } else {
                     cmd.setCalculable(type, args[0], sender);
                 }
-            } else if (args.length >= 2) {
+            } else if (args.length == 2 || (args.length > 2 && args[0].equalsIgnoreCase("list"))) {
                 if (calc == null) {
                     sendMessage(sender, "Nothing is selected!");
                 } else if (calc.getType() != type) {
