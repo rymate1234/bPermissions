@@ -81,7 +81,8 @@ public class BukkitCompat {
         plugin.getServer().getPluginManager().addPermission(positive);
         plugin.getServer().getPluginManager().addPermission(negative);
         PermissionAttachment att = null;
-        for (PermissionAttachmentInfo pai : player.getEffectivePermissions()) {
+        Set<PermissionAttachmentInfo> effectivePerms = player.getEffectivePermissions();
+        for (PermissionAttachmentInfo pai : effectivePerms) {
             if (pai.getAttachment() != null && pai.getAttachment().getPlugin() != null) {
                 if (pai.getAttachment().getPlugin() instanceof Permissions) {
                     att = pai.getAttachment();

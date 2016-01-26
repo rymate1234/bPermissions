@@ -3,6 +3,7 @@ package de.bananaco.bpermissions.api;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CalculableMeta extends GroupCarrier {
 
@@ -12,7 +13,7 @@ public class CalculableMeta extends GroupCarrier {
     protected CalculableMeta(Set<String> groups, Set<Permission> permissions,
             String world) {
         super(groups, permissions, world);
-        effectiveMeta = new HashMap();
+        effectiveMeta = new ConcurrentHashMap();
     }
 
     /**
@@ -32,8 +33,9 @@ public class CalculableMeta extends GroupCarrier {
                 // Calculate down the tree of the child group
                 group.calculateEffectiveMeta();
                 Map<String, String> meta = group.getEffectiveMeta();
+                Set<String> keySet = meta.keySet();
 
-                for (String key : meta.keySet()) {
+                for (String key : keySet) {
                     // If the effectiveMeta does not contain the key or the priority is greater than the current
                     if (!pr.containsKey(key) || group.getPriority() > pr.get(key)) {
                         // Store the priority too!
