@@ -452,7 +452,7 @@ public class YamlWorld extends World {
                                 }
                             };
                             // must be sync
-                            Bukkit.getScheduler().scheduleSyncDelayedTask(permissions, r, 1);
+                            Bukkit.getScheduler().runTask(permissions, r);
 
                         } catch (RecursiveGroupException e) {
                             e.printStackTrace();
