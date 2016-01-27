@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public abstract class MetaData {
 
-    private final Map<String, String> values = new HashMap<String, String>();
+    private final Map<String, String> values = Collections.synchronizedMap(new HashMap<String, String>());
     private final static Comparator<Object> comparObj = new Comparator<Object>() {
         public int compare(Object o1, Object o2) {
             if (o1 instanceof Calculable && o2 instanceof Calculable) {
@@ -92,11 +92,19 @@ public abstract class MetaData {
      * @param value
      */
     public void setValue(String key, String value) {
-        values.put(key, value);
-        try {
-            this.calculateEffectiveMeta();
-        } catch (RecursiveGroupException e) {
-            e.printStackTrace();
+        synchronized (values) {
+            if (values.containsKey(key)) {
+                values.replace(key, value);
+            }
+            else {
+                values.put(key, value);
+            }
+
+            try {
+                this.calculateEffectiveMeta();
+            } catch (RecursiveGroupException e) {
+                e.printStackTrace();
+            }
         }
     }
 
