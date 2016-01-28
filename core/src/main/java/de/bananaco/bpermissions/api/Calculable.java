@@ -59,6 +59,9 @@ public abstract class Calculable extends CalculableMeta {
                 //System.out.println(serialiseGroups());
                 for (String gr : serialiseGroups()) {
                     Group group = getWorldObject().getGroup(gr);
+                    // we probably want to recalculate group permissions as well
+                    group.setDirty(true);
+                    group.calculateEffectivePermissions();
                     group.calculateMappedPermissions();
                     for (Permission perm : group.getEffectivePermissions()) {
                         if (!priorities.containsKey(perm.nameLowerCase()) || priorities.get(perm.nameLowerCase()) < group.getPriority()) {
@@ -92,10 +95,12 @@ public abstract class Calculable extends CalculableMeta {
      */
     public synchronized Set<Permission> getEffectivePermissions() {
         try {
-            if (!hasCalculated)
-                this.calculateEffectivePermissions();
+            synchronized (effectivePermissions) {
+                if (!hasCalculated)
+                    this.calculateEffectivePermissions();
 
-            return effectivePermissions;
+                return effectivePermissions;
+            }
         } catch (RecursiveGroupException e) {
             e.printStackTrace();
         }

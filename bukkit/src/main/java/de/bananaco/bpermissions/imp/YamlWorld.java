@@ -218,9 +218,25 @@ public class YamlWorld extends World {
             Bukkit.getServer().broadcastMessage(ChatColor.RED + "Permissions for world:" + this.getName() + " did not load correctly, please consult server.log.");
             return false;
         }
+
         save = true;
         // async again
         try {
+            // ensure groups and users are calculated
+            Set<Calculable> users = getAll(CalculableType.USER);
+            Set<Calculable> groups = getAll(CalculableType.GROUP);
+
+            for (Calculable user : users) {
+                user.calculateGroups();
+                user.calculateEffectivePermissions();
+            }
+
+            for (Calculable group : groups) {
+                group.calculateGroups();
+                group.calculateEffectivePermissions();
+            }
+
+            // now save them
             TaskRunnable saveTask = new TaskRunnable() {
                 @Override
                 public TaskType getType() {
@@ -281,8 +297,6 @@ public class YamlWorld extends World {
                     continue;
                 }
 
-                user.calculateGroups();
-                user.calculateEffectivePermissions();
                 usaveconfig.set(USERS + "." + name + "." + PERMISSIONS, user.serialisePermissions());
                 usaveconfig.set(USERS + "." + name + "." + USERNAME, Bukkit.getOfflinePlayer(UUID.fromString(name)).getName());
                 usaveconfig.set(USERS + "." + name + "." + GROUPS, user.serialiseGroups());
@@ -308,8 +322,6 @@ public class YamlWorld extends World {
 
         for (Calculable group : groups) {
             String name = group.getName();
-            group.calculateGroups();
-            group.calculateEffectivePermissions();
             gsaveconfig.set(GROUPS + "." + name + "." + PERMISSIONS, group.serialisePermissions());
             gsaveconfig.set(GROUPS + "." + name + "." + GROUPS, group.serialiseGroups());
             // MetaData
