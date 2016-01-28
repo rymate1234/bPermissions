@@ -1,9 +1,6 @@
 package de.bananaco.bpermissions.api;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class is any object which carries groups. The group references are
@@ -20,9 +17,9 @@ public abstract class GroupCarrier extends PermissionCarrier {
     protected GroupCarrier(Set<String> groups, Set<Permission> permissions, String world) {
         super(permissions, world);
         if (groups == null) {
-            groups = new HashSet();
+            groups = Collections.synchronizedSet(new HashSet());
         }
-        groupsCalculated = new HashSet();
+        groupsCalculated = Collections.synchronizedSet(new HashSet());
         this.groups = groups;
 
         calculateGroups();
@@ -36,12 +33,14 @@ public abstract class GroupCarrier extends PermissionCarrier {
             return;
 
         groupsCalculated.clear();
-        for (String name : groups) {
-            if (WorldManager.getInstance().getWorld(getWorld()) == null) {
-                System.err.println(getWorld() + " is null?");
+        synchronized (groups) {
+            for (String name : groups) {
+                if (WorldManager.getInstance().getWorld(getWorld()) == null) {
+                    System.err.println(getWorld() + " is null?");
+                }
+                Group group = (Group) WorldManager.getInstance().getWorld(getWorld()).get(name, CalculableType.GROUP);
+                groupsCalculated.add(group);
             }
-            Group group = (Group) WorldManager.getInstance().getWorld(getWorld()).get(name, CalculableType.GROUP);
-            groupsCalculated.add(group);
         }
     }
 
@@ -72,8 +71,10 @@ public abstract class GroupCarrier extends PermissionCarrier {
      * @param group
      */
     public void addGroup(String group) {
-        group = group.toLowerCase();
-        groups.add(group);
+        synchronized (groups) {
+            group = group.toLowerCase();
+            groups.add(group);
+        }
         calculateGroups();
     }
 
@@ -84,8 +85,10 @@ public abstract class GroupCarrier extends PermissionCarrier {
      * @param group
      */
     public void removeGroup(String group) {
-        group = group.toLowerCase();
-        groups.remove(group);
+        synchronized (groups) {
+            group = group.toLowerCase();
+            groups.remove(group);
+        }
         calculateGroups();
     }
 
