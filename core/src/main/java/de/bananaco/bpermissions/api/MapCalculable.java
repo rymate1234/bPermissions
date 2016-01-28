@@ -2,6 +2,7 @@ package de.bananaco.bpermissions.api;
 
 import de.bananaco.bpermissions.util.Debugger;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +24,7 @@ public abstract class MapCalculable extends de.bananaco.bpermissions.api.util.Ca
         super(name, groups, permissions, world);
     }
     boolean dirty = true;
-    private final Map<String, Boolean> permissions = new HashMap<String, Boolean>();
+    private final Map<String, Boolean> permissions = Collections.synchronizedMap(new HashMap<String, Boolean>());
 
     /**
      * Return the calculated map The map will be blank unless
@@ -56,11 +57,14 @@ public abstract class MapCalculable extends de.bananaco.bpermissions.api.util.Ca
             return;
         }
         long time = System.currentTimeMillis();
-        permissions.clear();
-        for (Permission perm : super.getEffectivePermissions()) {
-            permissions.put(perm.nameLowerCase(), perm.isTrue());
+        synchronized (permissions) {
+            permissions.clear();
+            for (Permission perm : super.getEffectivePermissions()) {
+                permissions.put(perm.nameLowerCase(), perm.isTrue());
+            }
         }
         this.calculateEffectiveMeta();
+
         dirty = false;
         long finish = System.currentTimeMillis()-time;
 

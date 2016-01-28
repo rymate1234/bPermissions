@@ -1,10 +1,6 @@
 package de.bananaco.bpermissions.api;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class contains the main calculations for a
@@ -26,7 +22,7 @@ public abstract class Calculable extends CalculableMeta {
         super(groups, permissions, world);
         // TODO does this remove the ChatColor?
         this.name = name;
-        this.effectivePermissions = new HashSet();
+        this.effectivePermissions = Collections.synchronizedSet(new HashSet());
     }
 
     /**
@@ -57,28 +53,30 @@ public abstract class Calculable extends CalculableMeta {
     public synchronized void calculateEffectivePermissions() throws RecursiveGroupException {
         calculateGroups();
         try {
-            Map<String, Integer> priorities = new HashMap<String, Integer>();
-            effectivePermissions.clear();
-            //System.out.println(serialiseGroups());
-            for (String gr : serialiseGroups()) {
-                Group group = getWorldObject().getGroup(gr);
-                group.calculateMappedPermissions();
-                for (Permission perm : group.getEffectivePermissions()) {
-                    if (!priorities.containsKey(perm.nameLowerCase()) || priorities.get(perm.nameLowerCase()) < group.getPriority()) {
-                        priorities.put(perm.nameLowerCase(), group.getPriority());
-                        if (effectivePermissions.contains(perm)) {
-                            effectivePermissions.remove(perm);
+            synchronized (effectivePermissions) {
+                Map<String, Integer> priorities = new HashMap<String, Integer>();
+                effectivePermissions.clear();
+                //System.out.println(serialiseGroups());
+                for (String gr : serialiseGroups()) {
+                    Group group = getWorldObject().getGroup(gr);
+                    group.calculateMappedPermissions();
+                    for (Permission perm : group.getEffectivePermissions()) {
+                        if (!priorities.containsKey(perm.nameLowerCase()) || priorities.get(perm.nameLowerCase()) < group.getPriority()) {
+                            priorities.put(perm.nameLowerCase(), group.getPriority());
+                            if (effectivePermissions.contains(perm)) {
+                                effectivePermissions.remove(perm);
+                            }
+                            effectivePermissions.add(perm);
                         }
-                        effectivePermissions.add(perm);
                     }
                 }
-            }
-            priorities.clear();
-            for (Permission perm : this.getPermissions()) {
-                if (effectivePermissions.contains(perm)) {
-                    effectivePermissions.remove(perm);
+                priorities.clear();
+                for (Permission perm : this.getPermissions()) {
+                    if (effectivePermissions.contains(perm)) {
+                        effectivePermissions.remove(perm);
+                    }
+                    effectivePermissions.add(perm);
                 }
-                effectivePermissions.add(perm);
             }
             hasCalculated = true;
             //print();
@@ -146,7 +144,7 @@ public abstract class Calculable extends CalculableMeta {
     protected abstract World getWorldObject();
 
     @Override
-    public void clear() {
+    public synchronized void clear() {
         this.effectivePermissions.clear();
         super.clear();
     }
