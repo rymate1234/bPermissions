@@ -440,40 +440,24 @@ public class YamlWorld extends World {
     @Override
     public boolean setupAll() {
         for (final Player player : this.permissions.getServer().getOnlinePlayers()) {
-            final World yamlWorld = this;
-            TaskRunnable setupTask = new TaskRunnable() {
-                @Override
-                public TaskType getType() {
-                    return TaskType.PLAYER_SETUP;
-                }
-
+            final UUID name = player.getUniqueId();
+            Runnable r = new Runnable() {
                 public void run() {
-                    UUID name = player.getUniqueId();
-                    String world = player.getWorld().getName();
-                    if (wm.getWorld(world) == yamlWorld) {
-                        try {
-                            User user = getUser(name);
-                            user.setDirty(true);
-                            user.calculateGroups();
-                            user.calculateEffectivePermissions();
-                            user.calculateMappedPermissions();
-                            user.calculateEffectiveMeta();
-                            Runnable r = new Runnable() {
-                                public void run() {
-                                    permissions.handler.setupPlayer(player);
-                                }
-                            };
-                            // must be sync
-                            Bukkit.getScheduler().runTask(permissions, r);
-
-                        } catch (RecursiveGroupException e) {
-                            e.printStackTrace();
-                        }
+                    try {
+                        User user = getUser(name);
+                        user.setDirty(true);
+                        user.calculateGroups();
+                        user.calculateEffectivePermissions();
+                        user.calculateMappedPermissions();
+                        user.calculateEffectiveMeta();
+                        permissions.handler.setupPlayer(player);
+                    } catch (RecursiveGroupException e) {
+                        e.printStackTrace();
                     }
                 }
             };
-
-            MainThread.getInstance().schedule(setupTask);
+            // must be sync
+            Bukkit.getScheduler().runTask(permissions, r);
         }
         // return true for success
         return true;

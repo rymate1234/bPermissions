@@ -149,13 +149,9 @@ public class SuperPermissionHandler implements Listener {
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
         final String uuid = event.getUniqueId().toString();
         for (final de.bananaco.bpermissions.api.World world : wm.getAllWorlds()) {
-            TaskRunnable r = new TaskRunnable() {
-            @Override
-            public TaskType getType() {
-                return TaskType.LOAD;
-            }
-
-            public void run() {
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
                     world.loadIfExists(uuid, CalculableType.USER);
 
                     User user = (User) world.get(uuid, CalculableType.USER);
@@ -168,7 +164,7 @@ public class SuperPermissionHandler implements Listener {
                     }
                 }
             };
-            MainThread.getInstance().schedule(r);
+            Bukkit.getScheduler().runTask(plugin, r);
         }
 
 
@@ -177,23 +173,14 @@ public class SuperPermissionHandler implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLogin(final PlayerLoginEvent event) {
         // Likewise, in theory this should be all we need to detect when a player joins
-        TaskRunnable r = new TaskRunnable() {
-            @Override
-            public TaskType getType() {
-                return TaskType.SERVER;
-            }
+        long time = System.currentTimeMillis();
+        String uuid = event.getPlayer().getUniqueId().toString();
+        Debugger.log("Begun setup for " + uuid);
 
-            public void run() {
-                long time = System.currentTimeMillis();
-                String uuid = event.getPlayer().getUniqueId().toString();
-                Debugger.log("Begun setup for " + uuid);
+        setupPlayer(event.getPlayer());
 
-                setupPlayer(event.getPlayer());
+        long finish = System.currentTimeMillis() - time;
+        Debugger.log("Setup for " + uuid + ". took " + finish + "ms.");
 
-                long finish = System.currentTimeMillis() - time;
-                Debugger.log("Setup for " + uuid + ". took " + finish + "ms.");
-            }
-        };
-        MainThread.getInstance().schedule(r);
     }
 }
