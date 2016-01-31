@@ -229,11 +229,13 @@ public class YamlWorld extends World {
             for (Calculable user : users) {
                 user.calculateGroups();
                 user.calculateEffectivePermissions();
+                user.calculateEffectiveMeta();
             }
 
             for (Calculable group : groups) {
                 group.calculateGroups();
                 group.calculateEffectivePermissions();
+                group.calculateEffectiveMeta();
             }
 
             // now save them

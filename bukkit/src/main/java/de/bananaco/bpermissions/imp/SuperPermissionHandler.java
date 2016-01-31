@@ -147,7 +147,16 @@ public class SuperPermissionHandler implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
-        final String uuid = event.getUniqueId().toString();
+
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerLogin(final PlayerLoginEvent event) {
+        final String uuid = event.getPlayer().getUniqueId().toString();
+
+        // Load a player when they log in
+        long time = System.currentTimeMillis();
+        Debugger.log("Begun setup for " + uuid);
         for (final de.bananaco.bpermissions.api.World world : wm.getAllWorlds()) {
             Runnable r = new Runnable() {
                 @Override
@@ -167,16 +176,7 @@ public class SuperPermissionHandler implements Listener {
             Bukkit.getScheduler().runTask(plugin, r);
         }
 
-
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerLogin(final PlayerLoginEvent event) {
-        // Likewise, in theory this should be all we need to detect when a player joins
-        long time = System.currentTimeMillis();
-        String uuid = event.getPlayer().getUniqueId().toString();
-        Debugger.log("Begun setup for " + uuid);
-
+        // set them up
         setupPlayer(event.getPlayer());
 
         long finish = System.currentTimeMillis() - time;

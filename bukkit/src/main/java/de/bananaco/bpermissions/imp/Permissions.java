@@ -3,6 +3,7 @@ package de.bananaco.bpermissions.imp;
 import java.util.*;
 import java.util.concurrent.Callable;
 
+import de.bananaco.bpermissions.api.*;
 import de.bananaco.bpermissions.util.Debugger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,10 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.bananaco.bpermissions.api.ApiLayer;
-import de.bananaco.bpermissions.api.CalculableType;
-import de.bananaco.bpermissions.api.World;
-import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.imp.loadmanager.MainThread;
 import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
 import de.bananaco.bpermissions.unit.PermissionsTest;
@@ -41,11 +38,24 @@ public class Permissions extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Cancel tasks
-        getServer().getScheduler().cancelTasks(this);
+        //save all worlds
+        for (World world : wm.getAllWorlds()) {
+            world.save();
+        }
 
-        mt.setRunning(false);
-        System.out.println(blankFormat("Disabled"));
+        // then disable
+        mt.schedule(new TaskRunnable() {
+            public void run() {
+                getServer().getScheduler().cancelTasks(Permissions.instance);
+
+                mt.setRunning(false);
+                System.out.println(blankFormat("Disabled"));
+            }
+
+            public TaskRunnable.TaskType getType() {
+                return TaskRunnable.TaskType.SERVER;
+            }
+        });
     }
 
     @Override
