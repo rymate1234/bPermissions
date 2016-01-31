@@ -42,6 +42,7 @@ public class Permissions extends JavaPlugin {
         for (World world : wm.getAllWorlds()) {
             world.save();
         }
+        System.out.println(blankFormat("Finishing tasks and saving worlds before disabling bPermissions...."));
 
         // then disable
         mt.schedule(new TaskRunnable() {
@@ -56,6 +57,14 @@ public class Permissions extends JavaPlugin {
                 return TaskRunnable.TaskType.SERVER;
             }
         });
+
+        while (mt.hasTasks()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

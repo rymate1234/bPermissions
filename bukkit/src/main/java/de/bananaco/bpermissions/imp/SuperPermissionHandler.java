@@ -147,7 +147,9 @@ public class SuperPermissionHandler implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
-
+        for (final de.bananaco.bpermissions.api.World world : wm.getAllWorlds()) {
+            world.loadIfExists(event.getUniqueId().toString(), CalculableType.USER);
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -156,13 +158,12 @@ public class SuperPermissionHandler implements Listener {
 
         // Load a player when they log in
         long time = System.currentTimeMillis();
+        wm.getWorld(event.getPlayer().getWorld().getName()).loadIfExists(uuid, CalculableType.USER);
         Debugger.log("Begun setup for " + uuid);
         for (final de.bananaco.bpermissions.api.World world : wm.getAllWorlds()) {
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
-                    world.loadIfExists(uuid, CalculableType.USER);
-
                     User user = (User) world.get(uuid, CalculableType.USER);
                     try {
                         user.calculateEffectivePermissions();
