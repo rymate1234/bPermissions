@@ -8,6 +8,7 @@ import java.util.Set;
 public class CalculableMeta extends GroupCarrier {
 
     Map<String, String> effectiveMeta;
+    private boolean calculatingMeta;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     protected CalculableMeta(Set<String> groups, Set<Permission> permissions,
@@ -22,6 +23,10 @@ public class CalculableMeta extends GroupCarrier {
      * @throws RecursiveGroupException
      */
     public synchronized void calculateEffectiveMeta() throws RecursiveGroupException {
+        if (calculatingMeta)
+            return;
+
+        calculatingMeta = true;
         try {
             // Implement meta priorities
             effectiveMeta.clear();
@@ -57,6 +62,7 @@ public class CalculableMeta extends GroupCarrier {
         } catch (StackOverflowError e) {
             throw new RecursiveGroupException(this);
         }
+        calculatingMeta = true;
     }
 
     public Map<String, String> getEffectiveMeta() {

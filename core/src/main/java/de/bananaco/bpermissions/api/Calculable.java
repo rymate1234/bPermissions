@@ -15,6 +15,7 @@ public abstract class Calculable extends CalculableMeta {
     Set<Permission> effectivePermissions;
     String name;
     boolean hasCalculated = false;
+    private boolean calculatingPermissions;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public Calculable(String name, Set<String> groups,
@@ -51,6 +52,10 @@ public abstract class Calculable extends CalculableMeta {
      * @throws RecursiveGroupException
      */
     public synchronized void calculateEffectivePermissions() throws RecursiveGroupException {
+        if (calculatingPermissions)
+            return;
+
+        calculatingPermissions = true;
         calculateGroups();
         try {
             synchronized (effectivePermissions) {
@@ -86,6 +91,7 @@ public abstract class Calculable extends CalculableMeta {
         } catch (StackOverflowError e) {
             throw new RecursiveGroupException(this);
         }
+        calculatingPermissions = false;
     }
 
     /**
