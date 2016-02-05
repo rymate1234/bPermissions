@@ -102,6 +102,23 @@ public abstract class MetaData {
         }
     }
 
+    /**
+     * Removes a value from the metadata map
+     *
+     * @param key
+     */
+    public void removeValue(String key) {
+        synchronized (values) {
+            if (values.containsKey(key))
+                values.remove(key);
+            try {
+                this.calculateEffectiveMeta();
+            } catch (RecursiveGroupException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public abstract void calculateEffectiveMeta() throws RecursiveGroupException;
 
     /**

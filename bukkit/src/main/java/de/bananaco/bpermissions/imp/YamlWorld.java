@@ -135,10 +135,12 @@ public class YamlWorld extends World {
         if (usersConfig != null) {
             Set<String> names = usersConfig.getKeys(false);
             usersArray = names.toArray(new String[0]);
-            // for (String name : names) {
-            // experiment - only load online users
+            for (String name : names) {
+            /*
+            experiment - only load online users (disabled)
             for (Player player : this.permissions.getServer().getOnlinePlayers()) {
-                String name = player.getUniqueId().toString();
+            String name = player.getUniqueId().toString();
+            */
                 List<String> nPerm = usersConfig.getStringList(name + "." + PERMISSIONS);
                 List<String> nGroup = usersConfig.getStringList(name + "." + GROUPS);
                 Set<Permission> perms = Permission.loadFromString(nPerm);
@@ -270,8 +272,10 @@ public class YamlWorld extends World {
             gfile.createNewFile();
         }
 
-        YamlConfiguration usaveconfig = uconfig;
-        YamlConfiguration gsaveconfig = gconfig;
+        YamlConfiguration usaveconfig = new YamlConfiguration();
+        YamlConfiguration gsaveconfig = new YamlConfiguration();;
+        usaveconfig.setDefaults(this.uconfig);
+        gsaveconfig.setDefaults(this.gconfig);
 
         String def = getDefaultGroup();
         gsaveconfig.set("default", def);

@@ -18,7 +18,7 @@ public class CalculableMeta extends GroupCarrier {
     }
 
     /**
-     * Used to calculate the total permissions gained by the object
+     * Used to calculate the metadata gained by the object
      *
      * @throws RecursiveGroupException
      */
@@ -42,12 +42,10 @@ public class CalculableMeta extends GroupCarrier {
 
                 for (String key : keySet) {
                     // If the effectiveMeta does not contain the key or the priority is greater than the current
-                    synchronized (effectiveMeta) {
-                        if (!pr.containsKey(key) || group.getPriority() > pr.get(key)) {
-                            // Store the priority too!
-                            effectiveMeta.put(key, meta.get(key));
-                            pr.put(key, group.getPriority());
-                        }
+                    if (!pr.containsKey(key) || group.getPriority() > pr.get(key)) {
+                        // Store the priority too!
+                        effectiveMeta.put(key, meta.get(key));
+                        pr.put(key, group.getPriority());
                     }
                 }
             }
@@ -62,7 +60,7 @@ public class CalculableMeta extends GroupCarrier {
         } catch (StackOverflowError e) {
             throw new RecursiveGroupException(this);
         }
-        calculatingMeta = true;
+        calculatingMeta = false;
     }
 
     public Map<String, String> getEffectiveMeta() {
