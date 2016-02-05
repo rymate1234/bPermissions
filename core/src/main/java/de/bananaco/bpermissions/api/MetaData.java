@@ -93,13 +93,7 @@ public abstract class MetaData {
      */
     public void setValue(String key, String value) {
         synchronized (values) {
-            if (values.containsKey(key)) {
-                values.replace(key, value);
-            }
-            else {
-                values.put(key, value);
-            }
-
+            values.put(key, value);
             try {
                 this.calculateEffectiveMeta();
             } catch (RecursiveGroupException e) {
