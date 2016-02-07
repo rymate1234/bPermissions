@@ -11,11 +11,11 @@ import java.util.*;
  * want to.
  */
 public abstract class Calculable extends CalculableMeta {
-
     Set<Permission> effectivePermissions;
     String name;
-    boolean hasCalculated = false;
+    String lowerName; // see https://images.rymate.co.uk/images/4BWucrJ.png as to why this exists
     private boolean calculatingPermissions;
+    private boolean dirty = true;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public Calculable(String name, Set<String> groups,
@@ -23,7 +23,8 @@ public abstract class Calculable extends CalculableMeta {
         super(groups, permissions, world);
         // TODO does this remove the ChatColor?
         this.name = name;
-        this.effectivePermissions = Collections.synchronizedSet(new HashSet());
+        this.lowerName = name.toLowerCase();
+        this.effectivePermissions = new HashSet();
     }
 
     /**
@@ -51,42 +52,43 @@ public abstract class Calculable extends CalculableMeta {
      *
      * @throws RecursiveGroupException
      */
-    public synchronized void calculateEffectivePermissions() throws RecursiveGroupException {
+    public void calculateEffectivePermissions() throws RecursiveGroupException {
         if (calculatingPermissions)
+            return;
+
+        if (!isDirty())
             return;
 
         calculatingPermissions = true;
         calculateGroups();
         try {
-            synchronized (effectivePermissions) {
-                Map<String, Integer> priorities = new HashMap<String, Integer>();
-                effectivePermissions.clear();
-                //System.out.println(serialiseGroups());
-                for (String gr : serialiseGroups()) {
-                    Group group = getWorldObject().getGroup(gr);
-                    // we probably want to recalculate group permissions as well
-                    group.setDirty(true);
-                    group.calculateEffectivePermissions();
-                    group.calculateMappedPermissions();
-                    for (Permission perm : group.getEffectivePermissions()) {
-                        if (!priorities.containsKey(perm.nameLowerCase()) || priorities.get(perm.nameLowerCase()) < group.getPriority()) {
-                            priorities.put(perm.nameLowerCase(), group.getPriority());
-                            if (effectivePermissions.contains(perm)) {
-                                effectivePermissions.remove(perm);
-                            }
-                            effectivePermissions.add(perm);
+            Map<String, Integer> priorities = new HashMap<String, Integer>();
+            effectivePermissions.clear();
+            //System.out.println(serialiseGroups());
+            for (String gr : serialiseGroups()) {
+                Group group = getWorldObject().getGroup(gr);
+                // we probably want to recalculate group permissions as well
+                group.setDirty(true);
+                group.calculateEffectiveMeta();
+                group.calculateEffectivePermissions();
+                group.calculateMappedPermissions();
+                for (Permission perm : group.getEffectivePermissions()) {
+                    if (!priorities.containsKey(perm.nameLowerCase()) || priorities.get(perm.nameLowerCase()) < group.getPriority()) {
+                        priorities.put(perm.nameLowerCase(), group.getPriority());
+                        if (effectivePermissions.contains(perm)) {
+                            effectivePermissions.remove(perm);
                         }
+                        effectivePermissions.add(perm);
                     }
-                }
-                priorities.clear();
-                for (Permission perm : this.getPermissions()) {
-                    if (effectivePermissions.contains(perm)) {
-                        effectivePermissions.remove(perm);
-                    }
-                    effectivePermissions.add(perm);
                 }
             }
-            hasCalculated = true;
+            priorities.clear();
+            for (Permission perm : this.getPermissions()) {
+                if (effectivePermissions.contains(perm)) {
+                    effectivePermissions.remove(perm);
+                }
+                effectivePermissions.add(perm);
+            }
             //print();
         } catch (StackOverflowError e) {
             throw new RecursiveGroupException(this);
@@ -99,14 +101,12 @@ public abstract class Calculable extends CalculableMeta {
      *
      * @return Set<Permission>
      */
-    public synchronized Set<Permission> getEffectivePermissions() {
+    public Set<Permission> getEffectivePermissions() {
         try {
-            synchronized (effectivePermissions) {
-                if (!hasCalculated)
-                    this.calculateEffectivePermissions();
+            if (isDirty())
+                this.calculateEffectivePermissions();
 
-                return effectivePermissions;
-            }
+            return effectivePermissions;
         } catch (RecursiveGroupException e) {
             e.printStackTrace();
         }
@@ -128,7 +128,7 @@ public abstract class Calculable extends CalculableMeta {
      * @return String
      */
     public String getNameLowerCase() {
-        return name.toLowerCase();
+        return lowerName;
     }
 
     @Override
@@ -148,14 +148,20 @@ public abstract class Calculable extends CalculableMeta {
      */
     public abstract CalculableType getType();
 
-    protected abstract boolean isDirty();
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
+    }
 
     public abstract boolean hasPermission(String node);
 
     protected abstract World getWorldObject();
 
     @Override
-    public synchronized void clear() {
+    public void clear() {
         this.effectivePermissions.clear();
         super.clear();
     }

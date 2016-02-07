@@ -11,6 +11,7 @@ import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
 import de.bananaco.bpermissions.util.Debugger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -18,6 +19,7 @@ import org.bukkit.entity.Player;
  * Here is the main YamlWorld class This loads from the default users.yml and
  * groups.yml on first creation. Isn't it pretty?
  */
+@SuppressWarnings({"Duplicates"})
 public class YamlWorld extends World {
 
     protected static final String GROUPS = "groups";
@@ -135,12 +137,12 @@ public class YamlWorld extends World {
         if (usersConfig != null) {
             Set<String> names = usersConfig.getKeys(false);
             usersArray = names.toArray(new String[0]);
-            for (String name : names) {
-            /*
-            experiment - only load online users (disabled)
+            //for (String name : names) {
+
+            //experiment - only load online users (disabled)
             for (Player player : this.permissions.getServer().getOnlinePlayers()) {
             String name = player.getUniqueId().toString();
-            */
+
                 List<String> nPerm = usersConfig.getStringList(name + "." + PERMISSIONS);
                 List<String> nGroup = usersConfig.getStringList(name + "." + GROUPS);
                 Set<Permission> perms = Permission.loadFromString(nPerm);
@@ -224,22 +226,6 @@ public class YamlWorld extends World {
         save = true;
         // async again
         try {
-            // ensure groups and users are calculated
-            Set<Calculable> users = getAll(CalculableType.USER);
-            Set<Calculable> groups = getAll(CalculableType.GROUP);
-
-            for (Calculable user : users) {
-                user.calculateGroups();
-                user.calculateEffectivePermissions();
-                user.calculateEffectiveMeta();
-            }
-
-            for (Calculable group : groups) {
-                group.calculateGroups();
-                group.calculateEffectivePermissions();
-                group.calculateEffectiveMeta();
-            }
-
             // now save them
             TaskRunnable saveTask = new TaskRunnable() {
                 @Override
@@ -272,10 +258,8 @@ public class YamlWorld extends World {
             gfile.createNewFile();
         }
 
-        YamlConfiguration usaveconfig = new YamlConfiguration();
-        YamlConfiguration gsaveconfig = new YamlConfiguration();;
-        usaveconfig.setDefaults(this.uconfig);
-        gsaveconfig.setDefaults(this.gconfig);
+        YamlConfiguration usaveconfig = uconfig;
+        YamlConfiguration gsaveconfig = gconfig;
 
         String def = getDefaultGroup();
         gsaveconfig.set("default", def);
@@ -293,6 +277,7 @@ public class YamlWorld extends World {
 
             for (Calculable user : users) {
                 String name = user.getName();
+                usaveconfig.set(USERS + "." + name, null);
 
                 // don't save users with default settings
                 if (user.getMeta().size() == 0
@@ -303,9 +288,13 @@ public class YamlWorld extends World {
                     continue;
                 }
 
+                // save their username
+                if (isUUID(name)) usaveconfig.set(USERS + "." + name + "." + USERNAME, Bukkit.getOfflinePlayer(UUID.fromString(name)).getName());
+
+                // save the permissions and groups
                 usaveconfig.set(USERS + "." + name + "." + PERMISSIONS, user.serialisePermissions());
-                usaveconfig.set(USERS + "." + name + "." + USERNAME, Bukkit.getOfflinePlayer(UUID.fromString(name)).getName());
                 usaveconfig.set(USERS + "." + name + "." + GROUPS, user.serialiseGroups());
+
                 // MetaData
                 Map<String, String> meta = user.getMeta();
                 if (meta.size() > 0) {
@@ -328,6 +317,8 @@ public class YamlWorld extends World {
 
         for (Calculable group : groups) {
             String name = group.getName();
+            gsaveconfig.set(GROUPS + "." + name, null);
+
             gsaveconfig.set(GROUPS + "." + name + "." + PERMISSIONS, group.serialisePermissions());
             gsaveconfig.set(GROUPS + "." + name + "." + GROUPS, group.serialiseGroups());
             // MetaData
@@ -452,10 +443,9 @@ public class YamlWorld extends World {
                     try {
                         User user = getUser(name);
                         user.setDirty(true);
-                        user.calculateGroups();
                         user.calculateEffectivePermissions();
-                        user.calculateMappedPermissions();
                         user.calculateEffectiveMeta();
+                        user.calculateMappedPermissions();
                         permissions.handler.setupPlayer(player);
                     } catch (RecursiveGroupException e) {
                         e.printStackTrace();

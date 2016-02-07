@@ -145,11 +145,7 @@ public class OldUserGroupCommand extends BaseCommand {
                     } else {
                         sendMessage(sender, "Please consult the command documentation!");
                     }
-                    try {
-                        cmd.getCalculable().calculateEffectivePermissions();
-                    } catch (RecursiveGroupException e) {
-                        e.printStackTrace();
-                    }
+                    calc.setDirty(true);
                     ApiLayer.update();
                 }
             } else if (args.length == 3 && args[0].equalsIgnoreCase("meta")) {

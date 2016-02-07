@@ -91,11 +91,15 @@ public class MainThread extends Thread implements TaskThread {
         return running;
     }
 
-    public void setRunning(final boolean running) {
+    public void clearTasks() {
         load.clear();
         save.clear();
         server.clear();
         playerSetup.clear();
+    }
+
+    public void setRunning(final boolean running) {
+        clearTasks();
         if (!running) {
             thread.running = false;
             thread = null;
@@ -121,6 +125,13 @@ public class MainThread extends Thread implements TaskThread {
     }
 
     public void schedule(TaskRunnable r) {
-        getTasks(r.getType()).add(r);
+        // stop tasks from building up
+        if (tasksCount() < 10) {
+            getTasks(r.getType()).add(r);
+        }
+    }
+
+    public int tasksCount() {
+        return load.size() + save.size() + server.size() + playerSetup.size();
     }
 }

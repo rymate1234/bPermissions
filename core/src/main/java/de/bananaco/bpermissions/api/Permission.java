@@ -71,16 +71,19 @@ public class Permission extends de.bananaco.bpermissions.api.util.Permission {
     }
     private final boolean isTrue;
     private final String name;
+    private final String nameLower;
     private final Map<String, Boolean> children;
 
     Permission(String name, boolean isTrue) {
         this.name = name;
+        this.nameLower = name.toLowerCase();
         this.isTrue = isTrue;
         this.children = null;
     }
 
     Permission(String name, boolean isTrue, Map<String, Boolean> children) {
         this.name = name;
+        this.nameLower = name.toLowerCase();
         this.isTrue = isTrue;
         // create a new Map<String, Boolean> for safety
         this.children = new HashMap<String, Boolean>(children);
@@ -124,7 +127,7 @@ public class Permission extends de.bananaco.bpermissions.api.util.Permission {
      * @return String
      */
     public String nameLowerCase() {
-        return name.toLowerCase();
+        return nameLower;
     }
 
     @Override

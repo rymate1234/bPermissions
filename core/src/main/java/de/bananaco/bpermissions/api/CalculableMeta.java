@@ -14,7 +14,7 @@ public class CalculableMeta extends GroupCarrier {
     protected CalculableMeta(Set<String> groups, Set<Permission> permissions,
             String world) {
         super(groups, permissions, world);
-        effectiveMeta = Collections.synchronizedMap(new HashMap<String, String>());
+        effectiveMeta = new HashMap<String, String>();
     }
 
     /**
@@ -22,7 +22,7 @@ public class CalculableMeta extends GroupCarrier {
      *
      * @throws RecursiveGroupException
      */
-    public synchronized void calculateEffectiveMeta() throws RecursiveGroupException {
+    public void calculateEffectiveMeta() throws RecursiveGroupException {
         if (calculatingMeta)
             return;
 
