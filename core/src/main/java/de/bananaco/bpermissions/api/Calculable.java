@@ -138,7 +138,7 @@ public abstract class Calculable extends CalculableMeta {
 
     @Override
     public String toString() {
-        return name.toLowerCase();
+        return lowerName;
     }
 
     /**

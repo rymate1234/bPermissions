@@ -24,6 +24,7 @@ public abstract class MapCalculable extends de.bananaco.bpermissions.api.util.Ca
             Set<Permission> permissions, String world) {
         super(name, groups, permissions, world);
     }
+
     private final Map<String, Boolean> permissions = new HashMap<String, Boolean>();
 
     /**
@@ -53,18 +54,19 @@ public abstract class MapCalculable extends de.bananaco.bpermissions.api.util.Ca
     }
 
     public void calculateMappedPermissions() throws RecursiveGroupException {
-        if (calculatingMapped){
+        if (calculatingMapped) {
             return;
         }
-        calculatingMapped = true;
 
         if (!isDirty()) {
             return;
         }
 
+        calculatingMapped = true;
+
         long time = System.currentTimeMillis();
         permissions.clear();
-        for (Permission perm : super.getEffectivePermissions()) {
+        for (Permission perm : getEffectivePermissions()) {
             permissions.put(perm.nameLowerCase(), perm.isTrue());
         }
         this.calculateEffectiveMeta();

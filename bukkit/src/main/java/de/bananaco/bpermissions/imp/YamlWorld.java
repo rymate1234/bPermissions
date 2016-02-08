@@ -11,7 +11,6 @@ import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
 import de.bananaco.bpermissions.util.Debugger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -19,9 +18,7 @@ import org.bukkit.entity.Player;
  * Here is the main YamlWorld class This loads from the default users.yml and
  * groups.yml on first creation. Isn't it pretty?
  */
-@SuppressWarnings({"Duplicates"})
 public class YamlWorld extends World {
-
     protected static final String GROUPS = "groups";
     protected static final String PERMISSIONS = "permissions";
     protected static final String USERNAME = "username";
@@ -136,7 +133,7 @@ public class YamlWorld extends World {
         ConfigurationSection usersConfig = uconfig.getConfigurationSection(USERS);
         if (usersConfig != null) {
             Set<String> names = usersConfig.getKeys(false);
-            usersArray = names.toArray(new String[0]);
+            usersArray = names.toArray(new String[names.size()]);
             //for (String name : names) {
 
             //experiment - only load online users (disabled)
@@ -172,7 +169,7 @@ public class YamlWorld extends World {
         if (groupsConfig != null) {
             clearGroups();
             Set<String> names = groupsConfig.getKeys(false);
-            groupsArray = names.toArray(new String[0]);
+            groupsArray = names.toArray(new String[names.size()]);
 
             for (String name : names) {
                 List<String> nPerm = groupsConfig.getStringList(name + "." + PERMISSIONS);
@@ -377,13 +374,6 @@ public class YamlWorld extends World {
             }
 
             if (Bukkit.getPlayer(UUID.fromString(name)) != null) {
-                try {
-                    UUID uuid = UUID.fromString(name);
-                    getUser(uuid).calculateMappedPermissions();
-                    getUser(uuid).calculateEffectiveMeta();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 setupPlayer(name);
             }
         } else if (type == CalculableType.GROUP) {
@@ -437,23 +427,7 @@ public class YamlWorld extends World {
     @Override
     public boolean setupAll() {
         for (final Player player : this.permissions.getServer().getOnlinePlayers()) {
-            final UUID name = player.getUniqueId();
-            Runnable r = new Runnable() {
-                public void run() {
-                    try {
-                        User user = getUser(name);
-                        user.setDirty(true);
-                        user.calculateEffectivePermissions();
-                        user.calculateEffectiveMeta();
-                        user.calculateMappedPermissions();
-                        permissions.handler.setupPlayer(player);
-                    } catch (RecursiveGroupException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            // must be sync
-            Bukkit.getScheduler().runTask(permissions, r);
+            setupPlayer(player);
         }
         // return true for success
         return true;
@@ -471,7 +445,27 @@ public class YamlWorld extends World {
 
     @Override
     public boolean setupPlayer(String player) {
-        permissions.handler.setupPlayer(Bukkit.getPlayer(UUID.fromString(player)));
+        return setupPlayer(Bukkit.getPlayer(UUID.fromString(player)));
+    }
+
+    public boolean setupPlayer(final Player player) {
+        final UUID name = player.getUniqueId();
+        Runnable r = new Runnable() {
+            public void run() {
+                try {
+                    User user = getUser(name);
+                    user.setDirty(true);
+                    user.calculateEffectivePermissions();
+                    user.calculateEffectiveMeta();
+                    user.calculateMappedPermissions();
+                    permissions.handler.setupPlayer(player);
+                } catch (RecursiveGroupException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        // must be sync
+        Bukkit.getScheduler().runTask(permissions, r);
         return true;
     }
 
@@ -481,6 +475,7 @@ public class YamlWorld extends World {
         try {
             gconfig.save(gfile);
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
