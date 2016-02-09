@@ -46,11 +46,13 @@ public abstract class GroupCarrier extends PermissionCarrier {
      * Returns the groups that were calculated via the calculateGroups()
      * method.
      *
+     * This gets a copy of the Set
+     *
      * @return Set<Group>
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     public Set<Group> getGroups() {
-        return groupsCalculated;
+        return new HashSet<Group>(groupsCalculated);
     }
 
     /**
