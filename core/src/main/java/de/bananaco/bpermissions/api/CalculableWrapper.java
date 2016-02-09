@@ -79,6 +79,17 @@ public abstract class CalculableWrapper extends MapCalculable {
         }
     }
 
+    @Override
+    public void removeValue(String key) {
+        super.removeValue(key);
+        setDirty(true);
+        setCalculablesWithGroupDirty();
+        if (wm.getAutoSave()) {
+            getWorldObject().save();
+            getWorldObject().setupAll();
+        }
+    }
+
     public void setCalculablesWithGroupDirty() {
         Set<Calculable> users = getWorldObject().getAll(CalculableType.USER);
         Set<Calculable> groups = getWorldObject().getAll(CalculableType.GROUP);

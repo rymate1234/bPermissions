@@ -19,7 +19,7 @@ public class ExtraCommands {
 
     private static WorldManager wm = WorldManager.getInstance();
 
-    public static void execute(String name, CalculableType type, String action, String value, String world) {
+    public static boolean execute(String name, CalculableType type, String action, String value, String world) {
         Set<World> worlds = new HashSet<World>();
         // add all if null
         if (world == null) {
@@ -54,6 +54,14 @@ public class ExtraCommands {
                 c.addPermission(perm.nameLowerCase(), perm.isTrue());
             } else if (action.equalsIgnoreCase("rmperm")) {
                 c.removePermission(value);
+            } else if (action.startsWith("addmeta")) {
+                String meta = action.split(":")[1];
+                c.setValue(meta, value);
+            } else if (action.startsWith("rmmeta")) {
+                String meta = action.split(":")[1];
+                c.removeValue(meta);
+            } else {
+                return false;
             }
 
             c.setDirty(true);
@@ -62,5 +70,6 @@ public class ExtraCommands {
 
         }
 
+        return true;
     }
 }

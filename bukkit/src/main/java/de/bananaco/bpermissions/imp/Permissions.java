@@ -331,20 +331,31 @@ public class Permissions extends JavaPlugin {
                     }
                     name = c.split(":")[1];
                 } else if (c.startsWith("a:")) {
-                    action = c.split(":")[1];
+                    String[] actionArray = c.split(":");
+                    if (actionArray.length == 3) {
+                        action = actionArray[1] + ":" + actionArray[2];
+                    } else {
+                        action = actionArray[1];
+                    }
                 } else if (c.startsWith("v:")) {
                     value = c.split(":")[1];
                 } else if (c.startsWith("w:")) {
                     world = c.split(":")[1];
                 }
             }
-            String message = ChatColor.GOLD + "Executing action: " + ChatColor.GREEN + action + " " + value + ChatColor.GOLD + " in " + ChatColor.GREEN + (world == null ? "all worlds" : "world: " + world);
-            String message2 = ChatColor.GOLD + "Action applied to " + ChatColor.GREEN + type.getName() + " " + name;
 
-            sender.sendMessage(message);
-            sender.sendMessage(message2);
-            ExtraCommands.execute(name, type, action, value, world);
-            ApiLayer.update();
+            boolean executed = ExtraCommands.execute(name, type, action, value, world);
+            if (executed) {
+                String message = ChatColor.GOLD + "Executing action: " + ChatColor.GREEN + action + " " + value + ChatColor.GOLD + " in " + ChatColor.GREEN + (world == null ? "all worlds" : "world: " + world);
+                String message2 = ChatColor.GOLD + "Action applied to " + ChatColor.GREEN + type.getName() + " " + name;
+
+                sender.sendMessage(message);
+                sender.sendMessage(message2);
+
+                ApiLayer.update();
+            } else {
+                sender.sendMessage(format("Invalid exec command!"));
+            }
         }
         /*
          * A new, easier way to set a players group!
