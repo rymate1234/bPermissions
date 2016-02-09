@@ -59,7 +59,7 @@ public class Commands {
             sender.sendMessage(format("No world selected, selecting the default world"));
             sender.sendMessage(format("To select a world use: /world worldname"));
 
-            if (instance.getUseGlobalFiles())
+            if (instance.getUseGlobalFiles() || (type == CalculableType.USER && instance.isUseGlobalUsers()))
                 setWorld("global", sender);
             else
                 setWorld(Bukkit.getServer().getWorlds().get(0).getName(), sender);
@@ -84,19 +84,34 @@ public class Commands {
      * Main functions go here
      */
     public void addGroup(String group, CommandSender sender) {
-        getCalculable().addGroup(group);
-        sender.sendMessage(format("Added " + group + " to " + getCalculable().getName()));
+        //getCalculable().addGroup(group);
+        boolean executed = ExtraCommands.execute(name, calc, "addgroup", group, world.getName());
+        if (executed) {
+            sender.sendMessage(format("Added " + group + " to " + getCalculable().getName()));
+        } else {
+            sender.sendMessage(format("Failed to add " + group + " to " + getCalculable().getName()));
+        }
     }
 
     public void removeGroup(String group, CommandSender sender) {
-        getCalculable().removeGroup(group);
-        sender.sendMessage(format("Removed " + group + " from " + getCalculable().getName()));
+        //getCalculable().removeGroup(group);
+        boolean executed = ExtraCommands.execute(name, calc, "rmgroup", group, world.getName());
+        if (executed) {
+            sender.sendMessage(format("Removed " + group + " from " + getCalculable().getName()));
+        } else {
+            sender.sendMessage(format("Failed to add " + group + " to " + getCalculable().getName()));
+        }
     }
 
     public void setGroup(String group, CommandSender sender) {
-        getCalculable().getGroupsAsString().clear();
-        getCalculable().addGroup(group);
-        sender.sendMessage(format("Set " + getCalculable().getName() + "'s group to " + group));
+        //getCalculable().getGroupsAsString().clear();
+        //getCalculable().addGroup(group);
+        boolean executed = ExtraCommands.execute(name, calc, "setgroup", group, world.getName());
+        if (executed) {
+            sender.sendMessage(format("Set " + getCalculable().getName() + "'s group to " + group));
+        } else {
+            sender.sendMessage(format("Failed to set " + getCalculable().getName() + "'s group to " + group));
+        }
     }
 
     public void listGroups(CommandSender sender) {
@@ -108,14 +123,24 @@ public class Commands {
     }
 
     public void addPermission(String permission, CommandSender sender) {
-        Permission perm = Permission.loadFromString(permission);
-        getCalculable().addPermission(perm.name(), perm.isTrue());
-        sender.sendMessage(format("Added " + perm.toString() + " to " + getCalculable().getName()));
+        //Permission perm = Permission.loadFromString(permission);
+        //getCalculable().addPermission(perm.name(), perm.isTrue());
+        boolean executed = ExtraCommands.execute(name, calc, "addperm", permission, world.getName());
+        if (executed) {
+            sender.sendMessage(format("Added " + permission + " to " + getCalculable().getName()));
+        } else {
+            sender.sendMessage(format("Failed to add " + permission + " to " + getCalculable().getName()));
+        }
     }
 
     public void removePermission(String permission, CommandSender sender) {
-        getCalculable().removePermission(permission);
-        sender.sendMessage(format("Removed " + permission + " from " + getCalculable().getName()));
+        //getCalculable().removePermission(permission);
+        boolean executed = ExtraCommands.execute(name, calc, "rmperm", permission, world.getName());
+        if (executed) {
+            sender.sendMessage(format("Removed " + permission + " from " + getCalculable().getName()));
+        } else {
+            sender.sendMessage(format("Failed to remove " + permission + " from " + getCalculable().getName()));
+        }
     }
 
     public void listPermissions(CommandSender sender, int page) {
@@ -162,8 +187,13 @@ public class Commands {
     }
 
     public void setValue(String key, String value, CommandSender sender) {
-        getCalculable().setValue(key, value);
-        sender.sendMessage(format(key + " set to " + value + " for " + getCalculable().getName()));
+        //getCalculable().setValue(key, value);
+        boolean executed = ExtraCommands.execute(name, calc, "addmeta:" + key, value, world.getName());
+        if (executed) {
+            sender.sendMessage(format(key + " set to " + value + " for " + getCalculable().getName()));
+        } else {
+            sender.sendMessage(format("Failed to set key " +  key + " to " + value + " for " + getCalculable().getName()));
+        }
     }
 
     public void showValue(String key, CommandSender sender) {
@@ -180,7 +210,12 @@ public class Commands {
     }
 
     public void clearMeta(String value, CommandSender sender) {
-        getCalculable().removeValue(value);
-        sender.sendMessage(format("Meta for " + calc.getName() + " " + getCalculable().getName() + " - cleared"));
+        //getCalculable().removeValue(value);
+        boolean executed = ExtraCommands.execute(name, calc, "rmmeta:" + value, "", world.getName());
+        if (executed) {
+            sender.sendMessage(format("Meta for " + calc.getName() + " " + getCalculable().getName() + " - cleared"));
+        } else {
+            sender.sendMessage(format("Failed to clear " + calc.getName() + " meta value for " + getCalculable().getName()));
+        }
     }
 }

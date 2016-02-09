@@ -83,9 +83,12 @@ public class OldUserGroupCommand extends BaseCommand {
              * Selecting, displaying, and executing commands on the Calculable
              */
 
-            if ((WorldManager.getInstance().isUseGlobalUsers()) && (command.getName().equalsIgnoreCase("user")) && (!cmd.getWorld().getName().equalsIgnoreCase("global"))) {
-                sendMessage(sender, "You need to select the global world!");
-            } else if (args.length == 0) {
+            if ((WorldManager.getInstance().isUseGlobalUsers()) && (command.getName().equalsIgnoreCase("user")) && (cmd.getWorld() != WorldManager.getInstance().getDefaultWorld())) {
+                sendMessage(sender, "Changing to the global world");
+                cmd.setWorld("global", sender);
+            }
+
+            if (args.length == 0) {
                 if (calc == null) {
                     sendMessage(sender, "Nothing is selected!");
                 } else {

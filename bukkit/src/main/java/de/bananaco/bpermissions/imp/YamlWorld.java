@@ -41,6 +41,7 @@ public class YamlWorld extends World {
     public YamlWorld(String world, Permissions permissions, File root) {
         super(world);
         this.permissions = permissions;
+
         if (wm.isUseGlobalUsers())
             this.ufile = new File(new File("plugins/bPermissions/global/"), "users.yml");
         else
@@ -138,7 +139,7 @@ public class YamlWorld extends World {
 
             //experiment - only load online users (disabled)
             for (Player player : this.permissions.getServer().getOnlinePlayers()) {
-            String name = player.getUniqueId().toString();
+                String name = player.getUniqueId().toString();
 
                 List<String> nPerm = usersConfig.getStringList(name + "." + PERMISSIONS);
                 List<String> nGroup = usersConfig.getStringList(name + "." + GROUPS);

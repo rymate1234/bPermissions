@@ -115,7 +115,7 @@ public class WorldManager {
             }
         }
         // Add the global world
-        if (useGlobalFiles && getDefaultWorld() != null) {
+        if ((useGlobalFiles || useGlobalUsers) && getDefaultWorld() != null) {
             worlds.add(getDefaultWorld());
         }
 
