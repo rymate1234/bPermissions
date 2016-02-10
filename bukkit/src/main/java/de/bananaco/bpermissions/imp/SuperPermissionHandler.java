@@ -5,9 +5,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import de.bananaco.bpermissions.api.*;
+import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
 import de.bananaco.bpermissions.util.Debugger;
-import org.bukkit.Bukkit;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -158,7 +159,15 @@ public class SuperPermissionHandler implements Listener {
 
         // Load a player when they log in
         long time = System.currentTimeMillis();
-        wm.getWorld(event.getPlayer().getWorld().getName()).loadIfExists(uuid, CalculableType.USER);
+        org.bukkit.World playerWorld = event.getPlayer().getWorld();
+
+        if (playerWorld != null) {
+            World currentWorld = wm.getWorld(playerWorld.getName());
+            if (currentWorld != null) {
+                currentWorld.loadIfExists(uuid, CalculableType.USER);
+            }
+        }
+
         Debugger.log("Begun setup for " + uuid);
         for (final de.bananaco.bpermissions.api.World world : wm.getAllWorlds()) {
             Runnable r = new Runnable() {

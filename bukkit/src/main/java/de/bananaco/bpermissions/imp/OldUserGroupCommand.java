@@ -2,6 +2,7 @@ package de.bananaco.bpermissions.imp;
 
 import de.bananaco.bpermissions.api.*;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -11,7 +12,7 @@ import java.util.Map;
 /**
  * Created by Ryan on 25/05/2015.
  */
-public class OldUserGroupCommand extends BaseCommand {
+public class OldUserGroupCommand extends BaseCommand implements CommandExecutor {
     private final Permissions plugin;
     private final Map<String, Commands> commands;
     private final Map<String, String> mirrors = new HashMap<String, String>();

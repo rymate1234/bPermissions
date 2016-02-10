@@ -8,9 +8,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Ryan on 25/05/2015.
+ * Common functions used within commands (and tab completers)
+ *
+ * Created by rymate1234 on 25/05/2015.
  */
-public abstract class BaseCommand implements CommandExecutor {
+public abstract class BaseCommand {
 
     public static String format(String message) {
         ChatColor vary = ChatColor.GREEN;
