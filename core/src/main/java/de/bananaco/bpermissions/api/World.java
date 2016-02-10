@@ -158,6 +158,9 @@ public abstract class World {
             if (!isUUID(name))
                 name = getUUID(name).toString();
 
+            if (!users.containsKey(name))
+                loadIfExists(name, type);
+
             if (!users.containsKey(name)) {
                 add(new User(name, null, null, getName(), this));
                 // Don't forget to add the default group!
