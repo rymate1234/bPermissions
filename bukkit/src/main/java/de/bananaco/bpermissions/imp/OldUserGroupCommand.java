@@ -150,7 +150,9 @@ public class OldUserGroupCommand extends BaseCommand implements CommandExecutor 
                         sendMessage(sender, "Please consult the command documentation!");
                     }
                     calc.setDirty(true);
-                    ApiLayer.update();
+
+                    // no need to call this now
+                    //ApiLayer.update();
                 }
             } else if (args.length == 3 && args[0].equalsIgnoreCase("meta")) {
                 if (calc == null) {

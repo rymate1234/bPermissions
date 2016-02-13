@@ -1,6 +1,6 @@
 package de.bananaco.bpermissions.imp;
 
-//import org.bukkit.craftbukkit.entity.CraftHumanEntity;
+import de.bananaco.bpermissions.util.Debugger;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
@@ -23,7 +23,7 @@ import java.util.Set;
  * @author codename_B
  */
 public class BukkitCompat {
-
+    public static int TIMES_RAN = 0;
     /**
      * Use to efficiently set a Map<String, Boolean> onto a Player Assumes one
      * large PermissionAttachment
@@ -52,6 +52,8 @@ public class BukkitCompat {
      * @return
      */
     public static PermissionAttachment doBukkitPermissions(Permissible p, Plugin plugin, Map<String, Boolean> permissions) {
+        long start, finish, time;
+        start = System.currentTimeMillis();
         Player player = (Player) p;
 
         Permission positive = plugin.getServer().getPluginManager().getPermission(player.getName());
@@ -98,6 +100,11 @@ public class BukkitCompat {
         }
         // recalculate permissions
         player.recalculatePermissions();
+        finish = System.currentTimeMillis();
+        time = finish - start;
+        Debugger.log("Adding permissions took: " + time + "ms.");
+        TIMES_RAN = TIMES_RAN + 1;
+        Debugger.log("Amount of times ran: " + TIMES_RAN++);
         return att;
     }
 

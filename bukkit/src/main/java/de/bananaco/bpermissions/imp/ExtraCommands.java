@@ -65,8 +65,7 @@ public class ExtraCommands {
             }
 
             c.setDirty(true);
-
-            wm.update();
+            w.setupAll();
 
         }
 
