@@ -39,6 +39,7 @@ public class ExtraCommands {
         }
         for (World w : worlds) {
             Calculable c = w.get(name, type);
+            //c.setDirty(true);
 
             if (action.equalsIgnoreCase("addgroup")) {
                 c.addGroup(value);
@@ -64,8 +65,7 @@ public class ExtraCommands {
                 return false;
             }
 
-            c.setDirty(true);
-            w.setupAll();
+            //w.setupAll();
 
         }
 
