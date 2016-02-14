@@ -349,7 +349,7 @@ public class Permissions extends JavaPlugin {
                 }
             }
 
-            boolean executed = ExtraCommands.execute(name, type, action, value, world);
+            boolean executed = ActionExecutor.execute(name, type, action, value, world);
             if (executed) {
                 String message = ChatColor.GOLD + "Executing action: " + ChatColor.GREEN + action + " " + value + ChatColor.GOLD + " in " + ChatColor.GREEN + (world == null ? "all worlds" : "world: " + world);
                 String message2 = ChatColor.GOLD + "Action applied to " + ChatColor.GREEN + type.getName() + " " + name;
@@ -376,7 +376,7 @@ public class Permissions extends JavaPlugin {
             String value = args[1];
             String world = null;
 
-            ExtraCommands.execute(name, type, action, value, world);
+            ActionExecutor.execute(name, type, action, value, world);
             sendMessage(sender, "The player " + name + " is now " + value + "!");
         }
         /*
