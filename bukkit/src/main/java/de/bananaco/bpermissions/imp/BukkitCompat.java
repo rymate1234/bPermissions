@@ -9,10 +9,8 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * This code is distributed for your use and modification. Do what you like with
@@ -23,7 +21,21 @@ import java.util.Set;
  * @author codename_B
  */
 public class BukkitCompat {
-    public static int TIMES_RAN = 0;
+    private static int TIMES_RAN = 0;
+    private static final HashMap<String, PermissionAttachment> attachments = new HashMap<String, PermissionAttachment>();
+    private static Field permissions;
+
+    static {
+        try {
+            permissions = PermissionAttachment.class.getDeclaredField("permissions");
+            permissions.setAccessible(true);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Use to efficiently set a Map<String, Boolean> onto a Player Assumes one
      * large PermissionAttachment
@@ -35,11 +47,48 @@ public class BukkitCompat {
      */
     public static PermissionAttachment setPermissions(Permissible p, Plugin plugin, Map<String, Boolean> perm) {
         try {
-            return doBukkitPermissions(p, plugin, perm);
+            //return doBukkitPermissions(p, plugin, perm);
+            return doReflectivePermissions(p, plugin, perm);
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * Reflection is still needed looking at the source of alternative permissions plugins
+     * Will be leaving the previous implementation in just in case.
+     *
+     * Code resurrected from https://github.com/rymate1234/bPermissions/blob/ca2e70b614ad290a81da3ba4e9d54ab3a387359c/src/de/bananaco/bpermissions/imp/SuperPermissionHandler.java
+     *
+     * @param p the permissible (player)
+     * @param plugin the plugin
+     * @param perm A map of permissions
+     * @return the PermissionsAttachment
+     */
+    @SuppressWarnings("unchecked")
+    private static PermissionAttachment doReflectivePermissions(Permissible p, Plugin plugin, Map<String, Boolean> perm) throws IllegalAccessException {
+        if (p == null) {
+            return null;
+        }
+        Player player = (Player) p;
+
+        PermissionAttachment attachment = attachments.get(player.getUniqueId().toString());
+        if (attachment == null) {
+            attachment = player.addAttachment(plugin);
+            attachments.put(player.getUniqueId().toString(), attachment);
+        }
+
+        // Grab a reference to the original object
+        Map<String, Boolean> orig = (Map<String, Boolean>) permissions.get(attachment);
+        // Clear the map (faster than removing the attachment and recalculating)
+        orig.clear();
+        // Then whack our map into there
+        orig.putAll(perm);
+        // That's all folks!
+        player.recalculatePermissions();
+        return attachment;
     }
 
     /**
@@ -114,7 +163,7 @@ public class BukkitCompat {
         Map<String, Boolean> permissions = new HashMap<String, Boolean>();
         Set<String> keys = new HashSet<String>(permissions.keySet());
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 1000; i++) {
             permissions.put("example." + String.valueOf(i), true);
         }
 
