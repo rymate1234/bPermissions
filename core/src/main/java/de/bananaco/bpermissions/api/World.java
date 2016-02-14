@@ -385,6 +385,18 @@ public abstract class World {
 
     public abstract String getDefaultGroup();
 
+
+    public void setupInGroup(String group) {
+        Set<Calculable> users = getAll(CalculableType.USER);
+
+        for (Calculable user : users) {
+            if (user.hasGroupRecursive(group)) {
+                setupPlayer(user.getName());
+            }
+        }
+
+    }
+
     public abstract boolean setupPlayer(String player);
 
     public boolean setupAll() {
@@ -447,5 +459,4 @@ public abstract class World {
         char COLOR_CHAR = '\u00A7';
         return stripColorPattern.matcher(input).replaceAll("");
     }
-
 }

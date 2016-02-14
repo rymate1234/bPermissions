@@ -76,7 +76,11 @@ public class OldUserGroupCommand extends BaseCommand implements CommandExecutor 
          * Much is repeated here
          */
         if (command.getName().equalsIgnoreCase("user") || command.getName().equalsIgnoreCase("group")) {
-            Calculable calc = cmd.getCalculable();
+            Calculable calc = null;
+            if (cmd.getCalculable() != null) {
+                calc = cmd.getCalculable();
+            }
+
             CalculableType type = command.getName().equalsIgnoreCase("user") ? CalculableType.USER : CalculableType.GROUP;
             CalculableType opposite = !command.getName().equalsIgnoreCase("user") ? CalculableType.USER : CalculableType.GROUP;
 

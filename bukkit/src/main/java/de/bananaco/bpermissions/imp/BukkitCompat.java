@@ -104,7 +104,7 @@ public class BukkitCompat {
         time = finish - start;
         Debugger.log("Adding permissions took: " + time + "ms.");
         TIMES_RAN = TIMES_RAN + 1;
-        Debugger.log("Amount of times ran: " + TIMES_RAN++);
+        Debugger.log("Amount of times ran: " + TIMES_RAN);
         return att;
     }
 

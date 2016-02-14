@@ -62,8 +62,6 @@ public class Commands {
 
     public void setCalculable(CalculableType type, String c, CommandSender sender) {
         // If the world does not exist
-        calc = type;
-
         if (world == null) {
             sender.sendMessage(format("No world selected, selecting the default world"));
             sender.sendMessage(format("To select a world use: /world worldname"));
@@ -71,6 +69,7 @@ public class Commands {
             setDefaultWorld(sender);
         }
 
+        calc = type;
         name = c;
         sender.sendMessage(format(getCalculable().getName() + " selected."));
     }

@@ -453,6 +453,8 @@ public class YamlWorld extends World {
         final UUID name = player.getUniqueId();
         Runnable r = new Runnable() {
             public void run() {
+                long start, finish, time;
+                start = System.currentTimeMillis();
                 try {
                     User user = getUser(name);
                     user.setDirty(true);
@@ -463,6 +465,9 @@ public class YamlWorld extends World {
                 } catch (RecursiveGroupException e) {
                     e.printStackTrace();
                 }
+                finish = System.currentTimeMillis();
+                time = finish - start;
+                Debugger.log("Setting up user took: " + time + "ms.");
             }
         };
         // must be sync

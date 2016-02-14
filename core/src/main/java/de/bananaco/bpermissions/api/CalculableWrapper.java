@@ -23,70 +23,54 @@ public abstract class CalculableWrapper extends MapCalculable {
     /*
      * These methods are added to allow auto-saving of the World on any changes
      */
-
     @Override
     public void addGroup(String group) {
         super.addGroup(group);
-        setDirty(true);
-        setCalculablesWithGroupDirty();
-        if (wm.getAutoSave()) {
-            getWorldObject().save();
-            getWorldObject().setupAll();
-        }
+        updateCalculable();
     }
 
     @Override
     public void removeGroup(String group) {
         super.removeGroup(group);
-        setDirty(true);
-        setCalculablesWithGroupDirty();
-        if (wm.getAutoSave()) {
-            getWorldObject().save();
-            getWorldObject().setupAll();
-        }
+        updateCalculable();
     }
 
     @Override
     public void addPermission(String permission, boolean isTrue) {
         super.addPermission(permission, isTrue);
-        setDirty(true);
-        setCalculablesWithGroupDirty();
-        if (wm.getAutoSave()) {
-            getWorldObject().save();
-            getWorldObject().setupAll();
-        }
+        updateCalculable();
     }
 
     @Override
     public void removePermission(String permission) {
         super.removePermission(permission);
-        setDirty(true);
-        setCalculablesWithGroupDirty();
-        if (wm.getAutoSave()) {
-            getWorldObject().save();
-            getWorldObject().setupAll();
-        }
+        updateCalculable();
     }
 
     @Override
     public void setValue(String key, String value) {
         super.setValue(key, value);
-        setDirty(true);
-        setCalculablesWithGroupDirty();
-        if (wm.getAutoSave()) {
-            getWorldObject().save();
-            getWorldObject().setupAll();
-        }
+        updateCalculable();
     }
 
     @Override
     public void removeValue(String key) {
         super.removeValue(key);
+        updateCalculable();
+    }
+
+
+    private void updateCalculable() {
         setDirty(true);
         setCalculablesWithGroupDirty();
         if (wm.getAutoSave()) {
             getWorldObject().save();
-            getWorldObject().setupAll();
+            if (getType().equals(CalculableType.USER)) {
+                getWorldObject().setupPlayer(getNameLowerCase());
+            } else {
+                //getWorldObject().setupAll();
+                getWorldObject().setupInGroup(getNameLowerCase());
+            }
         }
     }
 
