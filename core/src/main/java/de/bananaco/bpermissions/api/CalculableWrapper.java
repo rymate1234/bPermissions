@@ -66,7 +66,7 @@ public abstract class CalculableWrapper extends MapCalculable {
         if (wm.getAutoSave()) {
             getWorldObject().save();
             if (getType().equals(CalculableType.USER)) {
-                getWorldObject().setupPlayer(getNameLowerCase());
+                if (getWorldObject().isOnline((User) this)) getWorldObject().setupPlayer(getNameLowerCase());
             } else {
                 //getWorldObject().setupAll();
                 getWorldObject().setupInGroup(getNameLowerCase());

@@ -385,16 +385,14 @@ public abstract class World {
 
     public abstract String getDefaultGroup();
 
-
     public void setupInGroup(String group) {
         Set<Calculable> users = getAll(CalculableType.USER);
 
         for (Calculable user : users) {
             if (user.hasGroupRecursive(group)) {
-                setupPlayer(user.getName());
+                if (isOnline((User) user)) setupPlayer(user.getName());
             }
         }
-
     }
 
     public abstract boolean setupPlayer(String player);

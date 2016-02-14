@@ -436,7 +436,7 @@ public class YamlWorld extends World {
 
     @Override
     public boolean isOnline(User user) {
-        return Bukkit.getPlayer(user.getName()) != null;
+        return Bukkit.getPlayer(UUID.fromString(user.getName())) != null;
     }
 
     @Override
