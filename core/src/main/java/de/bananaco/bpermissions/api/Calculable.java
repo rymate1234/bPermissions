@@ -69,9 +69,7 @@ public abstract class Calculable extends CalculableMeta {
                 Group group = getWorldObject().getGroup(gr);
                 // we probably want to recalculate group permissions as well
                 group.setDirty(true);
-                group.calculateEffectiveMeta();
                 group.calculateEffectivePermissions();
-                group.calculateMappedPermissions();
                 for (Permission perm : group.getEffectivePermissions()) {
                     if (!priorities.containsKey(perm.nameLowerCase()) || priorities.get(perm.nameLowerCase()) < group.getPriority()) {
                         priorities.put(perm.nameLowerCase(), group.getPriority());

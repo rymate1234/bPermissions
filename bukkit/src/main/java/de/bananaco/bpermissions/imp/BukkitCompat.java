@@ -75,10 +75,12 @@ public class BukkitCompat {
         Player player = (Player) p;
 
         PermissionAttachment attachment = attachments.get(player.getUniqueId().toString());
-        if (attachment == null) {
-            attachment = player.addAttachment(plugin);
-            attachments.put(player.getUniqueId().toString(), attachment);
+        if (attachment != null) {
+            attachment.remove();
         }
+
+        attachment = player.addAttachment(plugin);
+        attachments.put(player.getUniqueId().toString(), attachment);
 
         // Grab a reference to the original object
         Map<String, Boolean> orig = (Map<String, Boolean>) permissions.get(attachment);
