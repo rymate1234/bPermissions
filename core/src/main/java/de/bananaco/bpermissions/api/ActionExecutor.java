@@ -13,7 +13,7 @@ public class ActionExecutor {
     public static boolean execute(String name, CalculableType type, String action, String value, String world) {
         Set<World> worlds = new HashSet<World>();
         // add all if null
-        if (world == null || (world.equals("global") && wm.isUseGlobalUsers())) {
+        if (world == null || ((world.equals("global") || type == CalculableType.USER) && (wm.isUseGlobalUsers()))) {
             worlds.addAll(wm.getAllWorlds());
         } else {
             worlds.add(wm.getWorld(world));
