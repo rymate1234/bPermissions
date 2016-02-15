@@ -158,7 +158,7 @@ public class SuperPermissionHandler implements Listener {
         final String uuid = event.getPlayer().getUniqueId().toString();
 
         // Load a player when they log in
-        final long time = System.currentTimeMillis();
+        long time = System.currentTimeMillis();
         org.bukkit.World playerWorld = event.getPlayer().getWorld();
 
         if (playerWorld != null) {
@@ -181,16 +181,16 @@ public class SuperPermissionHandler implements Listener {
                     } catch (RecursiveGroupException e) {
                         e.printStackTrace();
                     }
-
-                    // set them up
-                    setupPlayer(event.getPlayer());
-
-                    long finish = System.currentTimeMillis() - time;
-                    Debugger.log("Setup for " + uuid + ". took " + finish + "ms.");
                 }
             };
-            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, r, 1);
+            Bukkit.getScheduler().runTask(plugin, r);
         }
+
+        // set them up
+        setupPlayer(event.getPlayer());
+
+        long finish = System.currentTimeMillis() - time;
+        Debugger.log("Setup for " + uuid + ". took " + finish + "ms.");
 
     }
 }

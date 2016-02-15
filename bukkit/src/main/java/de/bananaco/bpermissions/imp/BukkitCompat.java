@@ -78,20 +78,18 @@ public class BukkitCompat {
         if (attachment != null) {
             attachment.remove();
         }
+
         attachment = player.addAttachment(plugin);
+        attachments.put(player.getUniqueId().toString(), attachment);
 
-        synchronized (attachment) {
-            attachments.put(player.getUniqueId().toString(), attachment);
-
-            // Grab a reference to the original object
-            Map<String, Boolean> orig = (Map<String, Boolean>) permissions.get(attachment);
-            // Clear the map (faster than removing the attachment and recalculating)
-            orig.clear();
-            // Then whack our map into there
-            orig.putAll(perm);
-            // That's all folks!
-            player.recalculatePermissions();
-        }
+        // Grab a reference to the original object
+        Map<String, Boolean> orig = (Map<String, Boolean>) permissions.get(attachment);
+        // Clear the map (faster than removing the attachment and recalculating)
+        orig.clear();
+        // Then whack our map into there
+        orig.putAll(perm);
+        // That's all folks!
+        player.recalculatePermissions();
         return attachment;
     }
 

@@ -374,9 +374,8 @@ public class YamlWorld extends World {
                 return false;
             }
 
-            Player p = Bukkit.getPlayer(UUID.fromString(name));
-            if (p != null && p.isOnline()) {
-                setupPlayer(p);
+            if (Bukkit.getPlayer(UUID.fromString(name)) != null) {
+                setupPlayer(name);
             }
         } else if (type == CalculableType.GROUP) {
             /*
@@ -458,15 +457,11 @@ public class YamlWorld extends World {
                 start = System.currentTimeMillis();
                 try {
                     User user = getUser(name);
-                    synchronized (user) {
-                        user.setDirty(true);
-                        user.calculateEffectivePermissions();
-                        user.calculateEffectiveMeta();
-                    }
-
-                    synchronized (player) {
-                        permissions.handler.setupPlayer(player);
-                    }
+                    user.setDirty(true);
+                    user.calculateEffectivePermissions();
+                    user.calculateEffectiveMeta();
+                    user.calculateMappedPermissions();
+                    permissions.handler.setupPlayer(player);
                 } catch (RecursiveGroupException e) {
                     e.printStackTrace();
                 }
@@ -476,7 +471,7 @@ public class YamlWorld extends World {
             }
         };
         // must be sync
-        Bukkit.getScheduler().runTaskLaterAsynchronously(permissions, r, 1);
+        Bukkit.getScheduler().runTask(permissions, r);
         return true;
     }
 
