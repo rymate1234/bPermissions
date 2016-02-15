@@ -65,22 +65,18 @@ public abstract class Calculable extends CalculableMeta {
             Map<String, Integer> priorities = new HashMap<String, Integer>();
             effectivePermissions.clear();
             //System.out.println(serialiseGroups());
-            synchronized (this) {
-                for (String gr : serialiseGroups()) {
-                    Group group = getWorldObject().getGroup(gr);
-                    // we probably want to recalculate group permissions as well
-                    synchronized (group) {
-                        group.setDirty(true);
-                        group.calculateEffectivePermissions();
-                        for (Permission perm : group.getEffectivePermissions()) {
-                            if (!priorities.containsKey(perm.nameLowerCase()) || priorities.get(perm.nameLowerCase()) < group.getPriority()) {
-                                priorities.put(perm.nameLowerCase(), group.getPriority());
-                                if (effectivePermissions.contains(perm)) {
-                                    effectivePermissions.remove(perm);
-                                }
-                                effectivePermissions.add(perm);
-                            }
+            for (String gr : serialiseGroups()) {
+                Group group = getWorldObject().getGroup(gr);
+                // we probably want to recalculate group permissions as well
+                group.setDirty(true);
+                group.calculateEffectivePermissions();
+                for (Permission perm : group.getEffectivePermissions()) {
+                    if (!priorities.containsKey(perm.nameLowerCase()) || priorities.get(perm.nameLowerCase()) < group.getPriority()) {
+                        priorities.put(perm.nameLowerCase(), group.getPriority());
+                        if (effectivePermissions.contains(perm)) {
+                            effectivePermissions.remove(perm);
                         }
+                        effectivePermissions.add(perm);
                     }
                 }
             }

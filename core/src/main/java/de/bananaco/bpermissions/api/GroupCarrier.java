@@ -104,14 +104,12 @@ public abstract class GroupCarrier extends PermissionCarrier {
     }
 
     public boolean hasGroupRecursive(String group) {
-        synchronized (this) {
-            if (groups.contains(group)) {
+        if (groups.contains(group)) {
+            return true;
+        }
+        for (Group g : getGroups()) {
+            if (g.hasGroupRecursive(group)) {
                 return true;
-            }
-            for (Group g : getGroups()) {
-                if (g.hasGroupRecursive(group)) {
-                    return true;
-                }
             }
         }
         return false;

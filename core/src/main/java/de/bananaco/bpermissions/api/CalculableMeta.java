@@ -33,23 +33,19 @@ public class CalculableMeta extends GroupCarrier {
 
             Map<String, Integer> pr = new HashMap<String, Integer>();
 
-            synchronized (this) {
-                for (String gr : serialiseGroups()) {
-                    Group group = WorldManager.getInstance().getWorld(getWorld()).getGroup(gr);
-                    synchronized (group) {
-                        // Calculate down the tree of the child group
-                        group.calculateEffectiveMeta();
-                        Map<String, String> meta = group.getEffectiveMeta();
-                        Set<String> keySet = meta.keySet();
+            for (String gr : serialiseGroups()) {
+                Group group = WorldManager.getInstance().getWorld(getWorld()).getGroup(gr);
+                // Calculate down the tree of the child group
+                group.calculateEffectiveMeta();
+                Map<String, String> meta = group.getEffectiveMeta();
+                Set<String> keySet = meta.keySet();
 
-                        for (String key : keySet) {
-                            // If the effectiveMeta does not contain the key or the priority is greater than the current
-                            if (!pr.containsKey(key) || group.getPriority() > pr.get(key)) {
-                                // Store the priority too!
-                                effectiveMeta.put(key, meta.get(key));
-                                pr.put(key, group.getPriority());
-                            }
-                        }
+                for (String key : keySet) {
+                    // If the effectiveMeta does not contain the key or the priority is greater than the current
+                    if (!pr.containsKey(key) || group.getPriority() > pr.get(key)) {
+                        // Store the priority too!
+                        effectiveMeta.put(key, meta.get(key));
+                        pr.put(key, group.getPriority());
                     }
                 }
             }
