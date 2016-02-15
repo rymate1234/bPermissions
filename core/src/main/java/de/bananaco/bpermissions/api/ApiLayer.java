@@ -165,12 +165,16 @@ public class ApiLayer {
         // do we apply globals?
         if (wm.getUseGlobalFiles()) {
             Calculable c = global.get(name, type);
-            permissions.putAll(((MapCalculable) c).getMappedPermissions());
+            synchronized (c) {
+                permissions.putAll(((MapCalculable) c).getMappedPermissions());
+            }
         }
         // now we apply the per-world stuff (or globals if w==null)
         if (w != null) {
             Calculable c = w.get(name, type);
-            permissions.putAll(((MapCalculable) c).getMappedPermissions());
+            synchronized (c) {
+                permissions.putAll(((MapCalculable) c).getMappedPermissions());
+            }
         }
         // custom node checking
         for (String key : new HashSet<String>(permissions.keySet())) {
@@ -206,7 +210,7 @@ public class ApiLayer {
      * @param key
      * @return String
      */
-    public static String getValue(String world, CalculableType type, String name, String key) {
+    public static synchronized String getValue(String world, CalculableType type, String name, String key) {
         World w = wm.getWorld(world);
         // Fix for Vault bug 112 https://github.com/MilkBowl/Vault/issues/112
         if (w == null || type == null || name == null || key == null) {
@@ -214,6 +218,11 @@ public class ApiLayer {
         }
         Calculable c = w.get(name, type);
         String v = c.getEffectiveValue(key);
+
+        if (v == null) {
+            v = "";
+        }
+
         // Add support for prefix/suffix from global files
         if (v.equals("") && wm.getUseGlobalFiles()) {
             w = wm.getDefaultWorld();
