@@ -63,7 +63,7 @@ public abstract class Calculable extends CalculableMeta {
         calculateGroups();
         try {
             Map<String, Integer> priorities = new HashMap<String, Integer>();
-            effectivePermissions.clear();
+            HashSet tempPermissions = new HashSet();
             //System.out.println(serialiseGroups());
             for (String gr : serialiseGroups()) {
                 Group group = getWorldObject().getGroup(gr);
@@ -73,20 +73,23 @@ public abstract class Calculable extends CalculableMeta {
                 for (Permission perm : group.getEffectivePermissions()) {
                     if (!priorities.containsKey(perm.nameLowerCase()) || priorities.get(perm.nameLowerCase()) < group.getPriority()) {
                         priorities.put(perm.nameLowerCase(), group.getPriority());
-                        if (effectivePermissions.contains(perm)) {
-                            effectivePermissions.remove(perm);
+                        if (tempPermissions.contains(perm)) {
+                            tempPermissions.remove(perm);
                         }
-                        effectivePermissions.add(perm);
+                        tempPermissions.add(perm);
                     }
                 }
             }
             priorities.clear();
             for (Permission perm : this.getPermissions()) {
-                if (effectivePermissions.contains(perm)) {
-                    effectivePermissions.remove(perm);
+                if (tempPermissions.contains(perm)) {
+                    tempPermissions.remove(perm);
                 }
-                effectivePermissions.add(perm);
+                tempPermissions.add(perm);
             }
+
+            effectivePermissions.clear();
+            effectivePermissions = tempPermissions;
             //print();
         } catch (StackOverflowError e) {
             throw new RecursiveGroupException(this);
