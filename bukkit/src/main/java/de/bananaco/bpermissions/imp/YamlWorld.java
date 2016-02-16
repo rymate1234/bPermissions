@@ -456,7 +456,7 @@ public class YamlWorld extends World {
 
     @Override
     public boolean setupPlayer(String player) {
-        permissions.handler.setupPlayer(Bukkit.getPlayer(UUID.fromString(player)));
+        permissions.handler.setupPlayer(Bukkit.getPlayer(UUID.fromString(player)), true);
         return true;
     }
 

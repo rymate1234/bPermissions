@@ -64,7 +64,11 @@ public class ExtraCommands {
                 return false;
             }
 
-            wm.update();
+            if (type == CalculableType.GROUP) {
+                w.setupAll();
+            } else {
+                w.setupPlayer(name);
+            }
 
         }
 

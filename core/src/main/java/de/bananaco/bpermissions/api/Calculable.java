@@ -94,7 +94,7 @@ public abstract class Calculable extends CalculableMeta {
      */
     public Set<Permission> getEffectivePermissions() {
         try {
-            if (!hasCalculated)
+            if (!hasCalculated || isDirty())
                 this.calculateEffectivePermissions();
 
             return effectivePermissions;
@@ -177,4 +177,6 @@ public abstract class Calculable extends CalculableMeta {
         }
         return false;
     }
+
+    public abstract void setDirty(boolean dirty);
 }

@@ -143,6 +143,10 @@ public class ApiLayer {
         return permissions;
     }
 
+    public static synchronized Map<String, Boolean> getEffectivePermissions(String world, CalculableType type, String name) {
+        return getEffectivePermissions(world, type, name, false);
+    }
+
     /**
      * Returns an effective set of the permissions including calculated
      * inheritance from global files!
@@ -152,9 +156,10 @@ public class ApiLayer {
      * @param world
      * @param type
      * @param name
+     * @param recalculate
      * @return Map<String, Boolean> permissions
      */
-    public static synchronized Map<String, Boolean> getEffectivePermissions(String world, CalculableType type, String name) {
+    public static synchronized Map<String, Boolean> getEffectivePermissions(String world, CalculableType type, String name, boolean recalculate) {
         Map<String, Boolean> permissions = new HashMap<String, Boolean>();
         // our two thingies
         World global;
@@ -165,11 +170,13 @@ public class ApiLayer {
         // do we apply globals?
         if (wm.getUseGlobalFiles()) {
             Calculable c = global.get(name, type);
+            if (recalculate) c.setDirty(recalculate);
             permissions.putAll(((MapCalculable) c).getMappedPermissions());
         }
         // now we apply the per-world stuff (or globals if w==null)
         if (w != null) {
             Calculable c = w.get(name, type);
+            if (recalculate) c.setDirty(recalculate);
             permissions.putAll(((MapCalculable) c).getMappedPermissions());
         }
         // custom node checking

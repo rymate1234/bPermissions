@@ -26,6 +26,7 @@ public abstract class CalculableWrapper extends MapCalculable {
     @Override
     public void addGroup(String group) {
         super.addGroup(group);
+        calculateGroups();
         setDirty(true);
         setCalculablesWithGroupDirty();
         if (wm.getAutoSave()) {
@@ -37,6 +38,7 @@ public abstract class CalculableWrapper extends MapCalculable {
     @Override
     public void removeGroup(String group) {
         super.removeGroup(group);
+        calculateGroups();
         setDirty(true);
         setCalculablesWithGroupDirty();
         if (wm.getAutoSave()) {

@@ -62,7 +62,7 @@ public class SuperPermissionHandler implements Listener {
      */
     public void setupAllPlayers() {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
-            setupPlayer(player);
+            setupPlayer(player, false);
         }
     }
 
@@ -71,8 +71,9 @@ public class SuperPermissionHandler implements Listener {
      * bPermissions world, not a Bukkit world)
      *
      * @param player
+     * @param b
      */
-    public void setupPlayer(Player player) {
+    public void setupPlayer(Player player, boolean recalculate) {
         if (!plugin.isEnabled()) {
             return;
         }
@@ -82,7 +83,8 @@ public class SuperPermissionHandler implements Listener {
         Map<String, Boolean> perms = ApiLayer.getEffectivePermissions(
                 player.getWorld().getName(),
                 CalculableType.USER,
-                player.getUniqueId().toString()
+                player.getUniqueId().toString(),
+                recalculate
         );
 
         setPermissions(player, plugin, perms);
@@ -119,7 +121,7 @@ public class SuperPermissionHandler implements Listener {
     @EventHandler
     public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
         // In theory this should be all we need to detect world, it isn't cancellable so... should be fine?
-        setupPlayer(event.getPlayer());
+        setupPlayer(event.getPlayer(), false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -136,7 +138,7 @@ public class SuperPermissionHandler implements Listener {
             Runnable r = new Runnable() {
                 public void run() {
                     if (!start.equals(player.getWorld())) {
-                        setupPlayer(player);
+                        setupPlayer(player, false);
                     }
                 }
             };
@@ -175,7 +177,7 @@ public class SuperPermissionHandler implements Listener {
                 String uuid = event.getPlayer().getUniqueId().toString();
                 Debugger.log("Begun setup for " + uuid);
 
-                setupPlayer(event.getPlayer());
+                setupPlayer(event.getPlayer(), false);
 
                 long finish = System.currentTimeMillis() - time;
                 Debugger.log("Setup for " + uuid + ". took " + finish + "ms.");
