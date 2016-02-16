@@ -46,7 +46,7 @@ public abstract class CalculableWrapper extends MapCalculable {
 
     @Override
     public void removePermission(String permission) {
-        if (getPermissionsAsString().contains(permission)) {
+        if (!getPermissionsAsString().contains(permission)) {
             return;
         }
         super.removePermission(permission);
