@@ -21,9 +21,7 @@ public abstract class CalculableWrapper extends MapCalculable {
     }
 
     /*
-     * These methods are added
-     * to allow auto-saving of
-     * the World on any changes
+     * These methods are added to allow auto-saving of the World on any changes
      */
     @Override
     public void addGroup(String group) {
