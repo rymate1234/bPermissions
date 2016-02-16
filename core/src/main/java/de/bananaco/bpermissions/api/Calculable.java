@@ -158,6 +158,10 @@ public abstract class Calculable extends CalculableMeta {
         return dirty;
     }
 
+    public boolean isCalculatingPermissions() {
+        return calculatingPermissions;
+    }
+
     public void setDirty(boolean dirty) {
         this.dirty = dirty;
     }

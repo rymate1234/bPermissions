@@ -35,7 +35,7 @@ public abstract class MapCalculable extends de.bananaco.bpermissions.api.util.Ca
      * @return Map<String, Boolean>
      */
     public Map<String, Boolean> getMappedPermissions() {
-        if (isDirty()) {
+        if (isDirty() && !isCalculatingPermissions()) {
             try {
                 calculateMappedPermissions();
             } catch (RecursiveGroupException e) {

@@ -149,17 +149,37 @@ public class SuperPermissionHandler implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
         for (final de.bananaco.bpermissions.api.World world : wm.getAllWorlds()) {
-            world.loadIfExists(event.getUniqueId().toString(), CalculableType.USER);
+            String uuid = event.getUniqueId().toString();
+            world.loadIfExists(uuid, CalculableType.USER);
+
+            User user = (User) world.get(uuid, CalculableType.USER);
+            user.setDirty(true);
+            try {
+                user.calculateEffectivePermissions();
+                user.calculateMappedPermissions();
+                user.calculateEffectiveMeta();
+            } catch (RecursiveGroupException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLogin(final PlayerLoginEvent event) {
-        final String uuid = event.getPlayer().getUniqueId().toString();
+        onPlayerJoin(event.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerLogin(final PlayerJoinEvent event) {
+        onPlayerJoin(event.getPlayer());
+    }
+
+    private void onPlayerJoin(final Player player) {
+        final String uuid = player.getUniqueId().toString();
 
         // Load a player when they log in
         final long time = System.currentTimeMillis();
-        org.bukkit.World playerWorld = event.getPlayer().getWorld();
+        org.bukkit.World playerWorld = player.getWorld();
 
         if (playerWorld != null) {
             World currentWorld = wm.getWorld(playerWorld.getName());
@@ -170,26 +190,17 @@ public class SuperPermissionHandler implements Listener {
 
         Debugger.log("Begun setup for " + uuid);
         for (final de.bananaco.bpermissions.api.World world : wm.getAllWorlds()) {
-            Runnable r = new Runnable() {
-                @Override
-                public void run() {
-                    User user = (User) world.get(uuid, CalculableType.USER);
-                    try {
-                        user.calculateEffectivePermissions();
-                        user.calculateMappedPermissions();
-                        user.calculateEffectiveMeta();
-                    } catch (RecursiveGroupException e) {
-                        e.printStackTrace();
-                    }
-
-                    // set them up
-                    setupPlayer(event.getPlayer());
-
-                    long finish = System.currentTimeMillis() - time;
-                    Debugger.log("Setup for " + uuid + ". took " + finish + "ms.");
-                }
-            };
-            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, r, 1);
+            world.setupPlayer(player.getUniqueId().toString()) ;
+            //Runnable r = new Runnable() {
+            //    @Override
+            //    public void run() {
+            //        // set them up
+            //        setupPlayer(player);
+            //        long finish = System.currentTimeMillis() - time;
+            //        Debugger.log("Setup for " + uuid + ". took " + finish + "ms.");
+            //    }
+            //};
+            //Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, r, 1);
         }
 
     }

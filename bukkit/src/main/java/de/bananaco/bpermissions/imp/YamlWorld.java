@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import de.bananaco.bpermissions.imp.loadmanager.SetupThread;
 import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
 import de.bananaco.bpermissions.util.Debugger;
 import org.bukkit.Bukkit;
@@ -24,6 +25,7 @@ public class YamlWorld extends World {
     protected static final String USERNAME = "username";
     protected static final String META = "meta";
     protected static final String USERS = "users";
+    private final SetupThread setupThread;
     protected YamlConfiguration uconfig = null;//new YamlConfiguration();
     protected YamlConfiguration gconfig = null;//new YamlConfiguration();
     private final File ufile;
@@ -51,6 +53,8 @@ public class YamlWorld extends World {
 
         this.usersArray = new String[0];
         this.groupsArray = new String[0];
+        this.setupThread = new SetupThread(this, permissions);
+        setupThread.start();
     }
 
     @Override
@@ -450,33 +454,9 @@ public class YamlWorld extends World {
         return setupPlayer(Bukkit.getPlayer(UUID.fromString(player)));
     }
 
-    public boolean setupPlayer(final Player player) {
-        final UUID name = player.getUniqueId();
-        Runnable r = new Runnable() {
-            public void run() {
-                long start, finish, time;
-                start = System.currentTimeMillis();
-                try {
-                    User user = getUser(name);
-                    synchronized (user) {
-                        user.setDirty(true);
-                        user.calculateEffectivePermissions();
-                        user.calculateEffectiveMeta();
-                    }
+    public boolean setupPlayer(Player player) {
+        setupThread.schedule(player);
 
-                    synchronized (player) {
-                        permissions.handler.setupPlayer(player);
-                    }
-                } catch (RecursiveGroupException e) {
-                    e.printStackTrace();
-                }
-                finish = System.currentTimeMillis();
-                time = finish - start;
-                Debugger.log("Setting up user took: " + time + "ms.");
-            }
-        };
-        // must be sync
-        Bukkit.getScheduler().runTaskLaterAsynchronously(permissions, r, 1);
         return true;
     }
 

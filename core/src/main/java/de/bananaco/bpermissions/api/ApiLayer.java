@@ -377,7 +377,7 @@ public class ApiLayer {
             return false;
         }
         Calculable c = w.get(name, type);
-        if (c.isDirty())
+        if (c.isDirty() && !c.isCalculatingPermissions())
             try {
                 c.calculateEffectivePermissions();
             } catch (RecursiveGroupException e) {
