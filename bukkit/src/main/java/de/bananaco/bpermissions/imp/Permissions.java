@@ -89,9 +89,14 @@ public class Permissions extends JavaPlugin {
         commands = new HashMap<String, Commands>();
         // Register Commands
         OldUserGroupCommand oldUserGroupCommand = new OldUserGroupCommand(this, commands);
+        GroupsTabCompleter tabCompleter = new GroupsTabCompleter(commands);
         this.getCommand("group").setExecutor(oldUserGroupCommand);
         this.getCommand("user").setExecutor(oldUserGroupCommand);
         this.getCommand("world").setExecutor(oldUserGroupCommand);
+
+        this.getCommand("group").setTabCompleter(tabCompleter);
+        this.getCommand("user").setTabCompleter(tabCompleter);
+        this.getCommand("setgroup").setTabCompleter(tabCompleter);
 
         // Register loader events
         getServer().getPluginManager().registerEvents(loader, this);

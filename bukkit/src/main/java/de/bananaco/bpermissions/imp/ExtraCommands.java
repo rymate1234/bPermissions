@@ -19,10 +19,10 @@ public class ExtraCommands {
 
     private static WorldManager wm = WorldManager.getInstance();
 
-    public static void execute(String name, CalculableType type, String action, String value, String world) {
+    public static boolean execute(String name, CalculableType type, String action, String value, String world) {
         Set<World> worlds = new HashSet<World>();
         // add all if null
-        if (world == null) {
+        if (world == null || (world.equals("global") && wm.isUseGlobalUsers())) {
             worlds.addAll(wm.getAllWorlds());
         } else {
             worlds.add(wm.getWorld(world));
@@ -54,17 +54,20 @@ public class ExtraCommands {
                 c.addPermission(perm.nameLowerCase(), perm.isTrue());
             } else if (action.equalsIgnoreCase("rmperm")) {
                 c.removePermission(value);
+            } else if (action.startsWith("addmeta")) {
+                String meta = action.split(":")[1];
+                c.setValue(meta, value);
+            } else if (action.startsWith("rmmeta") || action.startsWith("cmeta")) {
+                String meta = action.split(":")[1];
+                c.removeValue(meta);
+            } else {
+                return false;
             }
 
             wm.update();
 
-            try {
-                c.calculateEffectiveMeta();
-                c.calculateEffectivePermissions();
-            } catch (RecursiveGroupException ex) {
-                Logger.getLogger(ExtraCommands.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
 
+        return true;
     }
 }

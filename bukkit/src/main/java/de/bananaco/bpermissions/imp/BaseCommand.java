@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 /**
  * Created by Ryan on 25/05/2015.
  */
-public abstract class BaseCommand implements CommandExecutor {
+public abstract class BaseCommand {
 
     public static String format(String message) {
         ChatColor vary = ChatColor.GREEN;

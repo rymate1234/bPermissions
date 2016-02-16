@@ -9,6 +9,7 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -23,6 +24,16 @@ import java.util.Set;
  * @author codename_B
  */
 public class BukkitCompat {
+    private static Field perms;
+
+    static {
+        try {
+            perms = Permission.class.getDeclaredField("children");
+            perms.setAccessible(true);
+        } catch (SecurityException | NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Use to efficiently set a Map<String, Boolean> onto a Player Assumes one
@@ -51,7 +62,7 @@ public class BukkitCompat {
      * @param permissions
      * @return
      */
-    public static PermissionAttachment doBukkitPermissions(Permissible p, Plugin plugin, Map<String, Boolean> permissions) {
+    public static PermissionAttachment doBukkitPermissions(Permissible p, Plugin plugin, Map<String, Boolean> permissions) throws IllegalAccessException {
         Player player = (Player) p;
 
         Permission positive = plugin.getServer().getPluginManager().getPermission(player.getName());
@@ -75,8 +86,18 @@ public class BukkitCompat {
             }
         }
 
-        positive = new Permission(player.getName(), PermissionDefault.FALSE, po);
-        negative = new Permission("^" + player.getName(), PermissionDefault.FALSE, ne);
+        positive = new Permission(player.getName(), PermissionDefault.FALSE);
+        negative = new Permission("^" + player.getName(), PermissionDefault.FALSE);
+
+        // A touch of reflection
+        Map<String, Boolean> positiveChildren = (Map<String, Boolean>) perms.get(positive);
+        positiveChildren.clear();
+        positiveChildren.putAll(po);
+
+        // keeps the doBukkitPermissions times down
+        Map<String, Boolean> negativeChildren = (Map<String, Boolean>) perms.get(negative);
+        negativeChildren.clear();
+        negativeChildren.putAll(ne);
 
         plugin.getServer().getPluginManager().addPermission(positive);
         plugin.getServer().getPluginManager().addPermission(negative);
@@ -133,7 +154,11 @@ public class BukkitCompat {
         }
         // supersuperpermissions
         start = System.currentTimeMillis();
-        att = BukkitCompat.doBukkitPermissions(player, plugin, permissions);
+        try {
+            att = BukkitCompat.doBukkitPermissions(player, plugin, permissions);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
         finish = System.currentTimeMillis();
         time = finish - start;
         if (!player.hasPermission("example.1")) {

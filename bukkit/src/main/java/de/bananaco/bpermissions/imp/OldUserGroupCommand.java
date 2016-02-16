@@ -2,6 +2,7 @@ package de.bananaco.bpermissions.imp;
 
 import de.bananaco.bpermissions.api.*;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -11,7 +12,7 @@ import java.util.Map;
 /**
  * Created by Ryan on 25/05/2015.
  */
-public class OldUserGroupCommand extends BaseCommand {
+public class OldUserGroupCommand extends BaseCommand implements CommandExecutor {
     private final Permissions plugin;
     private final Map<String, Commands> commands;
     private final Map<String, String> mirrors = new HashMap<String, String>();
@@ -83,9 +84,12 @@ public class OldUserGroupCommand extends BaseCommand {
              * Selecting, displaying, and executing commands on the Calculable
              */
 
-            if ((WorldManager.getInstance().isUseGlobalUsers()) && (command.getName().equalsIgnoreCase("user")) && (!cmd.getWorld().getName().equalsIgnoreCase("global"))) {
-                sendMessage(sender, "You need to select the global world!");
-            } else if (args.length == 0) {
+            if ((WorldManager.getInstance().isUseGlobalUsers()) && (command.getName().equalsIgnoreCase("user")) && (cmd.getWorld() != WorldManager.getInstance().getDefaultWorld())) {
+                sendMessage(sender, "Changing to the global world");
+                cmd.setWorld("global", sender);
+            }
+
+            if (args.length == 0) {
                 if (calc == null) {
                     sendMessage(sender, "Nothing is selected!");
                 } else {
@@ -107,7 +111,7 @@ public class OldUserGroupCommand extends BaseCommand {
                 } else {
                     cmd.setCalculable(type, args[0], sender);
                 }
-            } else if (args.length == 2) {
+            } else if (args.length == 2 || (args.length > 2 && args[0].equalsIgnoreCase("list"))) {
                 if (calc == null) {
                     sendMessage(sender, "Nothing is selected!");
                 } else if (calc.getType() != type) {
@@ -122,11 +126,15 @@ public class OldUserGroupCommand extends BaseCommand {
                     } else if (action.equalsIgnoreCase("setgroup")) {
                         cmd.setGroup(value, sender);
                     } else if (action.equalsIgnoreCase("list")) {
+                        int page = 1;
+                        if (args.length == 3)
+                            page = Integer.parseInt(args[2]);
+
                         value = value.toLowerCase();
                         if (value.equalsIgnoreCase("groups") || value.equalsIgnoreCase("group") || value.equalsIgnoreCase("g")) {
                             cmd.listGroups(sender);
                         } else if (value.startsWith("perm") || value.equalsIgnoreCase("p")) {
-                            cmd.listPermissions(sender);
+                            cmd.listPermissions(sender, page);
                         }
                     } else if (action.equalsIgnoreCase("meta")) {
                         cmd.showValue(value, sender);
@@ -141,7 +149,6 @@ public class OldUserGroupCommand extends BaseCommand {
                     } else {
                         sendMessage(sender, "Please consult the command documentation!");
                     }
-                    ApiLayer.update();
                 }
             } else if (args.length == 3 && args[0].equalsIgnoreCase("meta")) {
                 if (calc == null) {
