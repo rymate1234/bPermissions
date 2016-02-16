@@ -206,8 +206,6 @@ public class YamlWorld extends World {
             String name = player.getUniqueId().toString();
             String world = player.getWorld().getName();
             if (wm.getWorld(world) == this) {
-                getUser(name).calculateMappedPermissions();
-                getUser(name).calculateEffectiveMeta();
                 setupPlayer(name);
             }
         }
@@ -279,6 +277,7 @@ public class YamlWorld extends World {
 
             for (Calculable user : users) {
                 String name = user.getName();
+                usaveconfig.set(USERS + "." + name, null);
 
                 // don't save users with default settings
                 if (user.getMeta().size() == 0
@@ -289,9 +288,13 @@ public class YamlWorld extends World {
                     continue;
                 }
 
+                // save their username
+                if (isUUID(name)) usaveconfig.set(USERS + "." + name + "." + USERNAME, Bukkit.getOfflinePlayer(UUID.fromString(name)).getName());
+
+                // save the permissions and groups
                 usaveconfig.set(USERS + "." + name + "." + PERMISSIONS, user.serialisePermissions());
-                usaveconfig.set(USERS + "." + name + "." + USERNAME, Bukkit.getOfflinePlayer(UUID.fromString(name)).getName());
                 usaveconfig.set(USERS + "." + name + "." + GROUPS, user.serialiseGroups());
+
                 // MetaData
                 Map<String, String> meta = user.getMeta();
                 if (meta.size() > 0) {
@@ -314,6 +317,8 @@ public class YamlWorld extends World {
 
         for (Calculable group : groups) {
             String name = group.getName();
+            gsaveconfig.set(GROUPS + "." + name, null);
+
             gsaveconfig.set(GROUPS + "." + name + "." + PERMISSIONS, group.serialisePermissions());
             gsaveconfig.set(GROUPS + "." + name + "." + GROUPS, group.serialiseGroups());
             // MetaData
