@@ -1,9 +1,17 @@
 package de.bananaco.bpermissions.imp;
 
-import java.util.*;
-import java.util.concurrent.Callable;
-
+import de.bananaco.bpermissions.api.ApiLayer;
+import de.bananaco.bpermissions.api.CalculableType;
+import de.bananaco.bpermissions.api.World;
+import de.bananaco.bpermissions.api.WorldManager;
+import de.bananaco.bpermissions.imp.loadmanager.MainThread;
+import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
+import de.bananaco.bpermissions.unit.PermissionsTest;
 import de.bananaco.bpermissions.util.Debugger;
+import de.bananaco.permissions.ImportManager;
+import de.bananaco.permissions.fornoobs.BackupPermissionsCommand;
+import de.bananaco.permissions.fornoobs.ForNoobs;
+import de.bananaco.permissions.interfaces.PromotionTrack;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -13,17 +21,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.bananaco.bpermissions.api.ApiLayer;
-import de.bananaco.bpermissions.api.CalculableType;
-import de.bananaco.bpermissions.api.World;
-import de.bananaco.bpermissions.api.WorldManager;
-import de.bananaco.bpermissions.imp.loadmanager.MainThread;
-import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
-import de.bananaco.bpermissions.unit.PermissionsTest;
-import de.bananaco.permissions.ImportManager;
-import de.bananaco.permissions.fornoobs.BackupPermissionsCommand;
-import de.bananaco.permissions.fornoobs.ForNoobs;
-import de.bananaco.permissions.interfaces.PromotionTrack;
+import java.util.*;
+import java.util.concurrent.Callable;
 
 public class Permissions extends JavaPlugin {
 
@@ -173,7 +172,7 @@ public class Permissions extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command,
-            String label, String[] args) {
+                             String label, String[] args) {
         boolean allowed = true;
 
         if (sender instanceof Player) {
@@ -293,20 +292,28 @@ public class Permissions extends JavaPlugin {
                     }
                     name = c.split(":")[1];
                 } else if (c.startsWith("a:")) {
-                    action = c.split(":")[1];
+                    String[] actionArray = c.split(":");
+                    if (actionArray.length == 3) {
+                        action = actionArray[1] + ":" + actionArray[2];
+                    } else {
+                        action = actionArray[1];
+                    }
                 } else if (c.startsWith("v:")) {
                     value = c.split(":")[1];
                 } else if (c.startsWith("w:")) {
                     world = c.split(":")[1];
                 }
             }
-            String message = ChatColor.GOLD + "Executing action: " + ChatColor.GREEN + action + " " + value + ChatColor.GOLD + " in " + ChatColor.GREEN + (world == null ? "all worlds" : "world: " + world);
-            String message2 = ChatColor.GOLD + "Action applied to " + ChatColor.GREEN + type.getName() + " " + name;
+            boolean executed = ExtraCommands.execute(name, type, action, value, world);
+            if (executed) {
+                String message = ChatColor.GOLD + "Executing action: " + ChatColor.GREEN + action + " " + value + ChatColor.GOLD + " in " + ChatColor.GREEN + (world == null ? "all worlds" : "world: " + world);
+                String message2 = ChatColor.GOLD + "Action applied to " + ChatColor.GREEN + type.getName() + " " + name;
 
-            sender.sendMessage(message);
-            sender.sendMessage(message2);
-            ExtraCommands.execute(name, type, action, value, world);
-            //ApiLayer.update();
+                sender.sendMessage(message);
+                sender.sendMessage(message2);
+            } else {
+                sender.sendMessage(format("Invalid exec command!"));
+            }
         }
         /*
          * A new, easier way to set a players group!
@@ -413,7 +420,7 @@ public class Permissions extends JavaPlugin {
                     sendMessage(sender, "Creating backup!");
                     new BackupPermissionsCommand(this).backup();
                     return true;
-                } else if (args[0].equalsIgnoreCase("convert")){
+                } else if (args[0].equalsIgnoreCase("convert")) {
                     final ImportManager manager = new ImportManager(this);
 
                     ConvertRunnable runnable = new ConvertRunnable(manager);
@@ -448,12 +455,13 @@ public class Permissions extends JavaPlugin {
         private String threadName = "converter";
         private Thread t;
 
-        ConvertRunnable( ImportManager manager){
+        ConvertRunnable(ImportManager manager) {
             this.manager = manager;
         }
+
         public void run() {
 
-            System.out.println("Running " +  threadName );
+            System.out.println("Running " + threadName);
             try {
                 manager.importUuid();
             } catch (Exception e) {
@@ -461,13 +469,11 @@ public class Permissions extends JavaPlugin {
             }
         }
 
-        public void start ()
-        {
-            System.out.println("Starting " +  threadName );
-            if (t == null)
-            {
-                t = new Thread (this, threadName);
-                t.start ();
+        public void start() {
+            System.out.println("Starting " + threadName);
+            if (t == null) {
+                t = new Thread(this, threadName);
+                t.start();
             }
         }
 
