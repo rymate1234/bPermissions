@@ -177,7 +177,7 @@ public class SuperPermissionHandler implements Listener {
                 String uuid = event.getPlayer().getUniqueId().toString();
                 Debugger.log("Begun setup for " + uuid);
 
-                setupPlayer(event.getPlayer(), false);
+                setupPlayer(event.getPlayer(), true);
 
                 long finish = System.currentTimeMillis() - time;
                 Debugger.log("Setup for " + uuid + ". took " + finish + "ms.");

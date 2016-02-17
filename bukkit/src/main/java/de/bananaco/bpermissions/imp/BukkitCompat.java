@@ -64,9 +64,10 @@ public class BukkitCompat {
      */
     public static PermissionAttachment doBukkitPermissions(Permissible p, Plugin plugin, Map<String, Boolean> permissions) throws IllegalAccessException {
         Player player = (Player) p;
+        String uuid = player.getUniqueId().toString();
 
-        Permission positive = plugin.getServer().getPluginManager().getPermission(player.getName());
-        Permission negative = plugin.getServer().getPluginManager().getPermission("^" + player.getName());
+        Permission positive = plugin.getServer().getPluginManager().getPermission(uuid);
+        Permission negative = plugin.getServer().getPluginManager().getPermission("^" + uuid);
 
         if (positive != null) {
             plugin.getServer().getPluginManager().removePermission(positive);
@@ -86,8 +87,8 @@ public class BukkitCompat {
             }
         }
 
-        positive = new Permission(player.getName(), PermissionDefault.FALSE);
-        negative = new Permission("^" + player.getName(), PermissionDefault.FALSE);
+        positive = new Permission(uuid, PermissionDefault.FALSE);
+        negative = new Permission("^" + uuid, PermissionDefault.FALSE);
 
         // A touch of reflection
         Map<String, Boolean> positiveChildren = (Map<String, Boolean>) perms.get(positive);
@@ -99,8 +100,24 @@ public class BukkitCompat {
         negativeChildren.clear();
         negativeChildren.putAll(ne);
 
-        plugin.getServer().getPluginManager().addPermission(positive);
-        plugin.getServer().getPluginManager().addPermission(negative);
+        try {
+            plugin.getServer().getPluginManager().addPermission(positive);
+            plugin.getServer().getPluginManager().addPermission(negative);
+        } catch (Exception e) {
+            Permission positiveCheck = plugin.getServer().getPluginManager().getPermission(uuid);
+            Permission negativeCheck = plugin.getServer().getPluginManager().getPermission("^" + uuid);
+
+            if (positiveCheck != null) {
+                plugin.getServer().getPluginManager().removePermission(positiveCheck);
+            }
+            if (negativeCheck != null) {
+                plugin.getServer().getPluginManager().removePermission(negativeCheck);
+            }
+
+            plugin.getServer().getPluginManager().addPermission(positive);
+            plugin.getServer().getPluginManager().addPermission(negative);
+        }
+
         PermissionAttachment att = null;
         for (PermissionAttachmentInfo pai : player.getEffectivePermissions()) {
             if (pai.getAttachment() != null && pai.getAttachment().getPlugin() != null) {
@@ -113,8 +130,8 @@ public class BukkitCompat {
         // only if null
         if (att == null) {
             att = player.addAttachment(plugin);
-            att.setPermission(player.getName(), true);
-            att.setPermission("^" + player.getName(), true);
+            att.setPermission(uuid, true);
+            att.setPermission("^" + uuid, true);
         }
         // recalculate permissions
         player.recalculatePermissions();
