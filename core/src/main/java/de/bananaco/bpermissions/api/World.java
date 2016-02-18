@@ -154,6 +154,8 @@ public abstract class World {
         // A quick lowercase here
         name = name.toLowerCase();
 
+        if (storeContains(name, type)) loadIfExists(name, type);
+
         if (type == CalculableType.USER) {
             if (!isUUID(name))
                 name = getUUID(name).toString();
