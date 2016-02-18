@@ -54,12 +54,6 @@ public class ActionExecutor {
                 return false;
             }
 
-            if (type == CalculableType.GROUP) {
-                w.setupAll();
-            } else {
-                w.setupPlayer(name);
-            }
-
         }
 
         return true;
