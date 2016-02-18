@@ -400,12 +400,9 @@ public abstract class World {
 
 
     public boolean isUUID(String string) {
-        try {
-            UUID.fromString(string);
-            return true;
-        } catch (Exception ex) {
-            return false;
-        }
+        // use the uuid check from the java source code
+        String[] components = string.split("-");
+        return components.length == 5;
     }
 
 

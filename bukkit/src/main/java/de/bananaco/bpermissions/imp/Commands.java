@@ -4,17 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import de.bananaco.bpermissions.api.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import de.bananaco.bpermissions.api.Calculable;
-import de.bananaco.bpermissions.api.CalculableType;
-import de.bananaco.bpermissions.api.Group;
-import de.bananaco.bpermissions.api.Permission;
-import de.bananaco.bpermissions.api.User;
-import de.bananaco.bpermissions.api.World;
-import de.bananaco.bpermissions.api.WorldManager;
 
 public class Commands {
 
@@ -91,7 +84,7 @@ public class Commands {
      */
     public void addGroup(String group, CommandSender sender) {
         //getCalculable().addGroup(group);
-        boolean executed = ExtraCommands.execute(name, calc, "addgroup", group, world.getName());
+        boolean executed = ActionExecutor.execute(name, calc, "addgroup", group, world.getName());
         if (executed) {
             sender.sendMessage(format("Added " + group + " to " + getCalculable().getName()));
         } else {
@@ -101,7 +94,7 @@ public class Commands {
 
     public void removeGroup(String group, CommandSender sender) {
         //getCalculable().removeGroup(group);
-        boolean executed = ExtraCommands.execute(name, calc, "rmgroup", group, world.getName());
+        boolean executed = ActionExecutor.execute(name, calc, "rmgroup", group, world.getName());
         if (executed) {
             sender.sendMessage(format("Removed " + group + " from " + getCalculable().getName()));
         } else {
@@ -112,7 +105,7 @@ public class Commands {
     public void setGroup(String group, CommandSender sender) {
         //getCalculable().getGroupsAsString().clear();
         //getCalculable().addGroup(group);
-        boolean executed = ExtraCommands.execute(name, calc, "setgroup", group, world.getName());
+        boolean executed = ActionExecutor.execute(name, calc, "setgroup", group, world.getName());
         if (executed) {
             sender.sendMessage(format("Set " + getCalculable().getName() + "'s group to " + group));
         } else {
@@ -131,7 +124,7 @@ public class Commands {
     public void addPermission(String permission, CommandSender sender) {
         //Permission perm = Permission.loadFromString(permission);
         //getCalculable().addPermission(perm.name(), perm.isTrue());
-        boolean executed = ExtraCommands.execute(name, calc, "addperm", permission, world.getName());
+        boolean executed = ActionExecutor.execute(name, calc, "addperm", permission, world.getName());
         if (executed) {
             sender.sendMessage(format("Added " + permission + " to " + getCalculable().getName()));
         } else {
@@ -141,7 +134,7 @@ public class Commands {
 
     public void removePermission(String permission, CommandSender sender) {
         //getCalculable().removePermission(permission);
-        boolean executed = ExtraCommands.execute(name, calc, "rmperm", permission, world.getName());
+        boolean executed = ActionExecutor.execute(name, calc, "rmperm", permission, world.getName());
         if (executed) {
             sender.sendMessage(format("Removed " + permission + " from " + getCalculable().getName()));
         } else {
@@ -194,7 +187,7 @@ public class Commands {
 
     public void setValue(String key, String value, CommandSender sender) {
         //getCalculable().setValue(key, value);
-        boolean executed = ExtraCommands.execute(name, calc, "addmeta:" + key, value, world.getName());
+        boolean executed = ActionExecutor.execute(name, calc, "addmeta:" + key, value, world.getName());
         if (executed) {
             sender.sendMessage(format(key + " set to " + value + " for " + getCalculable().getName()));
         } else {
@@ -217,7 +210,7 @@ public class Commands {
 
     public void clearMeta(String value, CommandSender sender) {
         //getCalculable().removeValue(value);
-        boolean executed = ExtraCommands.execute(name, calc, "rmmeta:" + value, "", world.getName());
+        boolean executed = ActionExecutor.execute(name, calc, "rmmeta:" + value, "", world.getName());
         if (executed) {
             sender.sendMessage(format("Meta for " + calc.getName() + " " + getCalculable().getName() + " - cleared"));
         } else {

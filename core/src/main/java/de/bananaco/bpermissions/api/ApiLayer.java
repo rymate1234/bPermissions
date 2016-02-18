@@ -102,6 +102,7 @@ public class ApiLayer {
     /*
      * Used for getting values
      */
+
     /**
      * Used to get the groups of a user or a group as a String[] array
      *
@@ -150,7 +151,7 @@ public class ApiLayer {
     /**
      * Returns an effective set of the permissions including calculated
      * inheritance from global files!
-     *
+     * <p/>
      * Used internally and is also accessible to the world
      *
      * @param world
@@ -233,9 +234,10 @@ public class ApiLayer {
         return v;
     }
 
-    /*
+     /*
      * Used for setting values
      */
+
     /**
      * Used to add a single group to a user or a group
      *
@@ -249,8 +251,8 @@ public class ApiLayer {
         if (w == null || type == null || name == null || groupToAdd == null) {
             return;
         }
-        Calculable c = w.get(name, type);
-        c.addGroup(groupToAdd);
+
+        ActionExecutor.execute(name, type, ActionType.ADD_GROUP.getName(), groupToAdd, world);
     }
 
     /**
@@ -266,9 +268,8 @@ public class ApiLayer {
         if (w == null || type == null || name == null || groupToAdd == null) {
             return;
         }
-        Calculable c = w.get(name, type);
-        c.getGroupsAsString().clear();
-        c.addGroup(groupToAdd);
+
+        ActionExecutor.execute(name, type, ActionType.SET_GROUP.getName(), groupToAdd, world);
     }
 
     /**
@@ -284,8 +285,8 @@ public class ApiLayer {
         if (w == null || type == null || name == null || groupToRemove == null) {
             return;
         }
-        Calculable c = w.get(name, type);
-        c.removeGroup(groupToRemove);
+
+        ActionExecutor.execute(name, type, ActionType.REMOVE_GROUP.getName(), groupToRemove, world);
     }
 
     /**
@@ -339,8 +340,7 @@ public class ApiLayer {
         if (w == null || type == null || name == null || permissionToAdd == null) {
             return;
         }
-        Calculable c = w.get(name, type);
-        c.addPermission(permissionToAdd.name(), permissionToAdd.isTrue());
+        ActionExecutor.execute(name, type, ActionType.ADD_PERMISSION.getName(), permissionToAdd.toString(), world);
     }
 
     /**
@@ -357,8 +357,7 @@ public class ApiLayer {
         if (w == null || type == null || name == null || permissionToRemove == null) {
             return;
         }
-        Calculable c = w.get(name, type);
-        c.removePermission(permissionToRemove);
+        ActionExecutor.execute(name, type, ActionType.REMOVE_PERMISSION.getName(), permissionToRemove, world);
     }
 
     /**
@@ -381,7 +380,7 @@ public class ApiLayer {
         boolean b = c.hasPermission(node);
 
         long f = System.currentTimeMillis();
-        Debugger.log("Elapsed milliseconds for hasPermission " + name + " - " + node +  " :" + (f - t) + "ms");
+        Debugger.log("Elapsed milliseconds for hasPermission " + name + " - " + node + " :" + (f - t) + "ms");
         return b;
     }
 
@@ -397,11 +396,27 @@ public class ApiLayer {
     public static void setValue(String world, CalculableType type, String name, String key, String value) {
         World w = wm.getWorld(world);
         // NPE FIX
-        //if(world == null || type == null || name == null || key == null)
         if (w == null || type == null || name == null || key == null) {
             return;
         }
-        Calculable c = w.get(name, type);
-        c.setValue(key, value);
+        ActionExecutor.execute(name, type, ActionType.ADD_META.getName() + ":" + key, value, world);
+    }
+
+    /**
+     * Used to remove a metadata value from a user or a group
+     *
+     * @param world
+     * @param type
+     * @param name
+     * @param key
+     * @param value
+     */
+    public static void removeValue(String world, CalculableType type, String name, String key, String value) {
+        World w = wm.getWorld(world);
+        // NPE FIX
+        if (w == null || type == null || name == null || key == null) {
+            return;
+        }
+        ActionExecutor.execute(name, type, ActionType.REMOVE_META.getName() + ":" + key, value, world);
     }
 }

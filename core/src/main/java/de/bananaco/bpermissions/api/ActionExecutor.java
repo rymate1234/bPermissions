@@ -1,4 +1,4 @@
-package de.bananaco.bpermissions.imp;
+package de.bananaco.bpermissions.api;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -10,12 +10,11 @@ import de.bananaco.bpermissions.api.Permission;
 import de.bananaco.bpermissions.api.RecursiveGroupException;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
-import org.bukkit.Bukkit;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ExtraCommands {
+public class ActionExecutor {
 
     private static WorldManager wm = WorldManager.getInstance();
 
@@ -28,15 +27,6 @@ public class ExtraCommands {
             worlds.add(wm.getWorld(world));
         }
 
-        if (type == CalculableType.USER) {
-            if (!name.matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")) {
-                if (Bukkit.getPlayer(name) != null) {
-                    name = Bukkit.getPlayer(name).getUniqueId().toString();
-                } else {
-                    name = Bukkit.getOfflinePlayer(name).getUniqueId().toString();
-                }
-            }
-        }
         for (World w : worlds) {
             Calculable c = w.get(name, type);
 
@@ -75,3 +65,4 @@ public class ExtraCommands {
         return true;
     }
 }
+
