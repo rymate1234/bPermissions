@@ -97,6 +97,9 @@ public abstract class Calculable extends CalculableMeta {
             if (!hasCalculated || isDirty())
                 this.calculateEffectivePermissions();
 
+            if (effectivePermissions.size() == 0)
+                this.calculateEffectivePermissions();
+
             return effectivePermissions;
         } catch (RecursiveGroupException e) {
             e.printStackTrace();

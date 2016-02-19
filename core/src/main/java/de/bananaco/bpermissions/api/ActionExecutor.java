@@ -44,7 +44,7 @@ public class ActionExecutor {
                 c.addPermission(perm.nameLowerCase(), perm.isTrue());
             } else if (action.equalsIgnoreCase("rmperm")) {
                 c.removePermission(value);
-            } else if (action.startsWith("addmeta")) {
+            } else if (action.startsWith("addmeta") || action.startsWith("meta")) {
                 String meta = action.split(":")[1];
                 c.setValue(meta, value);
             } else if (action.startsWith("rmmeta") || action.startsWith("cmeta")) {
