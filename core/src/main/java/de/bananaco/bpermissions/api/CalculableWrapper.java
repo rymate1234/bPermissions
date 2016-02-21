@@ -8,6 +8,8 @@ public abstract class CalculableWrapper extends MapCalculable {
 
     private WorldManager wm = WorldManager.getInstance();
 
+    boolean loading = true;
+
     public CalculableWrapper(String name, Set<String> groups,
             Set<Permission> permissions, String world) {
         super(name, groups, permissions, world);
@@ -69,8 +71,16 @@ public abstract class CalculableWrapper extends MapCalculable {
         updateCalculable();
     }
 
+    public void setLoaded() {
+        this.loading = false;
+    }
+
 
     private void updateCalculable() {
+        if (loading) {
+            return;
+        }
+
         setDirty(true);
         setCalculablesWithGroupDirty();
         if (wm.getAutoSave()) {

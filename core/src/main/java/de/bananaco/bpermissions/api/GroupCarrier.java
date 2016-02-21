@@ -50,6 +50,11 @@ public abstract class GroupCarrier extends PermissionCarrier {
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     public Set<Group> getGroups() {
+        if (groupsCalculated.size() == 0 && groups.size() != 0) {
+            // calculate groups
+            calculateGroups();
+        }
+
         return groupsCalculated;
     }
 
@@ -100,6 +105,7 @@ public abstract class GroupCarrier extends PermissionCarrier {
     }
 
     public boolean hasGroupRecursive(String group) {
+        Set<String> groups = new HashSet<>(this.groups);
         if (groups.contains(group)) {
             return true;
         }

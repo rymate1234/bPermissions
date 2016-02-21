@@ -34,6 +34,7 @@ public class CustomNodes {
                 }
 
             }
+            Bukkit.getLogger().info("[bPermissions] Loaded " + permissions.size() + " custom nodes!");
         } catch (Exception e) {
             e.printStackTrace();
         }

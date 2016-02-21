@@ -368,6 +368,7 @@ public class YamlWorld extends World {
                         }
                     }
                 }
+                user.setLoaded();
                 // Upload it to the API
                 remove(user);
                 add(user);
