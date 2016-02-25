@@ -368,16 +368,12 @@ public class YamlWorld extends World {
                         }
                     }
                 }
+
                 user.setLoaded();
                 // Upload it to the API
                 remove(user);
                 add(user);
-            } else {
-                Debugger.log("Empty ConfigurationSection:" + USERS + ":" + ufile.getPath());
-                return false;
-            }
 
-            if (Bukkit.getPlayer(UUID.fromString(name)) != null) {
                 try {
                     UUID uuid = UUID.fromString(name);
                     getUser(uuid).calculateMappedPermissions();
@@ -385,8 +381,16 @@ public class YamlWorld extends World {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                setupPlayer(name);
+
+                if (isOnline(user)) {
+                    setupPlayer(name);
+                }
+            } else {
+                Debugger.log("Empty ConfigurationSection:" + USERS + ":" + ufile.getPath());
+                return false;
             }
+
+
         } else if (type == CalculableType.GROUP) {
             /*
              * Load a group

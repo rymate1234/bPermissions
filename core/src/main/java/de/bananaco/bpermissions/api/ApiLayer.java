@@ -171,13 +171,13 @@ public class ApiLayer {
         // do we apply globals?
         if (wm.getUseGlobalFiles()) {
             Calculable c = global.get(name, type);
-            if (recalculate) c.setDirty(recalculate);
+            if (recalculate) c.setDirty(true);
             permissions.putAll(((MapCalculable) c).getMappedPermissions());
         }
         // now we apply the per-world stuff (or globals if w==null)
         if (w != null) {
             Calculable c = w.get(name, type);
-            if (recalculate) c.setDirty(recalculate);
+            if (recalculate) c.setDirty(true);
             permissions.putAll(((MapCalculable) c).getMappedPermissions());
         }
         // custom node checking
