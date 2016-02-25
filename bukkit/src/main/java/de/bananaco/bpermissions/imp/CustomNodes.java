@@ -15,15 +15,21 @@ import org.bukkit.permissions.PermissionDefault;
 import de.bananaco.bpermissions.api.Permission;
 
 public class CustomNodes {
+    private static CustomNodes customNodes = new CustomNodes();
 
+    public static CustomNodes getInstance() {
+        return customNodes;
+    }
+    
     private final File file = new File("plugins/bPermissions/custom_nodes.yml");
     private YamlConfiguration config;// = new YamlConfiguration();
     private PermissionDefault pdo = PermissionDefault.OP;
+    List<Permission> permissions = new ArrayList<Permission>();
 
     public void load() {
         // System.out.println("Loading Custom Nodes");
         try {
-            List<Permission> permissions = doLoad();
+            permissions = doLoad();
             // load into API
             de.bananaco.bpermissions.api.CustomNodes.loadNodes(permissions);
             for (int i = 0; i < permissions.size(); i++) {
@@ -35,6 +41,22 @@ public class CustomNodes {
 
             }
             Bukkit.getLogger().info("[bPermissions] Loaded " + permissions.size() + " custom nodes!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void reload() {
+        try {
+            for (int i = 0; i < permissions.size(); i++) {
+                // If the permission doesn't already exist
+                if (Bukkit.getServer().getPluginManager().getPermission(permissions.get(i).nameLowerCase()) != null) {
+                    // Add it!
+                    Bukkit.getServer().getPluginManager().removePermission(convert(permissions.get(i)));
+                }
+
+            }
+            load();
         } catch (Exception e) {
             e.printStackTrace();
         }

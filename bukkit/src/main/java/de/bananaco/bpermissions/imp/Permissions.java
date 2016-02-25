@@ -103,7 +103,7 @@ public class Permissions extends JavaPlugin {
         // Load our custom nodes (if any)
         mt.schedule(new TaskRunnable() {
             public void run() {
-                new CustomNodes().load();
+                CustomNodes.getInstance().load();
             }
 
             public TaskRunnable.TaskType getType() {
@@ -397,6 +397,7 @@ public class Permissions extends JavaPlugin {
                     return true;
                 } else if (action.equalsIgnoreCase("reload")) {
                     // Reload all changes
+                    CustomNodes.getInstance().reload();
                     for (World world : wm.getAllWorlds()) {
                         world.load();
                         world.setupAll();
