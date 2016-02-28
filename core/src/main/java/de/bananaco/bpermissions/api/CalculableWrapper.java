@@ -82,7 +82,13 @@ public abstract class CalculableWrapper extends MapCalculable {
         }
 
         setDirty(true);
-        setCalculablesWithGroupDirty();
+
+        try {
+            setCalculablesWithGroupDirty();
+        } catch (RecursiveGroupException e) {
+            e.printStackTrace();
+        }
+
         if (wm.getAutoSave()) {
             getWorldObject().save();
             if (getType().equals(CalculableType.USER)) {
@@ -94,7 +100,12 @@ public abstract class CalculableWrapper extends MapCalculable {
     }
 
 
-    public void setCalculablesWithGroupDirty() {
+    public void setCalculablesWithGroupDirty() throws RecursiveGroupException {
+        if (getType() == CalculableType.USER) {
+            // changing a user does not affect other calculables!
+            return;
+        }
+
         Set<Calculable> users = getWorldObject().getAll(CalculableType.USER);
         Set<Calculable> groups = getWorldObject().getAll(CalculableType.GROUP);
         if (users == null || users.size() == 0) {
@@ -103,6 +114,7 @@ public abstract class CalculableWrapper extends MapCalculable {
             for (Calculable user : users) {
                 if (user.hasGroupRecursive(getName())) {
                     ((User) user).setDirty(true);
+                    user.calculateEffectiveMeta();
                 }
             }
         }

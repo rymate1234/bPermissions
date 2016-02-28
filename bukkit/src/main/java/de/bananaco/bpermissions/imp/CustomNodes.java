@@ -49,12 +49,11 @@ public class CustomNodes {
     public void reload() {
         try {
             for (int i = 0; i < permissions.size(); i++) {
-                // If the permission doesn't already exist
+                // If the permission exists
                 if (Bukkit.getServer().getPluginManager().getPermission(permissions.get(i).nameLowerCase()) != null) {
-                    // Add it!
+                    // remove it!
                     Bukkit.getServer().getPluginManager().removePermission(convert(permissions.get(i)));
                 }
-
             }
             load();
         } catch (Exception e) {

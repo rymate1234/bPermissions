@@ -157,6 +157,7 @@ public class YamlWorld extends World {
                 // Upload to API
                 remove(user);
                 add(user);
+                user.setLoaded();
             }
         } else {
             Debugger.log("Empty ConfigurationSection:" + USERS + ":" + ufile.getPath());
@@ -191,6 +192,7 @@ public class YamlWorld extends World {
                 // Upload to API
                 remove(group);
                 add(group);
+                group.setLoaded();
             }
         } else {
             Debugger.log("Empty ConfigurationSection:" + GROUPS + ":" + gfile.getPath());
@@ -416,6 +418,7 @@ public class YamlWorld extends World {
                 // Upload to API
                 remove(group);
                 add(group);
+                group.setLoaded();
             } else {
                 Debugger.log("Empty ConfigurationSection:" + GROUPS + ":" + gfile.getPath());
             }
