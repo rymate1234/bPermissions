@@ -444,8 +444,7 @@ public class YamlWorld extends World {
 
     @Override
     public boolean setupAll() {
-       Collection<Player> players = (Collection<Player>) Bukkit.getOnlinePlayers();
-        for (Player player : players) {
+        for (final Player player : this.permissions.getServer().getOnlinePlayers()) {
             setupPlayer(player.getUniqueId().toString());
         }
         // return true for success
