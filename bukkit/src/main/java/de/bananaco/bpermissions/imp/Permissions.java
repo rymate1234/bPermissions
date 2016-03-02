@@ -37,11 +37,58 @@ public class Permissions extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Cancel tasks
-        getServer().getScheduler().cancelTasks(this);
+        System.out.println(blankFormat("Waiting 30s to finish tasks..."));
+        // try to finish previous tasks first
+        for (int i = 0; i < 31; i++) {
+            if (mt.hasTasks()) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (i == 30) {
+                    System.out.println(blankFormat("Tasks not finished - disabling anyway."));
+                    System.out.println(blankFormat("Tasks remaining: " + mt.tasksCount()));
 
-        mt.setRunning(false);
-        System.out.println(blankFormat("Disabled"));
+                    getServer().getScheduler().cancelTasks(Permissions.instance);
+
+                    mt.clearTasks();
+                }
+            } else {
+                System.out.println(blankFormat("All tasks finished after " + i + " seconds!"));
+                i = 31;
+            }
+        }
+
+        System.out.println(blankFormat("Saving worlds..."));
+
+        //save all worlds
+        for (World world : wm.getAllWorlds()) {
+            world.save();
+        }
+
+        // then disable
+        mt.schedule(new TaskRunnable() {
+            public void run() {
+                getServer().getScheduler().cancelTasks(Permissions.instance);
+
+                mt.setRunning(false);
+                System.out.println(blankFormat("Worlds saved, bPermissions disabled."));
+            }
+
+            public TaskRunnable.TaskType getType() {
+                return TaskRunnable.TaskType.SERVER;
+            }
+        });
+
+        while (mt.hasTasks()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     @Override

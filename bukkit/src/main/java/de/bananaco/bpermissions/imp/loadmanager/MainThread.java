@@ -86,13 +86,17 @@ public class MainThread extends Thread implements TaskThread {
     }
 
     public void setRunning(final boolean running) {
-        load.clear();
-        save.clear();
-        server.clear();
+        clearTasks();
         if (!running) {
             thread.running = false;
             thread = null;
         }
+    }
+
+    public void clearTasks() {
+        load.clear();
+        save.clear();
+        server.clear();
     }
 
     public boolean getStarted() {
@@ -114,6 +118,13 @@ public class MainThread extends Thread implements TaskThread {
     }
 
     public void schedule(TaskRunnable r) {
+        if (tasksCount() > 10 && (r.getType() == TaskType.LOAD || r.getType() == TaskType.SAVE))
+            return;
+
         getTasks(r.getType()).add(r);
+    }
+
+    public int tasksCount() {
+        return load.size() + save.size();
     }
 }
