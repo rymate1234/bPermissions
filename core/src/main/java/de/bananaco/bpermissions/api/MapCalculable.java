@@ -3,6 +3,7 @@ package de.bananaco.bpermissions.api;
 import de.bananaco.bpermissions.util.Debugger;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -57,7 +58,8 @@ public abstract class MapCalculable extends de.bananaco.bpermissions.api.util.Ca
         }
         long time = System.currentTimeMillis();
         permissions.clear();
-        for (Permission perm : super.getEffectivePermissions()) {
+        Set<Permission> currentEffectivePerms = new HashSet<Permission>(super.getEffectivePermissions());
+        for (Permission perm : currentEffectivePerms) {
             permissions.put(perm.nameLowerCase(), perm.isTrue());
         }
         this.calculateEffectiveMeta();

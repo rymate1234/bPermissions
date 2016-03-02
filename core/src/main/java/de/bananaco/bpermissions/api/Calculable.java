@@ -56,9 +56,9 @@ public abstract class Calculable extends CalculableMeta {
      */
     public void calculateEffectivePermissions() throws RecursiveGroupException {
         calculateGroups();
+        Set<Permission> calculatedPermissions = new HashSet<Permission>();
         try {
             Map<String, Integer> priorities = new HashMap<String, Integer>();
-            effectivePermissions.clear();
             //System.out.println(serialiseGroups());
             for (String gr : serialiseGroups()) {
                 Group group = getWorldObject().getGroup(gr);
@@ -66,21 +66,22 @@ public abstract class Calculable extends CalculableMeta {
                 for (Permission perm : group.getEffectivePermissions()) {
                     if (!priorities.containsKey(perm.nameLowerCase()) || priorities.get(perm.nameLowerCase()) < group.getPriority()) {
                         priorities.put(perm.nameLowerCase(), group.getPriority());
-                        if (effectivePermissions.contains(perm)) {
-                            effectivePermissions.remove(perm);
+                        if (calculatedPermissions.contains(perm)) {
+                            calculatedPermissions.remove(perm);
                         }
-                        effectivePermissions.add(perm);
+                        calculatedPermissions.add(perm);
                     }
                 }
             }
             priorities.clear();
             for (Permission perm : this.getPermissions()) {
-                if (effectivePermissions.contains(perm)) {
-                    effectivePermissions.remove(perm);
+                if (calculatedPermissions.contains(perm)) {
+                    calculatedPermissions.remove(perm);
                 }
-                effectivePermissions.add(perm);
+                calculatedPermissions.add(perm);
             }
             hasCalculated = true;
+            effectivePermissions = calculatedPermissions;
             //print();
         } catch (StackOverflowError e) {
             throw new RecursiveGroupException(this);
