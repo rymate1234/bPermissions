@@ -377,9 +377,8 @@ public class YamlWorld extends World {
                 add(user);
 
                 try {
-                    UUID uuid = UUID.fromString(name);
-                    getUser(uuid).calculateMappedPermissions();
-                    getUser(uuid).calculateEffectiveMeta();
+                    user.calculateMappedPermissions();
+                    user.calculateEffectiveMeta();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
