@@ -114,7 +114,7 @@ public abstract class Calculable extends CalculableMeta {
      * @return String
      */
     public String getName() {
-        return name;
+        return name.replace(".", "");
     }
 
     /**
@@ -123,8 +123,8 @@ public abstract class Calculable extends CalculableMeta {
      * @return String
      */
     public String getNameLowerCase() {
-        return name.toLowerCase();
-    }
+        return name.toLowerCase().replace(".", "");
+}
 
     @Override
     public int hashCode() {

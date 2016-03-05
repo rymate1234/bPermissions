@@ -326,6 +326,10 @@ public class YamlWorld extends World {
 
         for (Calculable group : groups) {
             String name = group.getName();
+            if (name.equals("")) continue;
+
+            name = name.replace(".", "");
+
             gsaveconfig.set(GROUPS + "." + name, null);
 
             gsaveconfig.set(GROUPS + "." + name + "." + PERMISSIONS, group.serialisePermissions());
