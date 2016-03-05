@@ -380,8 +380,9 @@ public class ApiLayer {
         if (w == null || type == null || name == null || node == null) {
             return false;
         }
-        Calculable c = w.get(name, type);
-        boolean b = c.hasPermission(node);
+
+        Map<String, Boolean> permissions = getEffectivePermissions(world, type, name);
+        boolean b = Calculable.hasPermission(node, permissions);
 
         long f = System.currentTimeMillis();
         Debugger.log("Elapsed milliseconds for hasPermission " + name + " - " + node + " :" + (f - t) + "ms");

@@ -60,7 +60,7 @@ public class SingleGroupPromotion implements PromotionTrack {
 
                 Permission permCheck = Bukkit.getServer().getPluginManager().getPermission("tracks.*");
                 if (permCheck != null) Bukkit.getServer().getPluginManager().removePermission(permCheck);
-                
+
                 Bukkit.getPluginManager().addPermission(perm);
             }
         } catch (Exception e) {
