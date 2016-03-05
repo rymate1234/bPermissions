@@ -216,18 +216,22 @@ public class ApiLayer {
      */
     public static String getValue(String world, CalculableType type, String name, String key) {
         World w = wm.getWorld(world);
+        String v = "";
+        Calculable c;
         // Fix for Vault bug 112 https://github.com/MilkBowl/Vault/issues/112
         if (w == null || type == null || name == null || key == null) {
-            return "";
+            return v;
         }
-        Calculable c = w.get(name, type);
-        String v = c.getEffectiveValue(key);
+        
         // Add support for prefix/suffix from global files
-        if (v.equals("") && wm.getUseGlobalFiles()) {
-            w = wm.getDefaultWorld();
-            if (w == null) {
-                return v;
-            }
+        if (wm.getUseGlobalFiles()) {
+            World global = wm.getDefaultWorld();
+            c = global.get(name, type);
+            v = c.getEffectiveValue(key);
+        } 
+
+        // per world meta overrides global meta if it exists
+        if (w.get(name, type).containsEffectiveValue(key)) {
             c = w.get(name, type);
             v = c.getEffectiveValue(key);
         }

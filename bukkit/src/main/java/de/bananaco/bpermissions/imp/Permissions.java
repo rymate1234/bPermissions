@@ -215,8 +215,7 @@ public class Permissions extends JavaPlugin {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command,
-                             String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         boolean allowed = true;
 
         if (sender instanceof Player) {
@@ -443,8 +442,18 @@ public class Permissions extends JavaPlugin {
                     cmd.save();
                     return true;
                 } else if (action.equalsIgnoreCase("reload")) {
-                    // Reload all changes
+                    // Reload config file
+                    config.load();
+                    // Get the instance
+                    wm = WorldManager.getInstance();
+                    // Set the global file flag
+                    wm.setUseGlobalFiles(config.getUseGlobalFiles());
+                    wm.setUseGlobalUsers(config.getUseGlobalUsers());
+
+                    // reload custom nodes
                     CustomNodes.getInstance().reload();
+
+                    // reload all worlds too
                     for (World world : wm.getAllWorlds()) {
                         world.load();
                         world.setupAll();

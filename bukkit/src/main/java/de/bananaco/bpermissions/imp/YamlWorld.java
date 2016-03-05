@@ -158,6 +158,13 @@ public class YamlWorld extends World {
                 remove(user);
                 add(user);
                 user.setLoaded();
+
+                try {
+                    user.calculateMappedPermissions();
+                    user.calculateEffectiveMeta();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             Debugger.log("Empty ConfigurationSection:" + USERS + ":" + ufile.getPath());

@@ -22,9 +22,9 @@ public class CalculableMeta extends GroupCarrier {
      */
     public void calculateEffectiveMeta() throws RecursiveGroupException {
         try {
-            // Implement meta priorities
-            effectiveMeta.clear();
+            HashMap<String, String> calculatedMeta = new HashMap<String, String>();
 
+            // Implement meta priorities
             Map<String, Integer> pr = new HashMap<String, Integer>();
 
             for (String gr : serialiseGroups()) {
@@ -37,7 +37,7 @@ public class CalculableMeta extends GroupCarrier {
                     // If the effectiveMeta does not contain the key or the priority is greater than the current
                     if (!pr.containsKey(key) || group.getPriority() > pr.get(key)) {
                         // Store the priority too!
-                        effectiveMeta.put(key, meta.get(key));
+                        calculatedMeta.put(key, meta.get(key));
                         pr.put(key, group.getPriority());
                     }
                 }
@@ -48,8 +48,10 @@ public class CalculableMeta extends GroupCarrier {
             // Obviously local priority wins every time
             Map<String, String> meta = this.getMeta();
             for (String key : meta.keySet()) {
-                effectiveMeta.put(key, meta.get(key));
+                calculatedMeta.put(key, meta.get(key));
             }
+
+            effectiveMeta = calculatedMeta;
         } catch (StackOverflowError e) {
             throw new RecursiveGroupException(this);
         }
