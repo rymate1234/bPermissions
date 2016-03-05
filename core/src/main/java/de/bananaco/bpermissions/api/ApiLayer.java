@@ -385,7 +385,7 @@ public class ApiLayer {
         boolean b = Calculable.hasPermission(node, permissions);
 
         long f = System.currentTimeMillis();
-        Debugger.log("Elapsed milliseconds for hasPermission " + name + " - " + node + " :" + (f - t) + "ms");
+        Debugger.log("Elapsed milliseconds for hasPermission " + name + " in " + world +" - " + node + ":" + b +" :" + (f - t) + "ms");
         return b;
     }
 
