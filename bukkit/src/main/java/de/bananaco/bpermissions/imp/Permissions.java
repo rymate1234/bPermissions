@@ -453,6 +453,9 @@ public class Permissions extends JavaPlugin {
                     // reload custom nodes
                     CustomNodes.getInstance().reload();
 
+                    // reload mirrors
+                    mrs.load();
+
                     // reload all worlds too
                     for (World world : wm.getAllWorlds()) {
                         world.load();
