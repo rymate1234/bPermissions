@@ -148,7 +148,7 @@ public abstract class World {
      */
     public Calculable get(String name, CalculableType type) {
         long t = System.currentTimeMillis();
-        Calculable c = null;
+        MapCalculable c = null;
 
         name = stripColor(name);
         // A quick lowercase here
@@ -174,6 +174,17 @@ public abstract class World {
             }
 
             c = users.get(name);
+
+            if (c.getGroups().isEmpty()) {
+                c.addGroup(getDefaultGroup());
+                try {
+                    c.calculateGroups();
+                    c.calculateMappedPermissions();
+                    c.calculateEffectiveMeta();
+                } catch (RecursiveGroupException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
         } else if (type == CalculableType.GROUP) {
             if (!groups.containsKey(name)) {
                 add(new Group(name, null, null, getName(), this));
