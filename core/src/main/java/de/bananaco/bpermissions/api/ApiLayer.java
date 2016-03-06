@@ -112,12 +112,12 @@ public class ApiLayer {
      * @return String[]
      */
     public static String[] getGroups(String world, CalculableType type, String name) {
-        World w = null;
+        World w;
 
         if (wm.getUseGlobalFiles())
             w = wm.getDefaultWorld();
         else
-            wm.getWorld(world);
+            w = wm.getWorld(world);
 
         // Null checks everywhere!
         if (w == null || type == null || name == null) {
