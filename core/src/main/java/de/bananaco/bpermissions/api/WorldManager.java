@@ -88,7 +88,8 @@ public class WorldManager {
             name = mirrors.get(name);
         }
 
-        return worlds.get(name);
+        World world = worlds.get(name);
+        return world;
     }
 
     public boolean containsWorld(String name) {

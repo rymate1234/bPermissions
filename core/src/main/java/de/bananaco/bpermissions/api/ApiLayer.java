@@ -114,15 +114,17 @@ public class ApiLayer {
     public static String[] getGroups(String world, CalculableType type, String name) {
         World w;
 
-        if (wm.getUseGlobalFiles())
+        if (wm.getUseGlobalFiles()) {
             w = wm.getDefaultWorld();
-        else
+        } else {
             w = wm.getWorld(world);
+        }
 
         // Null checks everywhere!
         if (w == null || type == null || name == null) {
             return new String[0];
         }
+
         Calculable c = w.get(name, type);
         List<String> g = c.serialiseGroups();
         String[] groups = g.toArray(new String[g.size()]);
