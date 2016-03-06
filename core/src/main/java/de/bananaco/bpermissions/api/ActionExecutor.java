@@ -23,6 +23,8 @@ public class ActionExecutor {
         // add all if null
         if (world == null || (world.equals("global") && wm.isUseGlobalUsers())) {
             worlds.addAll(wm.getAllWorlds());
+        } else if (wm.getUseGlobalFiles()) {
+            worlds.add(wm.getDefaultWorld());
         } else {
             worlds.add(wm.getWorld(world));
         }

@@ -18,13 +18,8 @@ public abstract class CalculableWrapper extends MapCalculable {
 
     public boolean hasPermission(String node) {
         node = node.toLowerCase();
-        boolean allowed = hasPermission(node, getMappedPermissions());
-        return allowed;
+        return hasPermission(node, getMappedPermissions());
     }
-
-    /*
-     * These methods are added to allow auto-saving of the World on any changes
-     */
 
     /*
      * These methods are added to allow auto-saving of the World on any changes
@@ -92,7 +87,13 @@ public abstract class CalculableWrapper extends MapCalculable {
         if (wm.getAutoSave()) {
             getWorldObject().save();
             if (getType().equals(CalculableType.USER)) {
-                calculateGroups();
+                try {
+                    calculateGroups();
+                    calculateEffectiveMeta();
+                } catch (RecursiveGroupException e) {
+                    e.printStackTrace();
+                }
+
                 if (getWorldObject().isOnline((User) this)) {
                     getWorldObject().setupPlayer(getNameLowerCase());
                 }
@@ -116,7 +117,7 @@ public abstract class CalculableWrapper extends MapCalculable {
         } else {
             for (Calculable user : users) {
                 if (user.hasGroupRecursive(getName())) {
-                    ((User) user).setDirty(true);
+                    user.setDirty(true);
                     user.calculateEffectiveMeta();
                 }
             }
@@ -126,7 +127,7 @@ public abstract class CalculableWrapper extends MapCalculable {
         } else {
             for (Calculable group : groups) {
                 if (group.hasGroupRecursive(getName())) {
-                    ((Group) group).setDirty(true);
+                    group.setDirty(true);
                 }
             }
         }

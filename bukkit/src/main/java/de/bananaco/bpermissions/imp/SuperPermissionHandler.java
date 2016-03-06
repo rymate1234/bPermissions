@@ -71,7 +71,7 @@ public class SuperPermissionHandler implements Listener {
      * bPermissions world, not a Bukkit world)
      *
      * @param player
-     * @param b
+     * @param recalculate
      */
     public void setupPlayer(Player player, boolean recalculate) {
         if (!plugin.isEnabled()) {
@@ -81,27 +81,27 @@ public class SuperPermissionHandler implements Listener {
         // Then whack it onto the player
         // TODO wait for the bukkit team to get their finger out, we'll use our reflection here!		
         Map<String, Boolean> perms = ApiLayer.getEffectivePermissions(
-                player.getWorld().getName(),
-                CalculableType.USER,
-                player.getUniqueId().toString(),
-                recalculate
+            player.getWorld().getName(),
+            CalculableType.USER,
+            player.getUniqueId().toString(),
+            recalculate
         );
 
         setPermissions(player, plugin, perms);
 
         // Set the metadata?
         String prefix = ApiLayer.getValue(
-                player.getWorld().getName(),
-                CalculableType.USER,
-                player.getUniqueId().toString(),
-                "prefix"
+            player.getWorld().getName(),
+            CalculableType.USER,
+            player.getUniqueId().toString(),
+            "prefix"
         );
 
         String suffix = ApiLayer.getValue(
-                player.getWorld().getName(),
-                CalculableType.USER,
-                player.getUniqueId().toString(),
-                "suffix"
+            player.getWorld().getName(),
+            CalculableType.USER,
+            player.getUniqueId().toString(),
+            "suffix"
         );
 
         // WTF
