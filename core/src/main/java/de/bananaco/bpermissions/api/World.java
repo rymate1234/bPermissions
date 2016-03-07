@@ -1,13 +1,13 @@
 package de.bananaco.bpermissions.api;
 
+import de.bananaco.bpermissions.util.Debugger;
+
 import java.util.*;
 import java.util.regex.Pattern;
 
-import de.bananaco.bpermissions.util.Debugger;
-
 /**
  * This is the class to extend for new implementations of bPermissions.
- *
+ * <p/>
  * With this class, other ways to load/save permissions will become easily
  * available (hopefully)...
  */
@@ -30,7 +30,7 @@ public abstract class World {
     /**
      * Make sure you call .calculateMappedPermissions for all the users once
      * this is done!
-     *
+     * <p/>
      * You can just call add(Calculable) here with the objects you create.
      *
      * @return boolean
@@ -48,10 +48,10 @@ public abstract class World {
 
     /**
      * This loads a single Calculable into the API
-     *
+     * <p/>
      * Make sure you call .calculateMappedPermissions for all the users once
      * this is done!
-     *
+     * <p/>
      * You can just call add(Calculable) here with the objects you create.
      *
      * @return boolean
@@ -74,7 +74,7 @@ public abstract class World {
     /**
      * This is a way of checking whether a Calculable is stored within
      * the storage that this world uses.
-     *
+     * <p/>
      * Will return true if the store cointains the Calculable
      *
      * @return boolean
@@ -161,13 +161,15 @@ public abstract class World {
                 name = getUUID(name).toString();
 
             if (!users.containsKey(name)) {
-                add(new User(name, null, null, getName(), this));
+                User user = new User(name, null, null, getName(), this);
+                add(user);
                 // Don't forget to add the default group!
-                users.get(name).addGroup(getDefaultGroup());
+                user.addGroup(getDefaultGroup());
                 // And calculate the effective Permissions!
                 try {
-                    users.get(name).calculateMappedPermissions();
-                    users.get(name).calculateEffectiveMeta();
+                    user.setLoaded();
+                    user.calculateMappedPermissions();
+                    user.calculateEffectiveMeta();
                 } catch (RecursiveGroupException e) {
                     System.err.println(e.getMessage());
                 }
@@ -351,7 +353,7 @@ public abstract class World {
 
     /**
      * This is the implementation of the .cleanup() in WorldManager
-     *
+     * <p/>
      * Removes any empty groups and any users with just the default group
      */
     protected void cleanup() {
@@ -444,7 +446,7 @@ public abstract class World {
     /**
      * Strips the given message of all color codes - taken from the Bukkit source
      * code.
-     *
+     * <p/>
      * This allows the bPermissions core to be separate from an implementation
      *
      * @param input String to strip of color
