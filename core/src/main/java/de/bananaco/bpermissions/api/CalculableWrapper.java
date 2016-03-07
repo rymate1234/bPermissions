@@ -37,6 +37,12 @@ public abstract class CalculableWrapper extends MapCalculable {
     }
 
     @Override
+    public void setGroup(String group) {
+        super.setGroup(group);
+        updateCalculable();
+    }
+
+    @Override
     public void addPermission(String permission, boolean isTrue) {
         if (getPermissionsAsString().contains(permission)) {
             return;

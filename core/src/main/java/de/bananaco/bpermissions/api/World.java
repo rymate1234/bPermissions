@@ -168,6 +168,7 @@ public abstract class World {
                 // And calculate the effective Permissions!
                 try {
                     user.setLoaded();
+                    user.calculateGroups();
                     user.calculateMappedPermissions();
                     user.calculateEffectiveMeta();
                 } catch (RecursiveGroupException e) {

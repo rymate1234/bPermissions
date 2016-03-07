@@ -37,10 +37,7 @@ public class ActionExecutor {
             } else if (action.equalsIgnoreCase("rmgroup")) {
                 c.removeGroup(value);
             } else if (action.equalsIgnoreCase("setgroup")) {
-                for (String g : new ArrayList<String>(c.getGroupsAsString())) {
-                    c.removeGroup(g);
-                }
-                c.addGroup(value);
+                c.setGroup(value);
             } else if (action.equalsIgnoreCase("addperm")) {
                 Permission perm = Permission.loadFromString(value);
                 c.addPermission(perm.nameLowerCase(), perm.isTrue());

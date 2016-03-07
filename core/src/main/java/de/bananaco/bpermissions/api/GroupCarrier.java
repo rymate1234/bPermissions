@@ -89,6 +89,18 @@ public abstract class GroupCarrier extends PermissionCarrier {
         groups.remove(group);
     }
 
+
+    /**
+     * Sets the list of groups to a single group
+     *
+     * @param group
+     */
+    public void setGroup(String group) {
+        groups.clear();
+        group = group.toLowerCase();
+        groups.add(group);
+    }
+
     /**
      * Shows if the Object has the named group
      *
@@ -139,4 +151,5 @@ public abstract class GroupCarrier extends PermissionCarrier {
         this.groups.clear();
         super.clear();
     }
+
 }
