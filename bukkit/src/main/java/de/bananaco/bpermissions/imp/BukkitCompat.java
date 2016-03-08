@@ -100,26 +100,23 @@ public class BukkitCompat {
         negativeChildren.clear();
         negativeChildren.putAll(ne);
 
-        try {
-            plugin.getServer().getPluginManager().addPermission(positive);
-            plugin.getServer().getPluginManager().addPermission(negative);
-        } catch (Exception e) {
-            Permission positiveCheck = plugin.getServer().getPluginManager().getPermission(uuid);
-            Permission negativeCheck = plugin.getServer().getPluginManager().getPermission("^" + uuid);
+        Permission positiveCheck = plugin.getServer().getPluginManager().getPermission(uuid);
+        Permission negativeCheck = plugin.getServer().getPluginManager().getPermission("^" + uuid);
 
-            if (positiveCheck != null) {
-                plugin.getServer().getPluginManager().removePermission(positiveCheck);
-            }
-            if (negativeCheck != null) {
-                plugin.getServer().getPluginManager().removePermission(negativeCheck);
-            }
-
-            plugin.getServer().getPluginManager().addPermission(positive);
-            plugin.getServer().getPluginManager().addPermission(negative);
+        // sometimes we have to double check this
+        if (positiveCheck != null) {
+            plugin.getServer().getPluginManager().removePermission(positiveCheck);
+        }
+        // i blame threads
+        if (negativeCheck != null) {
+            plugin.getServer().getPluginManager().removePermission(negativeCheck);
         }
 
+        plugin.getServer().getPluginManager().addPermission(positive);
+        plugin.getServer().getPluginManager().addPermission(negative);
+        
         PermissionAttachment att = null;
-        for (PermissionAttachmentInfo pai : player.getEffectivePermissions()) {
+        for (PermissionAttachmentInfo pai : new HashSet<PermissionAttachmentInfo>(player.getEffectivePermissions())) {
             if (pai.getAttachment() != null && pai.getAttachment().getPlugin() != null) {
                 if (pai.getAttachment().getPlugin() instanceof Permissions) {
                     att = pai.getAttachment();
