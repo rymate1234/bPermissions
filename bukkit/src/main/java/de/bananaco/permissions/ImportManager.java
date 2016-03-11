@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.*;
 
 import com.evilmidget38.UUIDFetcher;
+import de.bananaco.bpermissions.api.*;
 import de.bananaco.bpermissions.util.Debugger;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -12,10 +13,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
-import de.bananaco.bpermissions.api.Group;
-import de.bananaco.bpermissions.api.Permission;
-import de.bananaco.bpermissions.api.User;
-import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.imp.loadmanager.MainThread;
 import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
 
@@ -63,49 +60,17 @@ public class ImportManager {
             System.err.println("File not exist");
             return;
         }
+        boolean autosave = wm.getAutoSave();
+
         YamlConfiguration perm = new YamlConfiguration();
         perm.load(file);
 
         World world = plugin.getServer().getWorlds().get(0);
         de.bananaco.bpermissions.api.World wd = wm.getWorld(world.getName());
+        wm.setAutoSave(false);
 
         ConfigurationSection users = perm.getConfigurationSection("users");
         ConfigurationSection groups = perm.getConfigurationSection("groups");
-
-        if (users.getKeys(false) != null && users.getKeys(false).size() > 0) {
-            System.out.println("Importing users....");
-            for (String user : users.getKeys(false)) {
-                List<String> g = users.getStringList(user + ".group");
-                List<String> p = users.getStringList(user + ".permissions");
-                User u = wd.getUser(user);
-                // Remove the existing groups
-                u.getGroupsAsString().clear();
-                // Add all the groups
-                if (g != null && g.size() > 0) {
-                    for (String gr : g) {
-                        u.addGroup(gr);
-                    }
-                }
-                if (p != null && p.size() > 0) {
-                    for (String pr : p) {
-                        if (pr.startsWith("-")) {
-                            u.addPermission(pr.replace("-", ""), false);
-                        } else {
-                            u.addPermission(pr, true);
-                        }
-                    }
-                }
-                String prefix = users.getString(user + ".prefix");
-                if (prefix != null) {
-                    u.setValue("prefix", prefix);
-                }
-                String suffix = users.getString(user + ".suffix");
-                if (suffix != null) {
-                    u.setValue("suffix", suffix);
-                }
-            }
-            System.out.println("Done!");
-        }
 
         if (groups.getKeys(false) != null && groups.getKeys(false).size() > 0) {
             System.out.println("Importing groups....");
@@ -116,15 +81,17 @@ public class ImportManager {
                 }
                 List<String> g = groups.getStringList(group + ".inheritance");
                 List<String> p = groups.getStringList(group + ".permissions");
-                Group u = wd.getGroup(group);
+                Group u = (Group) wd.get(group, CalculableType.GROUP);
                 // Remove the existing groups
                 u.getGroupsAsString().clear();
                 // Add all the groups
                 if (g != null && g.size() > 0) {
                     for (String gr : g) {
-                        u.addGroup(gr);
+                        Calculable grp = wd.get(gr, CalculableType.GROUP);
+                        u.addGroup(grp.getNameLowerCase());
                     }
                 }
+
                 if (p != null && p.size() > 0) {
                     for (String pr : p) {
                         if (pr.startsWith("-")) {
@@ -146,10 +113,50 @@ public class ImportManager {
                 if (priority != null) {
                     u.setValue("priority", priority);
                 }
+                u.calculateGroups();
             }
-            System.out.println("Done!");
-            wm.saveAll();
+            System.out.println("Groups loaded!");
         }
+
+        if (users.getKeys(false) != null && users.getKeys(false).size() > 0) {
+            System.out.println("Importing users....");
+            for (String user : users.getKeys(false)) {
+                List<String> g = users.getStringList(user + ".group");
+                List<String> p = users.getStringList(user + ".permissions");
+                User u = (User) wd.get(user, CalculableType.USER);
+                // Remove the existing groups
+                u.getGroupsAsString().clear();
+                // Add all the groups
+                if (g != null && g.size() > 0) {
+                    for (String gr : g) {
+                        Calculable grp = wd.get(gr, CalculableType.GROUP);
+                        if (grp != null) u.addGroup(grp.getNameLowerCase());
+                    }
+                }
+                if (p != null && p.size() > 0) {
+                    for (String pr : p) {
+                        if (pr.startsWith("-")) {
+                            u.addPermission(pr.replace("-", ""), false);
+                        } else {
+                            u.addPermission(pr, true);
+                        }
+                    }
+                }
+                String prefix = users.getString(user + ".prefix");
+                if (prefix != null) {
+                    u.setValue("prefix", prefix);
+                }
+                String suffix = users.getString(user + ".suffix");
+                if (suffix != null) {
+                    u.setValue("suffix", suffix);
+                }
+                u.calculateGroups();
+            }
+            System.out.println("Users loaded!");
+        }
+
+        wm.setAutoSave(autosave);
+        wm.saveAll();
     }
 
     public void importYML() throws Exception {
