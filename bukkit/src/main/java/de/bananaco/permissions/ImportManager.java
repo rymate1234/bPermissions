@@ -109,6 +109,18 @@ public class ImportManager {
                 if (suffix != null) {
                     u.setValue("suffix", suffix);
                 }
+
+                if (u.contains("prefix") || u.contains("suffix")) {
+                    prefix = groups.getString(group + ".options.prefix");
+                    if (prefix != null) {
+                        u.setValue("prefix", prefix);
+                    }
+                    suffix = groups.getString(group + ".options.suffix");
+                    if (suffix != null) {
+                        u.setValue("suffix", suffix);
+                    }
+                }
+
                 String priority = groups.getString(group + ".options.rank");
                 if (priority != null) {
                     u.setValue("priority", priority);
@@ -142,6 +154,7 @@ public class ImportManager {
                         }
                     }
                 }
+                // first get prefixes from old format
                 String prefix = users.getString(user + ".prefix");
                 if (prefix != null) {
                     u.setValue("prefix", prefix);
@@ -150,6 +163,19 @@ public class ImportManager {
                 if (suffix != null) {
                     u.setValue("suffix", suffix);
                 }
+
+                if (!u.contains("prefix") || !u.contains("suffix")) {
+                    // parse using new pex format
+                    prefix = users.getString(user + ".options.prefix");
+                    if (prefix != null) {
+                        u.setValue("prefix", prefix);
+                    }
+                    suffix = users.getString(user + ".options.suffix");
+                    if (suffix != null) {
+                        u.setValue("suffix", suffix);
+                    }
+                }
+
                 u.calculateGroups();
             }
             System.out.println("Users loaded!");
