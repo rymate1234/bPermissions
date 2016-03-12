@@ -190,7 +190,9 @@ public abstract class World {
             }
         } else if (type == CalculableType.GROUP) {
             if (!groups.containsKey(name)) {
-                add(new Group(name, null, null, getName(), this));
+                Group g = new Group(name, null, null, getName(), this);
+                g.setLoaded();
+                add(g);
             }
             c = groups.get(name);
         }
