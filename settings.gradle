@@ -1,3 +1,10 @@
 rootProject.name = 'bPermissions'
-include ':core'
-include ':bukkit'
+include 'core'
+include 'bukkit'
+include 'sponge'
+
+project(":sponge").name = "bPermissions-Sponge"
+
+project(":bukkit").name = "bPermissions-Bukkit"
+
+project(":core").name = "bPermissions-API"

@@ -24,12 +24,12 @@ repositories {
 }
 
 dependencies {
-    compile project(":core")
+    compile project(":bPermissions-API")
     compile group: 'org.bukkit', name: 'bukkit', version: '1.9-SNAPSHOT'
 }
 
 shadowJar {
     dependencies {
-        include(dependency(':core'))
+        include(dependency(':bPermissions-API'))
     }
 }

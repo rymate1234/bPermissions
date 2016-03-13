@@ -13,8 +13,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
-import de.bananaco.bpermissions.imp.loadmanager.MainThread;
-import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
+import de.bananaco.bpermissions.util.loadmanager.MainThread;
+import de.bananaco.bpermissions.util.loadmanager.TaskRunnable;
 
 public class ImportManager {
 

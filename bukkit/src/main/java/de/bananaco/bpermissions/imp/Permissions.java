@@ -1,8 +1,8 @@
 package de.bananaco.bpermissions.imp;
 
 import de.bananaco.bpermissions.api.*;
-import de.bananaco.bpermissions.imp.loadmanager.MainThread;
-import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
+import de.bananaco.bpermissions.util.loadmanager.MainThread;
+import de.bananaco.bpermissions.util.loadmanager.TaskRunnable;
 import de.bananaco.bpermissions.unit.PermissionsTest;
 import de.bananaco.bpermissions.util.Debugger;
 import de.bananaco.permissions.ImportManager;

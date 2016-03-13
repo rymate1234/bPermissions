@@ -1,13 +1,13 @@
 package de.bananaco.bpermissions.imp;
 
 import de.bananaco.bpermissions.api.*;
-import de.bananaco.bpermissions.imp.loadmanager.MainThread;
+import de.bananaco.bpermissions.util.loadmanager.MainThread;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
+import de.bananaco.bpermissions.util.loadmanager.TaskRunnable;
 import de.bananaco.bpermissions.util.Debugger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

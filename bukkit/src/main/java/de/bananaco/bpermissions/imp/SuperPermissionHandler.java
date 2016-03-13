@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import de.bananaco.bpermissions.api.*;
-import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
+import de.bananaco.bpermissions.util.loadmanager.TaskRunnable;
 import de.bananaco.bpermissions.util.Debugger;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,7 +20,7 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 
-import de.bananaco.bpermissions.imp.loadmanager.MainThread;
+import de.bananaco.bpermissions.util.loadmanager.MainThread;
 
 /**
  * Handles all the superperms registering/unregistering for
