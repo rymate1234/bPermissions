@@ -3,6 +3,7 @@ package de.bananaco.bpermissions.imp;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import de.bananaco.bpermissions.api.*;
 import org.bukkit.Bukkit;
@@ -175,7 +176,7 @@ public class Commands {
         if (c instanceof User) {
             User user = (User) c;
             sender.sendMessage(format(user.getName() + " - " + node + ": " + user.hasPermission(node)));
-            Player player = Bukkit.getPlayer(user.getName());
+            Player player = Bukkit.getPlayer(UUID.fromString(user.getName()));
             if (player != null) {
                 sender.sendMessage(format("SUPERPERMS" + " - " + node + ": " + player.hasPermission(node)));
             }
