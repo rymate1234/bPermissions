@@ -10,10 +10,7 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This code is distributed for your use and modification. Do what you like with
@@ -66,54 +63,37 @@ public class BukkitCompat {
         Player player = (Player) p;
         String uuid = player.getUniqueId().toString();
 
-        Permission positive = plugin.getServer().getPluginManager().getPermission(uuid);
-        Permission negative = plugin.getServer().getPluginManager().getPermission("^" + uuid);
+        Permission permission = plugin.getServer().getPluginManager().getPermission(uuid);
 
-        if (positive != null) {
-            plugin.getServer().getPluginManager().removePermission(positive);
-        }
-        if (negative != null) {
-            plugin.getServer().getPluginManager().removePermission(negative);
+        if (permission != null) {
+            plugin.getServer().getPluginManager().removePermission(permission);
         }
 
-        Map<String, Boolean> po = new HashMap<String, Boolean>();
-        Map<String, Boolean> ne = new HashMap<String, Boolean>();
+        Map<String, Boolean> children = new HashMap<String, Boolean>();
 
-        for (String key : permissions.keySet()) {
-            if (permissions.get(key)) {
-                po.put(key, true);
-            } else {
-                ne.put(key, false);
-            }
+        ListIterator<String> iter =
+                new ArrayList<>(permissions.keySet()).listIterator(permissions.size());
+
+        while (iter.hasPrevious()) {
+            String perm = iter.previous();
+            children.put(perm, permissions.get(perm));
         }
 
-        positive = new Permission(uuid, PermissionDefault.FALSE);
-        negative = new Permission("^" + uuid, PermissionDefault.FALSE);
+        permission = new Permission(uuid, PermissionDefault.FALSE);
 
         // A touch of reflection
-        Map<String, Boolean> positiveChildren = (Map<String, Boolean>) perms.get(positive);
-        positiveChildren.clear();
-        positiveChildren.putAll(po);
+        Map<String, Boolean> permissionChildren = (Map<String, Boolean>) perms.get(permission);
+        permissionChildren.clear();
+        permissionChildren.putAll(children);
 
-        // keeps the doBukkitPermissions times down
-        Map<String, Boolean> negativeChildren = (Map<String, Boolean>) perms.get(negative);
-        negativeChildren.clear();
-        negativeChildren.putAll(ne);
-
-        Permission positiveCheck = plugin.getServer().getPluginManager().getPermission(uuid);
-        Permission negativeCheck = plugin.getServer().getPluginManager().getPermission("^" + uuid);
+        Permission permissionCheck = plugin.getServer().getPluginManager().getPermission(uuid);
 
         // sometimes we have to double check this
-        if (positiveCheck != null) {
-            plugin.getServer().getPluginManager().removePermission(positiveCheck);
-        }
-        // i blame threads
-        if (negativeCheck != null) {
-            plugin.getServer().getPluginManager().removePermission(negativeCheck);
+        if (permissionCheck != null) {
+            plugin.getServer().getPluginManager().removePermission(permissionCheck);
         }
 
-        plugin.getServer().getPluginManager().addPermission(positive);
-        plugin.getServer().getPluginManager().addPermission(negative);
+        plugin.getServer().getPluginManager().addPermission(permission);
 
         PermissionAttachment att = null;
         for (PermissionAttachmentInfo pai : new HashSet<PermissionAttachmentInfo>(player.getEffectivePermissions())) {
@@ -128,7 +108,6 @@ public class BukkitCompat {
         if (att == null) {
             att = player.addAttachment(plugin);
             att.setPermission(uuid, true);
-            att.setPermission("^" + uuid, true);
         }
         // recalculate permissions
         player.recalculatePermissions();

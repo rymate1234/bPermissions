@@ -127,8 +127,10 @@ public class OldUserGroupCommand extends BaseCommand implements CommandExecutor 
                         cmd.setGroup(value, sender);
                     } else if (action.equalsIgnoreCase("list")) {
                         int page = 1;
-                        if (args.length == 3)
+                        if (args.length == 3 && !args[2].equalsIgnoreCase("all"))
                             page = Integer.parseInt(args[2]);
+                        else
+                            page = -1;
 
                         value = value.toLowerCase();
                         if (value.equalsIgnoreCase("groups") || value.equalsIgnoreCase("group") || value.equalsIgnoreCase("g")) {

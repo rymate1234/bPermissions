@@ -1,10 +1,6 @@
 package de.bananaco.bpermissions.api;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class contains the main calculations for a
@@ -16,7 +12,7 @@ import java.util.Set;
  */
 public abstract class Calculable extends CalculableMeta {
 
-    Set<Permission> effectivePermissions;
+    List<Permission> effectivePermissions;
     String name;
     boolean hasCalculated = false;
 
@@ -26,7 +22,7 @@ public abstract class Calculable extends CalculableMeta {
         super(groups, permissions, world);
         // TODO does this remove the ChatColor?
         this.name = name;
-        this.effectivePermissions = new HashSet();
+        this.effectivePermissions = new ArrayList<Permission>();
     }
 
     /**
@@ -56,7 +52,7 @@ public abstract class Calculable extends CalculableMeta {
      */
     public void calculateEffectivePermissions() throws RecursiveGroupException {
         calculateGroups();
-        Set<Permission> calculatedPermissions = new HashSet<Permission>();
+        List<Permission> calculatedPermissions = new ArrayList<Permission>();
         try {
             Map<String, Integer> priorities = new HashMap<String, Integer>();
             //System.out.println(serialiseGroups());
@@ -93,7 +89,7 @@ public abstract class Calculable extends CalculableMeta {
      *
      * @return Set<Permission>
      */
-    public Set<Permission> getEffectivePermissions() {
+    public List<Permission> getEffectivePermissions() {
         try {
             if (!hasCalculated || isDirty())
                 this.calculateEffectivePermissions();

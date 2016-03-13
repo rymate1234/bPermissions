@@ -1,5 +1,6 @@
 package de.bananaco.bpermissions.unit;
 
+import java.util.List;
 import java.util.Set;
 
 import org.bukkit.World;
@@ -15,7 +16,7 @@ public class PermissionsTest {
         World world = player.getWorld();
         WorldManager wm = WorldManager.getInstance();
         User user = wm.getWorld(world.getName()).getUser(player.getName());
-        Set<Permission> permissions = user.getEffectivePermissions();
+        List<Permission> permissions = user.getEffectivePermissions();
         System.out.println("** PERMISSION TEST FOR " + player.getName().toUpperCase());
         for (Permission perm : permissions) {
             System.out.println("** " + perm.name().toUpperCase());

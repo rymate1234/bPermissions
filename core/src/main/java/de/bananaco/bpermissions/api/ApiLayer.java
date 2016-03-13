@@ -2,11 +2,7 @@ package de.bananaco.bpermissions.api;
 
 import de.bananaco.bpermissions.util.Debugger;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Adds a super easy to use static interface to bPermissions 2
@@ -169,7 +165,7 @@ public class ApiLayer {
      * @return Map<String, Boolean> permissions
      */
     public static synchronized Map<String, Boolean> getEffectivePermissions(String world, CalculableType type, String name, boolean recalculate) {
-        Map<String, Boolean> permissions = new HashMap<String, Boolean>();
+        Map<String, Boolean> permissions = new LinkedHashMap<String, Boolean>();
         // our two thingies
         World global;
         World w;
