@@ -15,6 +15,8 @@ import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 
+import java.io.File;
+
 
 /**
  * bPermissions plugin
@@ -39,6 +41,11 @@ public class Permissions {
 
         // grab the WorldManager
         wm = WorldManager.getInstance();
+        wm.setFileFormat("YML");
+
+        FileWorld world = new FileWorld("world", this, new File("./bPermissions/world"));
+        world.load();
+        world.save();
     }
 
 

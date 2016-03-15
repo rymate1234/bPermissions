@@ -29,6 +29,7 @@ public class WorldManager {
     private boolean useGlobalFiles = false;
     private boolean useGlobalUsers = false;
     protected boolean loaded = false;
+    private String fileFormat;
 
     protected WorldManager() {
     }
@@ -184,5 +185,13 @@ public class WorldManager {
 
     public void setUseGlobalUsers(boolean useGlobalUsers) {
         this.useGlobalUsers = useGlobalUsers;
+    }
+
+    public String getFileFormat() {
+        return fileFormat;
+    }
+
+    public void setFileFormat(String fileFormat) {
+        this.fileFormat = fileFormat;
     }
 }
