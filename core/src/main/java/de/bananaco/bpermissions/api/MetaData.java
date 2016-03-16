@@ -154,6 +154,13 @@ public abstract class MetaData {
     }
 
     public static void sortGroups(List<Group> groups) {
+        if (groups == null) {
+            return;
+        }
+        if (groups.size() == 0) {
+            return;
+        }
+
         Collections.sort(groups, comparGrp);
     }
 

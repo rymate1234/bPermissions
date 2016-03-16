@@ -49,13 +49,17 @@ public class Permissions {
         wm.setFileFormat("YML");
         wm.setAutoSave(true);
         wm.setUseGlobalUsers(false);
-        Debugger.setDebug(true);
+        Debugger.setDebug(false);
 
         HashMap<String, String> mirrors = new HashMap<String, String>();
 
         Sponge.getEventManager().registerListeners(this, new WorldLoader(this, mirrors));
+        Sponge.getEventManager().registerListeners(this, new PlayerHandler(this));
     }
 
+    public Logger getLog() {
+        return log;
+    }
 
     @Listener
     public void disable(GameStoppedServerEvent event) {
