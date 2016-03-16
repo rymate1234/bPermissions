@@ -4,29 +4,31 @@ import com.google.inject.Inject;
 
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
+import de.bananaco.bpermissions.util.Debugger;
 import de.bananaco.bpermissions.util.loadmanager.MainThread;
 import de.bananaco.bpermissions.util.loadmanager.TaskRunnable;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 
 import java.io.File;
+import java.util.HashMap;
 
 
 /**
  * bPermissions plugin
  */
-@Plugin(id = "de.bananaco.bpermissions-sponge", name = "bPermissions", version = "EARLY-ALPHA-SPONGE",
-        description = "Permissions manager for Bukkit and Sponge")
+@Plugin(id = "de.bananaco.bpermissions-sponge", name = "bPermissions", version = "EARLY-ALPHA-SPONGE", description = "Permissions manager for Bukkit and Sponge")
 public class Permissions {
     @Inject private Logger log;
 
-    @Inject private Game game;
+    @Inject protected Game game;
 
     private MainThread mt;
     private WorldManager wm;
@@ -41,11 +43,17 @@ public class Permissions {
 
         // grab the WorldManager
         wm = WorldManager.getInstance();
-        wm.setFileFormat("YML");
 
-        FileWorld world = new FileWorld("world", this, new File("./bPermissions/world"));
-        world.load();
-        world.save();
+        // testing variables
+        // TODO: CONFIG FILE
+        wm.setFileFormat("YML");
+        wm.setAutoSave(true);
+        wm.setUseGlobalUsers(false);
+        Debugger.setDebug(true);
+
+        HashMap<String, String> mirrors = new HashMap<String, String>();
+
+        Sponge.getEventManager().registerListeners(this, new WorldLoader(this, mirrors));
     }
 
 
