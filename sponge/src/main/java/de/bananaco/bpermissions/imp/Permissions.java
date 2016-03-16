@@ -12,19 +12,21 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.HashMap;
 
 
 /**
  * bPermissions plugin
  */
-@Plugin(id = "de.bananaco.bpermissions-sponge", name = "bPermissions", version = "EARLY-ALPHA-SPONGE", description = "Permissions manager for Bukkit and Sponge")
+@Plugin(id = "bpermissions", name = "bPermissions", version = "EARLY-ALPHA-SPONGE", description = "Permissions manager for Bukkit and Sponge")
 public class Permissions {
     @Inject private Logger log;
 
@@ -32,6 +34,10 @@ public class Permissions {
 
     private MainThread mt;
     private WorldManager wm;
+
+    @Inject
+    @ConfigDir(sharedRoot = false)
+    private Path privateConfigDir;
 
     @Listener
     public void enable(GameInitializationEvent  event) {
@@ -110,5 +116,9 @@ public class Permissions {
                 e.printStackTrace();
             }
         }
+    }
+
+    public Path getFolder() {
+        return privateConfigDir;
     }
 }

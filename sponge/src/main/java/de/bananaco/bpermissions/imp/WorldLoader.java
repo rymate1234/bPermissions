@@ -36,7 +36,7 @@ public class WorldLoader {
 
         if (!mirrors.containsKey(world)) {
             Debugger.log("Loading world: " + targetWorld.getName());
-            wm.createWorld(world, new FileWorld(world, permissions, new File("./bPermissions/" + world + "/")));
+            wm.createWorld(world, new FileWorld(world, permissions, new File(permissions.getFolder() + "/" + world + "/")));
         }
     }
 

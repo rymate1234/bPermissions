@@ -1,6 +1,7 @@
 package de.bananaco.bpermissions.imp;
 
 import com.google.common.reflect.TypeToken;
+import com.typesafe.config.ConfigRenderOptions;
 import de.bananaco.bpermissions.api.*;
 import de.bananaco.bpermissions.util.Debugger;
 import de.bananaco.bpermissions.util.loadmanager.MainThread;
@@ -62,7 +63,7 @@ public class FileWorld extends World {
 
         this.permissions = permissions;
         if (wm.isUseGlobalUsers())
-            this.ufile = new File(new File("./bPermissions/global/"), "users." + format);
+            this.ufile = new File(new File(permissions.getFolder() + "/global/"), "users." + format);
         else
             this.ufile = new File(root, "users." + format);
 
@@ -126,18 +127,18 @@ public class FileWorld extends World {
         if (wm.getFileFormat().equalsIgnoreCase("YML")) {
             // YAML format
             YAMLConfigurationLoader.Builder ubuilder = YAMLConfigurationLoader.builder();
-            ubuilder.setFlowStyle(DumperOptions.FlowStyle.BLOCK).setFile(ufile);
-            YAMLConfigurationLoader.Builder gbuilder = YAMLConfigurationLoader.builder();
-            gbuilder.setFlowStyle(DumperOptions.FlowStyle.BLOCK).setFile(gfile);
+            ubuilder.setFlowStyle(DumperOptions.FlowStyle.BLOCK).setFile(ufile).setIndent(2);
+            YAMLConfigurationLoader.Builder gbuilder = YAMLConfigurationLoader.builder().setIndent(2);
+            gbuilder.setFlowStyle(DumperOptions.FlowStyle.BLOCK).setFile(gfile).setIndent(2);
 
             uloader = ubuilder.build();
             gloader = gbuilder.build();
         } else if (wm.getFileFormat().equalsIgnoreCase("HOCON")) {
             // assume HOCON
             HoconConfigurationLoader.Builder ubuilder = HoconConfigurationLoader.builder();
-            ubuilder.setFile(ufile);
+            ubuilder.setFile(ufile).setRenderOptions(ConfigRenderOptions.defaults());
             HoconConfigurationLoader.Builder gbuilder = HoconConfigurationLoader.builder();
-            gbuilder.setFile(gfile);
+            gbuilder.setFile(gfile).setRenderOptions(ConfigRenderOptions.defaults());
 
             uloader = ubuilder.build();
             gloader = gbuilder.build();
@@ -402,9 +403,9 @@ public class FileWorld extends World {
         }
 
         YAMLConfigurationLoader.Builder ubuilder = YAMLConfigurationLoader.builder();
-        ubuilder.setFile(ufile);
-        YAMLConfigurationLoader.Builder gbuilder = YAMLConfigurationLoader.builder();
-        gbuilder.setFile(gfile);
+        ubuilder.setFlowStyle(DumperOptions.FlowStyle.BLOCK).setFile(ufile).setIndent(2);
+        YAMLConfigurationLoader.Builder gbuilder = YAMLConfigurationLoader.builder().setIndent(2);
+        gbuilder.setFlowStyle(DumperOptions.FlowStyle.BLOCK).setFile(gfile).setIndent(2);
 
         try {
             ubuilder.build().save(uconfig);
