@@ -25,7 +25,7 @@ repositories {
 
 dependencies {
     compile project(":bPermissions-API")
-    compile group: 'org.bukkit', name: 'bukkit', version: '1.9-SNAPSHOT'
+    compile group: 'org.bukkit', name: 'bukkit', version: '1.9-R0.1-SNAPSHOT'
 }
 
 shadowJar {
