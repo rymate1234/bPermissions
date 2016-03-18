@@ -69,7 +69,7 @@ public class BukkitCompat {
             plugin.getServer().getPluginManager().removePermission(permission);
         }
 
-        Map<String, Boolean> children = new HashMap<String, Boolean>();
+        /*Map<String, Boolean> children = new HashMap<String, Boolean>();
 
         ListIterator<String> iter =
                 new ArrayList<>(permissions.keySet()).listIterator(permissions.size());
@@ -77,14 +77,14 @@ public class BukkitCompat {
         while (iter.hasPrevious()) {
             String perm = iter.previous();
             children.put(perm, permissions.get(perm));
-        }
+        }*/
 
         permission = new Permission(uuid, PermissionDefault.FALSE);
 
         // A touch of reflection
         Map<String, Boolean> permissionChildren = (Map<String, Boolean>) perms.get(permission);
         permissionChildren.clear();
-        permissionChildren.putAll(children);
+        permissionChildren.putAll(permissions);
 
         Permission permissionCheck = plugin.getServer().getPluginManager().getPermission(uuid);
 
