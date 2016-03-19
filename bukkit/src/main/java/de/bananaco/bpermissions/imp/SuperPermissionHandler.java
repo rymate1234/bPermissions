@@ -81,27 +81,27 @@ public class SuperPermissionHandler implements Listener {
         // Then whack it onto the player
         // TODO wait for the bukkit team to get their finger out, we'll use our reflection here!		
         Map<String, Boolean> perms = ApiLayer.getEffectivePermissions(
-            player.getWorld().getName(),
-            CalculableType.USER,
-            player.getUniqueId().toString(),
-            recalculate
+                player.getWorld().getName(),
+                CalculableType.USER,
+                player.getUniqueId().toString(),
+                recalculate
         );
 
         setPermissions(player, plugin, perms);
 
         // Set the metadata?
         String prefix = ApiLayer.getValue(
-            player.getWorld().getName(),
-            CalculableType.USER,
-            player.getUniqueId().toString(),
-            "prefix"
+                player.getWorld().getName(),
+                CalculableType.USER,
+                player.getUniqueId().toString(),
+                "prefix"
         );
 
         String suffix = ApiLayer.getValue(
-            player.getWorld().getName(),
-            CalculableType.USER,
-            player.getUniqueId().toString(),
-            "suffix"
+                player.getWorld().getName(),
+                CalculableType.USER,
+                player.getUniqueId().toString(),
+                "suffix"
         );
 
         // WTF
@@ -151,31 +151,22 @@ public class SuperPermissionHandler implements Listener {
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
         final String uuid = event.getUniqueId().toString();
         for (final de.bananaco.bpermissions.api.World world : wm.getAllWorlds()) {
-            TaskRunnable r = new TaskRunnable() {
-                @Override
-                public TaskType getType() {
-                return TaskType.SERVER;
-                }
+            world.loadIfExists(uuid, CalculableType.USER);
 
-                public void run() {
-                    world.loadIfExists(uuid, CalculableType.USER);
-
-                    User user = (User) world.get(uuid, CalculableType.USER);
-                    try {
-                        user.calculateMappedPermissions();
-                        user.calculateEffectiveMeta();
-                    } catch (RecursiveGroupException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            MainThread.getInstance().schedule(r);
+            User user = (User) world.get(uuid, CalculableType.USER);
+            try {
+                user.calculateMappedPermissions();
+                user.calculateEffectiveMeta();
+            } catch (RecursiveGroupException e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLogin(final PlayerLoginEvent event) {
+        final String uuid = event.getPlayer().getUniqueId().toString();
+        Debugger.log("Player logged in with UUID " + uuid);
         // Likewise, in theory this should be all we need to detect when a player joins
         TaskRunnable r = new TaskRunnable() {
             @Override
@@ -185,15 +176,20 @@ public class SuperPermissionHandler implements Listener {
 
             public void run() {
                 long time = System.currentTimeMillis();
-                String uuid = event.getPlayer().getUniqueId().toString();
                 Debugger.log("Begun setup for " + uuid);
 
-                setupPlayer(event.getPlayer(), true);
+                setupPlayer(event.getPlayer(), false);
 
                 long finish = System.currentTimeMillis() - time;
                 Debugger.log("Setup for " + uuid + ". took " + finish + "ms.");
             }
         };
         MainThread.getInstance().schedule(r);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerJoin(final PlayerJoinEvent event) {
+        String uuid = event.getPlayer().getUniqueId().toString();
+        Debugger.log("Player joined with UUID " + uuid);
     }
 }

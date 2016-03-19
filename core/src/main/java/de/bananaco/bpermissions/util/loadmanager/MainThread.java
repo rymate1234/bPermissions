@@ -37,10 +37,13 @@ public class MainThread extends Thread implements TaskThread {
                 List tasks = null;
                 if (getTasks(TaskRunnable.TaskType.LOAD).size() > 0) {
                     tasks = getTasks(TaskRunnable.TaskType.LOAD);
+                    setThreadName("LOAD");
                 } else if (getTasks(TaskRunnable.TaskType.SAVE).size() > 0) {
                     tasks = getTasks(TaskRunnable.TaskType.SAVE);
+                    setThreadName("SAVE");
                 } else if (getTasks(TaskRunnable.TaskType.SERVER).size() > 0) {
                     tasks = getTasks(TaskRunnable.TaskType.SERVER);
+                    setThreadName("SERVER");
                 }
 
                 if (tasks != null) {
@@ -126,5 +129,9 @@ public class MainThread extends Thread implements TaskThread {
 
     public int tasksCount() {
         return load.size() + save.size();
+    }
+
+    private void setThreadName(String s) {
+        setName("MainThread/" + s);
     }
 }

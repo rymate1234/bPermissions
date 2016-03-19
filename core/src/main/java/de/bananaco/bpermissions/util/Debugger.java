@@ -22,13 +22,14 @@ public class Debugger {
         return instance.debug;
     }
 
-    public static void log(String message) {
+    public static synchronized void log(String message) {
         if (instance.debug) {
-            System.out.println("[debug] " + message);
+            Thread t = Thread.currentThread();
+            System.out.println("[debug - " + t.getName() + "] " + message);
         }
     }
 
-    public static void log(World world) {
+    public static synchronized void log(World world) {
         if (world == null) {
             log("No world by that name");
             return;
