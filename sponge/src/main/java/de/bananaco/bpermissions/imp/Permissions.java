@@ -14,9 +14,11 @@ import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.game.state.GameInitializationEvent;
+import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.service.ServiceManager;
+import org.spongepowered.api.service.permission.PermissionService;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -29,7 +31,7 @@ import java.util.HashMap;
 @Plugin(id = "bpermissions", name = "bPermissions", version = "EARLY-ALPHA-SPONGE", description = "Permissions manager for Bukkit and Sponge")
 public class Permissions {
     @Inject private Logger log;
-
+    @Inject private ServiceManager services;
     @Inject protected Game game;
 
     private MainThread mt;
@@ -39,9 +41,16 @@ public class Permissions {
     @ConfigDir(sharedRoot = false)
     private Path privateConfigDir;
 
+    bPermissionsService bPermsService;
+
+    protected static Permissions instance = null;
+
+
     @Listener
-    public void enable(GameInitializationEvent  event) {
+    public void enable(GamePreInitializationEvent event) throws Exception {
         log.info("Loading bPermissions...");
+
+        bPermsService = new bPermissionsService();
 
         // start the main thread
         mt = MainThread.getInstance();
@@ -55,12 +64,25 @@ public class Permissions {
         wm.setFileFormat("YML");
         wm.setAutoSave(true);
         wm.setUseGlobalUsers(false);
-        Debugger.setDebug(false);
+        Debugger.setDebug(true);
+
+        // create the default world
+        FileWorld defaultWorld = new FileWorld("global", this, new File(getFolder() + "/global/"));
+        wm.setDefaultWorld(defaultWorld);
+        defaultWorld.load();
 
         HashMap<String, String> mirrors = new HashMap<String, String>();
 
         Sponge.getEventManager().registerListeners(this, new WorldLoader(this, mirrors));
         Sponge.getEventManager().registerListeners(this, new PlayerHandler(this));
+
+        // Register bPermissions as the permissions service, assuming there isn't one already
+        if (!services.isRegistered(PermissionService.class)) {
+            services.setProvider(this, PermissionService.class, bPermsService);
+        } else {
+            throw new Exception("There's already a permissions plugin installed!");
+        }
+        instance = this;
     }
 
     public Logger getLog() {

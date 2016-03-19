@@ -304,7 +304,7 @@ public class FileWorld extends World {
 
             for (Calculable user : users) {
                 String name = user.getName();
-                usaveconfig.getNode(USERS + "." + name).setValue(null);
+                usaveconfig.getNode(USERS, name).setValue(null);
 
                 // don't save users with default settings
                 if (user.getMeta().size() == 0
@@ -318,11 +318,11 @@ public class FileWorld extends World {
                 if (isUUID(name) && permissions.game.getServer().getPlayer(UUID.fromString(name)).get() != null) {
                     String player = permissions.game.getServer().getPlayer(UUID.fromString(name)).get().getName();
                     // save their username
-                    usaveconfig.getNode(USERS + "." + name + "." + USERNAME).setValue(player);
+                    usaveconfig.getNode(USERS, name, USERNAME).setValue(player);
 
-                    usaveconfig.getNode(USERS + "." + name + "." + PERMISSIONS).setValue(user.serialisePermissions());
-                    usaveconfig.getNode(USERS + "." + name + "." + GROUPS).setValue(user.serialiseGroups());
-                    usaveconfig.getNode(USERS + "." + name + "." + META).setValue(user.getMeta());
+                    usaveconfig.getNode(USERS, name, PERMISSIONS).setValue(user.serialisePermissions());
+                    usaveconfig.getNode(USERS, name, GROUPS).setValue(user.serialiseGroups());
+                    usaveconfig.getNode(USERS, name, META).setValue(user.getMeta());
                 }
             }
         }
@@ -340,12 +340,13 @@ public class FileWorld extends World {
         for (Calculable group : groups) {
             String name = group.getName();
             if (name.equals("")) continue;
+            usaveconfig.getNode(GROUPS, name).setValue(null);
 
             name = name.replace(".", "");
 
-            usaveconfig.getNode(USERS + "." + name + "." + PERMISSIONS).setValue(group.serialisePermissions());
-            usaveconfig.getNode(USERS + "." + name + "." + GROUPS).setValue(group.serialiseGroups());
-            usaveconfig.getNode(USERS + "." + name + "." + META).setValue(group.getMeta());
+            gsaveconfig.getNode(GROUPS, name, PERMISSIONS).setValue(group.serialisePermissions());
+            gsaveconfig.getNode(GROUPS, name, GROUPS).setValue(group.serialiseGroups());
+            gsaveconfig.getNode(GROUPS, name, META).setValue(group.getMeta());
         }
 
         if (!wm.isUseGlobalUsers() || getName().equalsIgnoreCase("global"))
