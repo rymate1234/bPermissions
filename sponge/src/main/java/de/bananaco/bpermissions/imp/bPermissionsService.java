@@ -3,6 +3,7 @@ package de.bananaco.bpermissions.imp;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.collect.ImmutableSet;
 import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.util.Debugger;
 import org.spongepowered.api.plugin.PluginContainer;
@@ -11,6 +12,7 @@ import org.spongepowered.api.service.context.ContextCalculator;
 import org.spongepowered.api.service.permission.*;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -26,6 +28,7 @@ public class bPermissionsService implements PermissionService {
         }
     });
     private SubjectData defaultData;
+    private ConcurrentHashMap<String, PermissionDescriptionImpl> descriptions = new ConcurrentHashMap<>();;
 
     @Override
     public SubjectCollection getUserSubjects() {
@@ -95,17 +98,17 @@ public class bPermissionsService implements PermissionService {
     }
 
     public void registerDescription(PermissionDescriptionImpl ret) {
-
+        this.descriptions.put(ret.getId(), ret);
     }
 
     @Override
-    public Optional<PermissionDescription> getDescription(String permission) {
-        return null;
+    public Optional<PermissionDescription> getDescription(String s) {
+        return Optional.ofNullable(this.descriptions.get(s));
     }
 
     @Override
     public Collection<PermissionDescription> getDescriptions() {
-        return null;
+        return ImmutableSet.<PermissionDescription>copyOf(this.descriptions.values());
     }
 
     @Override

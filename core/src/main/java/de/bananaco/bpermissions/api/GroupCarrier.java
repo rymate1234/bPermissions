@@ -1,9 +1,6 @@
 package de.bananaco.bpermissions.api;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class is any object which carries groups. The group references are
@@ -21,9 +18,9 @@ public abstract class GroupCarrier extends PermissionCarrier {
             String world) {
         super(permissions, world);
         if (groups == null) {
-            groups = new HashSet();
+            groups = new LinkedHashSet();
         }
-        groupsCalculated = new HashSet();
+        groupsCalculated = new LinkedHashSet();
 
         this.groups = groups;
     }
