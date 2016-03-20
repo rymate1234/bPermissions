@@ -121,6 +121,7 @@ public class SuperPermissionHandler implements Listener {
     @EventHandler
     public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
         // In theory this should be all we need to detect world, it isn't cancellable so... should be fine?
+        ((bPermissible) event.getPlayer()).setWorld(event.getPlayer().getWorld().getName());
         setupPlayer(event.getPlayer(), false);
     }
 
@@ -167,6 +168,13 @@ public class SuperPermissionHandler implements Listener {
     public void onPlayerLogin(final PlayerLoginEvent event) {
         final String uuid = event.getPlayer().getUniqueId().toString();
         Debugger.log("Player logged in with UUID " + uuid);
+
+        //inject permissible
+        bPermissible permissible = new bPermissible(event.getPlayer());
+        org.bukkit.permissions.Permissible oldpermissible = Injector.inject(event.getPlayer(), permissible);
+        permissible.setOldPermissible(oldpermissible);
+        permissible.setWorld(event.getPlayer().getWorld().getName());
+
         // Likewise, in theory this should be all we need to detect when a player joins
         TaskRunnable r = new TaskRunnable() {
             @Override
