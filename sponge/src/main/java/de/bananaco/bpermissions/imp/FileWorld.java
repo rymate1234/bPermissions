@@ -342,7 +342,7 @@ public class FileWorld extends World {
             if (name.equals("")) continue;
             usaveconfig.getNode(GROUPS, name).setValue(null);
 
-            name = name.replace(".", "");
+            name = name.replace(".", "-");
 
             gsaveconfig.getNode(GROUPS, name, PERMISSIONS).setValue(group.serialisePermissions());
             gsaveconfig.getNode(GROUPS, name, GROUPS).setValue(group.serialiseGroups());

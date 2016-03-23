@@ -153,6 +153,7 @@ public abstract class World {
         name = stripColor(name);
         // A quick lowercase here
         name = name.toLowerCase();
+        name = name.replace(".", "-");
 
         if (storeContains(name, type)) loadIfExists(name, type);
 

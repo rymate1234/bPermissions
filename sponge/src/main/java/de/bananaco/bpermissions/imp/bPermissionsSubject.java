@@ -76,6 +76,8 @@ public class bPermissionsSubject implements OptionSubject {
 
     @Override
     public Tristate getPermissionValue(Set<Context> contexts, String permission) {
+        Tristate ret = Tristate.UNDEFINED;
+
         Calculable c = ((bPermissionsSubjectData) getSubjectData()).getCalculableWithContext(contexts);
 
         if (c == null) {
@@ -88,7 +90,8 @@ public class bPermissionsSubject implements OptionSubject {
                 return Tristate.fromBoolean(b);
             }
         }
-        return Tristate.UNDEFINED;
+
+        return ret;
     }
 
     @Override

@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class bPermissible extends PermissibleBase {
-
     private Player player;
     private Map<String, PermissionAttachmentInfo> permissions;
     private org.bukkit.permissions.Permissible oldpermissible = new PermissibleBase(null);

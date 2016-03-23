@@ -31,6 +31,7 @@ public abstract class GroupCarrier extends PermissionCarrier {
     public void calculateGroups() {
         groupsCalculated.clear();
         for (String name : this.groups) {
+            name = name.replace(".", "-");
             if (WorldManager.getInstance().getWorld(getWorld()) == null) {
                 System.err.println(getWorld() + " is null?");
             }
@@ -71,6 +72,7 @@ public abstract class GroupCarrier extends PermissionCarrier {
      * @param group
      */
     public void addGroup(String group) {
+        group = group.replace(".", "-");
         group = group.toLowerCase();
         groups.add(group);
     }
@@ -82,6 +84,7 @@ public abstract class GroupCarrier extends PermissionCarrier {
      * @param group
      */
     public void removeGroup(String group) {
+        group = group.replace(".", "-");
         group = group.toLowerCase();
         groups.remove(group);
     }
@@ -93,6 +96,7 @@ public abstract class GroupCarrier extends PermissionCarrier {
      * @param group
      */
     public void setGroup(String group) {
+        group = group.replace(".", "-");
         groups.clear();
         group = group.toLowerCase();
         groups.add(group);
@@ -105,6 +109,7 @@ public abstract class GroupCarrier extends PermissionCarrier {
      * @return boolean
      */
     public boolean hasGroup(String group) {
+        group = group.replace(".", "-");
         for (String g : groups) {
             if (g.equalsIgnoreCase(group)) {
                 return true;
@@ -114,6 +119,7 @@ public abstract class GroupCarrier extends PermissionCarrier {
     }
 
     public boolean hasGroupRecursive(String group) {
+        group = group.replace(".", "-");
         Set<String> groups = new HashSet<>(this.groups);
         if (groups.contains(group)) {
             return true;
@@ -138,7 +144,7 @@ public abstract class GroupCarrier extends PermissionCarrier {
         // also sort it
         sortGroups(gr);
         for (int i = 0; i < gr.size(); i++) {
-            groups.add(gr.get(i).getNameLowerCase().replace(".", ""));
+            groups.add(gr.get(i).getNameLowerCase().replace(".", "-"));
         }
         return groups;
     }

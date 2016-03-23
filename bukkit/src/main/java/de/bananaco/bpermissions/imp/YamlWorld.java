@@ -328,7 +328,7 @@ public class YamlWorld extends World {
             String name = group.getName();
             if (name.equals("")) continue;
 
-            name = name.replace(".", "");
+            name = name.replace(".", "-");
 
             gsaveconfig.set(GROUPS + "." + name, null);
 
