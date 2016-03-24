@@ -41,7 +41,7 @@ public class BukkitCompat {
      * @param perm
      * @return
      */
-    public static PermissionAttachment setPermissions(Permissible p, Plugin plugin, Map<String, Boolean> perm) {
+    public static PermissionAttachment setPermissions(bPermissible p, Plugin plugin, Map<String, Boolean> perm) {
         try {
             return doBukkitPermissions(p, plugin, perm);
         } catch (Exception e) {
@@ -59,8 +59,8 @@ public class BukkitCompat {
      * @param permissions
      * @return
      */
-    public static PermissionAttachment doBukkitPermissions(Permissible p, Plugin plugin, Map<String, Boolean> permissions) throws IllegalAccessException {
-        Player player = (Player) p;
+    public static PermissionAttachment doBukkitPermissions(bPermissible p, Plugin plugin, Map<String, Boolean> permissions) throws IllegalAccessException {
+        Player player = p.getPlayer();
         String uuid = player.getUniqueId().toString();
 
         Permission permission = plugin.getServer().getPluginManager().getPermission(uuid);
@@ -68,16 +68,6 @@ public class BukkitCompat {
         if (permission != null) {
             plugin.getServer().getPluginManager().removePermission(permission);
         }
-
-        /*Map<String, Boolean> children = new HashMap<String, Boolean>();
-
-        ListIterator<String> iter =
-                new ArrayList<>(permissions.keySet()).listIterator(permissions.size());
-
-        while (iter.hasPrevious()) {
-            String perm = iter.previous();
-            children.put(perm, permissions.get(perm));
-        }*/
 
         permission = new Permission(uuid, PermissionDefault.FALSE);
 
@@ -115,6 +105,18 @@ public class BukkitCompat {
     }
 
     public static void runTest(Player player, Plugin plugin) {
+        bPermissible permissible = null;
+
+        if (player instanceof bPermissible) {
+            permissible = (bPermissible) player;
+            ((bPermissible) player).setWorld(player.getWorld().getName());
+        } else {
+            permissible = new bPermissible(player);
+            org.bukkit.permissions.Permissible oldpermissible = Injector.inject(player, permissible);
+            permissible.setOldPermissible(oldpermissible);
+            permissible.setWorld(player.getWorld().getName());
+        }
+
         long start, finish, time;
         // 1000 example permissions
         Map<String, Boolean> permissions = new HashMap<String, Boolean>();
@@ -148,7 +150,7 @@ public class BukkitCompat {
         // supersuperpermissions
         start = System.currentTimeMillis();
         try {
-            att = BukkitCompat.doBukkitPermissions(player, plugin, permissions);
+            att = BukkitCompat.doBukkitPermissions(permissible, plugin, permissions);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -166,7 +168,7 @@ public class BukkitCompat {
         }
         // ourpermissions
         start = System.currentTimeMillis();
-        att = BukkitCompat.setPermissions(player, plugin, permissions);
+        att = BukkitCompat.setPermissions(permissible, plugin, permissions);
         finish = System.currentTimeMillis();
         time = finish - start;
         if (!player.hasPermission("example.1")) {

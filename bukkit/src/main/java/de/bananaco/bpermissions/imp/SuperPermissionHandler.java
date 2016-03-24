@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
@@ -41,7 +42,7 @@ public class SuperPermissionHandler implements Listener {
      * This is put in place until such a time as Bukkit pull 466 is implemented
      * https://github.com/Bukkit/Bukkit/pull/466
      */
-    public void setPermissions(Player p, Plugin plugin, Map<String, Boolean> perm) {
+    public void setPermissions(bPermissible p, Plugin plugin, Map<String, Boolean> perm) {
         BukkitCompat.setPermissions(p, plugin, perm);
     }
 
@@ -77,6 +78,19 @@ public class SuperPermissionHandler implements Listener {
         if (!plugin.isEnabled()) {
             return;
         }
+
+        bPermissible permissible = null;
+
+        if (player instanceof bPermissible) {
+            permissible = (bPermissible) player;
+            ((bPermissible) player).setWorld(player.getWorld().getName());
+        } else {
+            permissible = new bPermissible(player);
+            org.bukkit.permissions.Permissible oldpermissible = Injector.inject(player, permissible);
+            permissible.setOldPermissible(oldpermissible);
+            permissible.setWorld(player.getWorld().getName());
+        }
+
         // Grab the pre-calculated effectivePermissions from the User object
         // Then whack it onto the player
         // TODO wait for the bukkit team to get their finger out, we'll use our reflection here!		
@@ -87,7 +101,8 @@ public class SuperPermissionHandler implements Listener {
                 recalculate
         );
 
-        setPermissions(player, plugin, perms);
+        // set the permissions onto the player's Permissible
+        setPermissions(permissible, plugin, perms);
 
         // Set the metadata?
         String prefix = ApiLayer.getValue(
@@ -121,7 +136,6 @@ public class SuperPermissionHandler implements Listener {
     @EventHandler
     public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
         // In theory this should be all we need to detect world, it isn't cancellable so... should be fine?
-        ((bPermissible) event.getPlayer()).setWorld(event.getPlayer().getWorld().getName());
         setupPlayer(event.getPlayer(), false);
     }
 
@@ -168,12 +182,6 @@ public class SuperPermissionHandler implements Listener {
     public void onPlayerLogin(final PlayerLoginEvent event) {
         final String uuid = event.getPlayer().getUniqueId().toString();
         Debugger.log("Player logged in with UUID " + uuid);
-
-        //inject permissible
-        bPermissible permissible = new bPermissible(event.getPlayer());
-        org.bukkit.permissions.Permissible oldpermissible = Injector.inject(event.getPlayer(), permissible);
-        permissible.setOldPermissible(oldpermissible);
-        permissible.setWorld(event.getPlayer().getWorld().getName());
 
         // Likewise, in theory this should be all we need to detect when a player joins
         TaskRunnable r = new TaskRunnable() {

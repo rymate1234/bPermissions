@@ -9,6 +9,7 @@ package de.bananaco.bpermissions.imp;
 
 import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.CalculableType;
+import de.bananaco.bpermissions.util.Debugger;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissibleBase;
@@ -28,6 +29,7 @@ public class bPermissible extends PermissibleBase {
     private Map<String, PermissionAttachmentInfo> permissions;
     private org.bukkit.permissions.Permissible oldpermissible = new PermissibleBase(null);
     private String world;
+    private boolean permsLoaded = false;
 
     public bPermissible(Player player) {
         super(player);
@@ -63,14 +65,16 @@ public class bPermissible extends PermissibleBase {
 
     @Override
     public boolean hasPermission(String permission) {
-        boolean res;
-        if (isPermissionSet(permission)) {
-            res = hasSuperPerm(permission);
-        } else {
-            return ApiLayer.hasPermission(world, CalculableType.USER, player.getUniqueId().toString(), permission);
+        // check with superperms first (gotta get them default perms yo)
+        boolean ret = hasSuperPerm(permission);
+
+        // then check with bPerms if it isn't set in superperms and it returned false
+        if (!ret && !isPermissionSet(permission)){
+            ret = ApiLayer.hasPermission(world, CalculableType.USER, player.getUniqueId().toString(), permission);
         }
 
-        return res;
+        // finally return it
+        return ret;
     }
 
     @Override
@@ -192,5 +196,9 @@ public class bPermissible extends PermissibleBase {
 
     public void setWorld(String world) {
         this.world = world;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }
