@@ -50,6 +50,44 @@ public class Injector {
             org.bukkit.permissions.Permissible permissible = (org.bukkit.permissions.Permissible) perm.get(sender);
             if (permissible instanceof bPermissible) {
                 perm.set(sender, ((bPermissible) permissible).getOldPermissible());
+                return permissible;
+            }
+
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static boolean isbPermissible(CommandSender sender) {
+        try {
+            Field perm = getPermField(sender);
+            if (perm == null) {
+                return false;
+            }
+            perm.setAccessible(true);
+            org.bukkit.permissions.Permissible permissible = (org.bukkit.permissions.Permissible) perm.get(sender);
+            if (permissible instanceof bPermissible) {
+                return true;
+            }
+
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static bPermissible getbPermissible(CommandSender sender) {
+        try {
+            Field perm = getPermField(sender);
+            if (perm == null) {
+                return null;
+            }
+            perm.setAccessible(true);
+            org.bukkit.permissions.Permissible permissible = (org.bukkit.permissions.Permissible) perm.get(sender);
+            if (permissible instanceof bPermissible) {
                 return (bPermissible) permissible;
             }
 

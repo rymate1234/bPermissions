@@ -7,9 +7,9 @@ package de.bananaco.bpermissions.imp;
  * Found at https://github.com/weaondara/BungeePermsBukkit/blob/master/src/main/java/net/alpenblock/bungeeperms/platform/bukkit/Permissible.java
  **/
 
-import de.bananaco.bpermissions.api.ApiLayer;
-import de.bananaco.bpermissions.api.CalculableType;
+import de.bananaco.bpermissions.api.*;
 import de.bananaco.bpermissions.util.Debugger;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissibleBase;
@@ -19,17 +19,19 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Field;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class bPermissible extends PermissibleBase {
     private Player player;
+    private static WorldManager wm = WorldManager.getInstance();
+
     private Map<String, PermissionAttachmentInfo> permissions;
     private org.bukkit.permissions.Permissible oldpermissible = new PermissibleBase(null);
     private String world;
     private boolean permsLoaded = false;
+
+    Map<String, Boolean> bpermissions;
+
 
     public bPermissible(Player player) {
         super(player);
@@ -69,8 +71,17 @@ public class bPermissible extends PermissibleBase {
         boolean ret = hasSuperPerm(permission);
 
         // then check with bPerms if it isn't set in superperms and it returned false
-        if (!ret && !isPermissionSet(permission)){
-            ret = ApiLayer.hasPermission(world, CalculableType.USER, player.getUniqueId().toString(), permission);
+        if (!ret && !isPermissionSet(permission) && !bpermissions.isEmpty()) {
+            long time = System.currentTimeMillis();
+            Debugger.log("Begun check for " + permission);
+
+            if (bpermissions.containsKey(permission)) {
+                ret = Calculable.hasPermission(permission, bpermissions);
+            }
+
+            long finish = System.currentTimeMillis() - time;
+
+            Debugger.log("Check for " + permission + ". took " + finish + "ms.");
         }
 
         // finally return it
@@ -83,7 +94,7 @@ public class bPermissible extends PermissibleBase {
     }
 
     @Override
-    public void recalculatePermissions() {
+    public synchronized void recalculatePermissions() {
         if (oldpermissible == null) {
             super.recalculatePermissions();
             return;
@@ -196,7 +207,29 @@ public class bPermissible extends PermissibleBase {
 
     public void setWorld(String world) {
         this.world = world;
+        updatePerms();
     }
+
+    private synchronized void updatePerms() {
+        CalculableType type = CalculableType.USER;
+        String name = player.getUniqueId().toString();
+
+        if (world == null) {
+            bpermissions = new HashMap<String, Boolean>();
+        }
+
+        bpermissions = ApiLayer.getEffectivePermissions(world, type, name);
+
+        // get child perms as well (for vanish, etc.)
+        for (String perm : bpermissions.keySet()) {
+            Set<String> children = Bukkit.getPluginManager().getPermission(perm).getChildren().keySet();
+
+            for (String child : children) {
+                bpermissions.put(child, bpermissions.get(perm));
+            }
+        }
+    }
+
 
     public Player getPlayer() {
         return player;

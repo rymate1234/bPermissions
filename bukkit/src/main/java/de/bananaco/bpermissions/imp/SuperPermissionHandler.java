@@ -81,9 +81,11 @@ public class SuperPermissionHandler implements Listener {
 
         bPermissible permissible = null;
 
-        if (player instanceof bPermissible) {
-            permissible = (bPermissible) player;
-            ((bPermissible) player).setWorld(player.getWorld().getName());
+        if (Injector.isbPermissible(player)) {
+            permissible = Injector.getbPermissible(player);
+            if (permissible != null) {
+                permissible.setWorld(player.getWorld().getName());
+            }
         } else {
             permissible = new bPermissible(player);
             org.bukkit.permissions.Permissible oldpermissible = Injector.inject(player, permissible);
