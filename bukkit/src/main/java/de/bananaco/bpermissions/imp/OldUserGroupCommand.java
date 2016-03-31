@@ -164,7 +164,7 @@ public class OldUserGroupCommand extends BaseCommand implements CommandExecutor 
                         meta = meta + arg;
                     }
                     meta = meta.trim();
-                    cmd.setValue(args[1], args[2], sender);
+                    cmd.setValue(args[1], meta, sender);
                 }
             } else {
                 sendMessage(sender, "Too many arguments.");
