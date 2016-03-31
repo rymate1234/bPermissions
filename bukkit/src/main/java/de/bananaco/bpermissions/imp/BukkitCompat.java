@@ -1,6 +1,9 @@
 package de.bananaco.bpermissions.imp;
 
 //import org.bukkit.craftbukkit.entity.CraftHumanEntity;
+import de.bananaco.bpermissions.util.loadmanager.MainThread;
+import de.bananaco.bpermissions.util.loadmanager.TaskRunnable;
+import de.bananaco.bpermissions.util.loadmanager.TaskThread;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
@@ -59,8 +62,8 @@ public class BukkitCompat {
      * @param permissions
      * @return
      */
-    public static PermissionAttachment doBukkitPermissions(bPermissible p, Plugin plugin, Map<String, Boolean> permissions) throws IllegalAccessException {
-        Player player = p.getPlayer();
+    public static PermissionAttachment doBukkitPermissions(final bPermissible p, Plugin plugin, Map<String, Boolean> permissions) throws IllegalAccessException {
+        final Player player = p.getPlayer();
         String uuid = player.getUniqueId().toString();
 
         Permission permission = plugin.getServer().getPluginManager().getPermission(uuid);
@@ -100,7 +103,18 @@ public class BukkitCompat {
             att.setPermission(uuid, true);
         }
         // recalculate permissions
-        player.recalculatePermissions();
+        TaskRunnable r = new TaskRunnable() {
+            @Override
+            public TaskType getType() {
+                return TaskRunnable.TaskType.SERVER;
+            }
+
+            public void run() {
+                player.recalculatePermissions();
+            }
+        };
+
+        MainThread.getInstance().schedule(r);
         return att;
     }
 

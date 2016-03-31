@@ -9,6 +9,7 @@ package de.bananaco.bpermissions.imp;
 
 import de.bananaco.bpermissions.api.*;
 import de.bananaco.bpermissions.util.Debugger;
+import de.bananaco.bpermissions.util.loadmanager.TaskRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -222,9 +223,17 @@ public class bPermissible extends PermissibleBase {
 
         // get child perms as well (for vanish, etc.)
         for (String perm : bpermissions.keySet()) {
-            Set<String> children = Bukkit.getPluginManager().getPermission(perm).getChildren().keySet();
+            Permission permission = Bukkit.getPluginManager().getPermission(perm);
+            if (permission == null) {
+                continue;
+            }
 
-            for (String child : children) {
+            Map<String, Boolean> children = permission.getChildren();
+            if (children == null || children.keySet().isEmpty() || children.isEmpty()) {
+                continue;
+            }
+
+            for (String child : children.keySet()) {
                 bpermissions.put(child, bpermissions.get(perm));
             }
         }

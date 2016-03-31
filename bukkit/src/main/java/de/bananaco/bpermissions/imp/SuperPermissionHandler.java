@@ -185,24 +185,14 @@ public class SuperPermissionHandler implements Listener {
         final String uuid = event.getPlayer().getUniqueId().toString();
         Debugger.log("Player logged in with UUID " + uuid);
 
-        // Likewise, in theory this should be all we need to detect when a player joins
-        TaskRunnable r = new TaskRunnable() {
-            @Override
-            public TaskType getType() {
-                return TaskType.SERVER;
-            }
+        long time = System.currentTimeMillis();
+        Debugger.log("Begun setup for " + uuid);
 
-            public void run() {
-                long time = System.currentTimeMillis();
-                Debugger.log("Begun setup for " + uuid);
+        setupPlayer(event.getPlayer(), false);
 
-                setupPlayer(event.getPlayer(), false);
+        long finish = System.currentTimeMillis() - time;
+        Debugger.log("Setup for " + uuid + ". took " + finish + "ms.");
 
-                long finish = System.currentTimeMillis() - time;
-                Debugger.log("Setup for " + uuid + ". took " + finish + "ms.");
-            }
-        };
-        MainThread.getInstance().schedule(r);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
