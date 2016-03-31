@@ -222,7 +222,7 @@ public class bPermissible extends PermissibleBase {
         bpermissions = ApiLayer.getEffectivePermissions(world, type, name);
 
         // get child perms as well (for vanish, etc.)
-        for (String perm : bpermissions.keySet()) {
+        for (String perm : new HashSet<>(bpermissions.keySet())) {
             Permission permission = Bukkit.getPluginManager().getPermission(perm);
             if (permission == null) {
                 continue;
