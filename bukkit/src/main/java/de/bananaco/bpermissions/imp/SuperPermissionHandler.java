@@ -34,6 +34,7 @@ import de.bananaco.bpermissions.util.loadmanager.MainThread;
  */
 public class SuperPermissionHandler implements Listener {
 
+    private final boolean customPermissible;
     private WorldManager wm = WorldManager.getInstance();
     private Map<UUID, PermissionAttachment> attachments = new HashMap<UUID, PermissionAttachment>();
     private Permissions plugin;
@@ -42,12 +43,12 @@ public class SuperPermissionHandler implements Listener {
      * This is put in place until such a time as Bukkit pull 466 is implemented
      * https://github.com/Bukkit/Bukkit/pull/466
      */
-    public void setPermissions(bPermissible p, Plugin plugin, Map<String, Boolean> perm) {
+    public void setPermissions(Permissible p, Plugin plugin, Map<String, Boolean> perm) {
         BukkitCompat.setPermissions(p, plugin, perm);
     }
 
     // Main constructor
-    protected SuperPermissionHandler(Permissions plugin) {
+    protected SuperPermissionHandler(Permissions plugin, boolean customPermissible) {
         this.plugin = plugin;
         // This next bit is simply to make bPermissions.* work with superperms, since I now have my bulk adding, I will concede to this
         Map<String, Boolean> children = new HashMap<String, Boolean>();
@@ -56,6 +57,8 @@ public class SuperPermissionHandler implements Listener {
         if (plugin.getServer().getPluginManager().getPermission("bPermissions.*") == null) {
             plugin.getServer().getPluginManager().addPermission(permission);
         }
+
+        this.customPermissible = customPermissible;
     }
 
     /**
@@ -79,18 +82,22 @@ public class SuperPermissionHandler implements Listener {
             return;
         }
 
-        bPermissible permissible = null;
+        Permissible permissible = null;
 
-        if (Injector.isbPermissible(player)) {
-            permissible = Injector.getbPermissible(player);
-            if (permissible != null) {
-                permissible.setWorld(player.getWorld().getName());
+        if (customPermissible) {
+            if (Injector.isbPermissible(player)) {
+                permissible = Injector.getbPermissible(player);
+                if (permissible != null) {
+                    ((bPermissible) permissible).setWorld(player.getWorld().getName());
+                }
+            } else {
+                permissible = new bPermissible(player);
+                org.bukkit.permissions.Permissible oldpermissible = Injector.inject(player, permissible);
+                ((bPermissible) permissible).setOldPermissible(oldpermissible);
+                ((bPermissible) permissible).setWorld(player.getWorld().getName());
             }
         } else {
-            permissible = new bPermissible(player);
-            org.bukkit.permissions.Permissible oldpermissible = Injector.inject(player, permissible);
-            permissible.setOldPermissible(oldpermissible);
-            permissible.setWorld(player.getWorld().getName());
+            permissible = player;
         }
 
         // Grab the pre-calculated effectivePermissions from the User object
@@ -128,14 +135,6 @@ public class SuperPermissionHandler implements Listener {
     }
 
     @EventHandler
-    public void onAsyncPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
-        MainThread mt = MainThread.getInstance();
-        if (!mt.getStarted()) {
-            event.disallow(Result.KICK_OTHER, "bPermissions not enabled");
-        }
-    }
-
-    @EventHandler
     public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
         // In theory this should be all we need to detect world, it isn't cancellable so... should be fine?
         setupPlayer(event.getPlayer(), false);
@@ -166,6 +165,11 @@ public class SuperPermissionHandler implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
+        MainThread mt = MainThread.getInstance();
+        if (!mt.getStarted()) {
+            event.disallow(Result.KICK_OTHER, "bPermissions not enabled");
+        }
+
         final String uuid = event.getUniqueId().toString();
         for (final de.bananaco.bpermissions.api.World world : wm.getAllWorlds()) {
             world.loadIfExists(uuid, CalculableType.USER);

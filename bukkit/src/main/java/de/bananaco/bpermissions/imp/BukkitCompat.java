@@ -44,7 +44,7 @@ public class BukkitCompat {
      * @param perm
      * @return
      */
-    public static PermissionAttachment setPermissions(bPermissible p, Plugin plugin, Map<String, Boolean> perm) {
+    public static PermissionAttachment setPermissions(Permissible p, Plugin plugin, Map<String, Boolean> perm) {
         try {
             return doBukkitPermissions(p, plugin, perm);
         } catch (Exception e) {
@@ -62,8 +62,13 @@ public class BukkitCompat {
      * @param permissions
      * @return
      */
-    public static PermissionAttachment doBukkitPermissions(final bPermissible p, Plugin plugin, Map<String, Boolean> permissions) throws IllegalAccessException {
-        final Player player = p.getPlayer();
+    public static PermissionAttachment doBukkitPermissions(final Permissible p, Plugin plugin, Map<String, Boolean> permissions) throws IllegalAccessException {
+        final Player player;
+        if (p instanceof bPermissible) {
+             player = ((bPermissible) p).getPlayer();
+        } else {
+            player = (Player) p;
+        }
         String uuid = player.getUniqueId().toString();
 
         Permission permission = plugin.getServer().getPluginManager().getPermission(uuid);

@@ -19,6 +19,7 @@ public class Config {
     private boolean offlineMode = false;
     private boolean trackLimit = false;
     private boolean useGlobalUsers = false;
+    private boolean useCustomPermissible = false;
 
     public void load() {
         try {
@@ -46,6 +47,7 @@ public class Config {
         config.set("use-global-files", config.get("use-global-files", useGlobalFiles));
         config.set("use-global-users", config.get("use-global-users", useGlobalUsers));
         config.set("track-limit", config.get("track-limit", trackLimit));
+        config.set("use-custom-permissible", config.get("use-custom-permissible", useCustomPermissible));
         // then load it into memory
         useGlobalFiles = config.getBoolean("use-global-files");
         useGlobalUsers = config.getBoolean("use-global-users");
@@ -53,6 +55,7 @@ public class Config {
         trackType = config.getString("track-type");
         offlineMode = config.getBoolean("allow-offline-mode");
         trackLimit = config.getBoolean("track-limit");
+        useCustomPermissible = config.getBoolean("use-custom-permissible");
         // then load our PromotionTrack
         if (trackType.equalsIgnoreCase("multi")) {
             track = new MultiGroupPromotion();
@@ -85,5 +88,9 @@ public class Config {
 
     public boolean getAllowOfflineMode() {
         return offlineMode;
+    }
+
+    public boolean useCustomPermissible() {
+        return useCustomPermissible;
     }
 }
