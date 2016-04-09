@@ -44,9 +44,15 @@ public class ActionExecutor {
             } else if (action.equalsIgnoreCase("rmperm")) {
                 c.removePermission(value);
             } else if (action.startsWith("addmeta") || action.startsWith("meta")) {
+                if (action.split(":").length != 2) {
+                    return false;
+                }
                 String meta = action.split(":")[1];
                 c.setValue(meta, value);
             } else if (action.startsWith("rmmeta") || action.startsWith("cmeta")) {
+                if (action.split(":").length != 2) {
+                    return false;
+                }
                 String meta = action.split(":")[1];
                 c.removeValue(meta);
             } else {

@@ -107,19 +107,9 @@ public class BukkitCompat {
             att = player.addAttachment(plugin);
             att.setPermission(uuid, true);
         }
-        // recalculate permissions
-        TaskRunnable r = new TaskRunnable() {
-            @Override
-            public TaskType getType() {
-                return TaskRunnable.TaskType.SERVER;
-            }
 
-            public void run() {
-                player.recalculatePermissions();
-            }
-        };
+        player.recalculatePermissions();
 
-        MainThread.getInstance().schedule(r);
         return att;
     }
 

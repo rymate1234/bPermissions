@@ -347,12 +347,15 @@ public class Permissions extends JavaPlugin {
                     world = c.split(":")[1];
                 }
             }
+            String actionMessage = (world == null ? "all worlds" : "world: " + world);
+
+            String message = ChatColor.GOLD + "Executing action: " + ChatColor.GREEN + action + " " + value + ChatColor.GOLD + " in " + ChatColor.GREEN + (world == null ? "all worlds" : "world: " + world);
+            sender.sendMessage(message);
+
             boolean executed = ActionExecutor.execute(name, type, action, value, world);
             if (executed) {
-                String message = ChatColor.GOLD + "Executing action: " + ChatColor.GREEN + action + " " + value + ChatColor.GOLD + " in " + ChatColor.GREEN + (world == null ? "all worlds" : "world: " + world);
                 String message2 = ChatColor.GOLD + "Action applied to " + ChatColor.GREEN + type.getName() + " " + name;
 
-                sender.sendMessage(message);
                 sender.sendMessage(message2);
             } else {
                 sender.sendMessage(format("Invalid exec command!"));

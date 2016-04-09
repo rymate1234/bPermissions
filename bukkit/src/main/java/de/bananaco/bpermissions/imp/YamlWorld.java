@@ -383,6 +383,7 @@ public class YamlWorld extends World {
                 }
 
                 user.setLoaded();
+
                 // Upload it to the API
                 remove(user);
                 add(user);
@@ -392,10 +393,6 @@ public class YamlWorld extends World {
                     user.calculateEffectiveMeta();
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
-
-                if (isOnline(user)) {
-                    setupPlayer(name);
                 }
             } else {
                 Debugger.log("Empty ConfigurationSection:" + USERS + ":" + ufile.getPath());
