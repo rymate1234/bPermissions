@@ -46,7 +46,7 @@ public class BukkitCompat {
      */
     public static PermissionAttachment setPermissions(Permissible p, Plugin plugin, Map<String, Boolean> perm) {
         try {
-            return doBukkitPermissions(p, plugin, perm);
+            return doBukkitMultiPermissions(p, plugin, perm);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -54,9 +54,103 @@ public class BukkitCompat {
     }
 
     /**
-     * Thanks
+     * The following methods for applying permissions are based off code by @Wolvereness
+     */
+
+
+    /**
+     * This method uses two permissions for a player - one with positive nodes and one with negative modes
      *
-     * @Wolvereness it looks like my reflection is no longer needed!
+     * @param p
+     * @param plugin
+     * @param permissions
+     * @return
+     */
+    public static PermissionAttachment doBukkitMultiPermissions(final Permissible p, Plugin plugin, Map<String, Boolean> permissions) throws IllegalAccessException {
+        final Player player;
+        if (p instanceof bPermissible) {
+            player = ((bPermissible) p).getPlayer();
+        } else {
+            player = (Player) p;
+        }
+        String uuid = player.getUniqueId().toString();
+
+
+        Permission positive = plugin.getServer().getPluginManager().getPermission(uuid);
+        Permission negative = plugin.getServer().getPluginManager().getPermission("^" + uuid);
+
+        if (positive != null) {
+            plugin.getServer().getPluginManager().removePermission(positive);
+        }
+        if (negative != null) {
+            plugin.getServer().getPluginManager().removePermission(negative);
+        }
+
+        Map<String, Boolean> po = new HashMap<String, Boolean>();
+        Map<String, Boolean> ne = new HashMap<String, Boolean>();
+
+        for (String key : permissions.keySet()) {
+            if (permissions.get(key)) {
+                po.put(key, true);
+            } else {
+                ne.put(key, false);
+            }
+        }
+
+        positive = new Permission(uuid, PermissionDefault.FALSE);
+        negative = new Permission("^" + uuid, PermissionDefault.FALSE);
+
+        // A touch of reflection
+        Map<String, Boolean> positiveChildren = (Map<String, Boolean>) perms.get(positive);
+        positiveChildren.clear();
+        positiveChildren.putAll(po);
+
+        // keeps the doBukkitPermissions times down
+        Map<String, Boolean> negativeChildren = (Map<String, Boolean>) perms.get(negative);
+        negativeChildren.clear();
+        negativeChildren.putAll(ne);
+
+        Permission positiveCheck = plugin.getServer().getPluginManager().getPermission(uuid);
+        Permission negativeCheck = plugin.getServer().getPluginManager().getPermission("^" + uuid);
+
+        // sometimes we have to double check this
+        if (positiveCheck != null) {
+            plugin.getServer().getPluginManager().removePermission(positiveCheck);
+        }
+        // i blame threads
+        if (negativeCheck != null) {
+            plugin.getServer().getPluginManager().removePermission(negativeCheck);
+        }
+
+        plugin.getServer().getPluginManager().addPermission(positive);
+        plugin.getServer().getPluginManager().addPermission(negative);
+
+        PermissionAttachment att = null;
+        for (PermissionAttachmentInfo pai : new HashSet<PermissionAttachmentInfo>(player.getEffectivePermissions())) {
+            if (pai.getAttachment() != null && pai.getAttachment().getPlugin() != null) {
+                if (pai.getAttachment().getPlugin() instanceof Permissions) {
+                    att = pai.getAttachment();
+                    break;
+                }
+            }
+        }
+        // only if null
+        if (att == null) {
+            att = player.addAttachment(plugin);
+            att.setPermission(uuid, true);
+            att.setPermission("^" + uuid, true);
+        }
+
+        player.recalculatePermissions();
+
+        return att;
+    }
+
+    /**
+     * This method uses one permission for a player - holding both negative and positive nodes
+     *
+     * Currently not used - will add a config option later
+     *
      * @param p
      * @param plugin
      * @param permissions
