@@ -66,7 +66,7 @@ public class BukkitCompat {
      * @param permissions
      * @return
      */
-    public static PermissionAttachment doBukkitMultiPermissions(final Permissible p, Plugin plugin, Map<String, Boolean> permissions) throws IllegalAccessException {
+    public static synchronized PermissionAttachment doBukkitMultiPermissions(final Permissible p, Plugin plugin, Map<String, Boolean> permissions) throws IllegalAccessException {
         final Player player;
         if (p instanceof bPermissible) {
             player = ((bPermissible) p).getPlayer();
@@ -156,7 +156,7 @@ public class BukkitCompat {
      * @param permissions
      * @return
      */
-    public static PermissionAttachment doBukkitPermissions(final Permissible p, Plugin plugin, Map<String, Boolean> permissions) throws IllegalAccessException {
+    public static synchronized PermissionAttachment doBukkitPermissions(final Permissible p, Plugin plugin, Map<String, Boolean> permissions) throws IllegalAccessException {
         final Player player;
         if (p instanceof bPermissible) {
              player = ((bPermissible) p).getPlayer();
