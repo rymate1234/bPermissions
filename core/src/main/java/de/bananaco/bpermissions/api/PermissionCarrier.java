@@ -34,6 +34,7 @@ public abstract class PermissionCarrier extends WorldCarrier {
      * @param isTrue
      */
     public void addPermission(String permission, boolean isTrue) {
+        removePermission(permission);
         permissions.add(new Permission(permission, isTrue));
     }
 
