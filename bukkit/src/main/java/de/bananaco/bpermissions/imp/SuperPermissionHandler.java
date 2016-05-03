@@ -196,12 +196,14 @@ public class SuperPermissionHandler implements Listener {
 
         long finish = System.currentTimeMillis() - time;
         Debugger.log("Setup for " + uuid + ". took " + finish + "ms.");
-
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(final PlayerJoinEvent event) {
         String uuid = event.getPlayer().getUniqueId().toString();
+
+        setupPlayer(event.getPlayer(), false);
+
         Debugger.log("Player joined with UUID " + uuid);
     }
 }
