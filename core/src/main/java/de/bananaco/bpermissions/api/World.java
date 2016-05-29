@@ -155,12 +155,20 @@ public abstract class World {
         name = name.toLowerCase();
         name = name.replace(".", "-");
 
-        if (storeContains(name, type)) loadIfExists(name, type);
-
+        // make sure we get the users UUID, not their nick
         if (type == CalculableType.USER) {
-            if (!isUUID(name))
+            if (!isUUID(name)) {
                 name = getUUID(name).toString();
+            }
+        }
 
+        // load them
+        if (storeContains(name, type)) {
+            loadIfExists(name, type);
+        }
+
+        // set them up
+        if (type == CalculableType.USER) {
             if (!users.containsKey(name)) {
                 User user = new User(name, null, null, getName(), this);
                 add(user);
