@@ -43,7 +43,7 @@ public class Config {
         config.set("track-type", config.get("track-type", trackType));
         // set the debugger value to default
         config.set("debug-mode", Debugger.setDebug(config.getBoolean("debug-mode", Debugger.getDebug())));
-        config.set("allow-offline-mode", config.get("allow-offline-mode", offlineMode));
+        // config.set("allow-offline-mode", config.get("allow-offline-mode", offlineMode));
         config.set("use-global-files", config.get("use-global-files", useGlobalFiles));
         config.set("use-global-users", config.get("use-global-users", useGlobalUsers));
         config.set("track-limit", config.get("track-limit", trackLimit));
