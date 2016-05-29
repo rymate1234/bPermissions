@@ -110,11 +110,10 @@ public class Permissions extends JavaPlugin {
         config.load();
         // And test
         boolean onlineMode = getServer().getOnlineMode();
-        // Don't allow online mode servers to run bPermissions by default
-        if (config.getAllowOfflineMode() == false && onlineMode == false) {
-            System.err.println(blankFormat("Please check config.yml to enable offline-mode use"));
-            this.setEnabled(false);
-            return;
+        if (!onlineMode) {
+            System.err.println(blankFormat("== Warning: Offline mode is enabled on the server =="));
+            System.err.println(blankFormat("bPermissions only recommends using offline mode in scenarios where a proxy such as BungeeCord is handling mojang auth"));
+            System.err.println(blankFormat("If there's no user authentication, users could be spoofed."));
         }
         // Get the instance
         wm = WorldManager.getInstance();
