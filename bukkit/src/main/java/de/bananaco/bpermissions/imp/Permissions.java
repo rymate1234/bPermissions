@@ -459,13 +459,31 @@ public class Permissions extends JavaPlugin {
                     // reload mirrors
                     mrs.load();
 
-                    // reload all worlds too
-                    for (World world : wm.getAllWorlds()) {
-                        world.load();
-                        world.setupAll();
-                    }
+                    // finally reload the files
+                    mt.schedule(new TaskRunnable() {
+                        public void run() {
+                            for (final World world : wm.getAllWorlds()) {
+                                try {
+                                    ((YamlWorld) world).loadUnsafe();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
-                    sendMessage(sender, "All worlds reloading!");
+                                Bukkit.getScheduler().callSyncMethod(Permissions.instance, new Callable() {
+                                    public Object call() throws Exception {
+                                        return world.setupAll();
+                                    }
+                                });
+                            }
+                        }
+
+                        public TaskRunnable.TaskType getType() {
+                            return TaskRunnable.TaskType.LOAD;
+                        }
+                    });
+
+
+                    sendMessage(sender, "Reloaded bPermissions!");
                     return true;
                 } else if (action.equalsIgnoreCase("cleanup")) {
                     sendMessage(sender, "Cleaning up files!");
