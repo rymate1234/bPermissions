@@ -168,6 +168,7 @@ public class SuperPermissionHandler implements Listener {
         MainThread mt = MainThread.getInstance();
         if (!mt.getStarted()) {
             event.disallow(Result.KICK_OTHER, "bPermissions not enabled");
+            return; // don't touch the bPerms
         }
 
         final String uuid = event.getUniqueId().toString();
@@ -186,6 +187,12 @@ public class SuperPermissionHandler implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLogin(final PlayerLoginEvent event) {
+        MainThread mt = MainThread.getInstance();
+        if (!mt.getStarted()) {
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "bPermissions not enabled");
+            return; // don't touch the bPerms
+        }
+
         final String uuid = event.getPlayer().getUniqueId().toString();
         Debugger.log("Player logged in with UUID " + uuid);
 
@@ -200,6 +207,12 @@ public class SuperPermissionHandler implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(final PlayerJoinEvent event) {
+        MainThread mt = MainThread.getInstance();
+        if (!mt.getStarted()) {
+            event.getPlayer().kickPlayer("bPermissions not enabled");
+            return; // don't touch the bPerms
+        }
+
         String uuid = event.getPlayer().getUniqueId().toString();
 
         setupPlayer(event.getPlayer(), false);

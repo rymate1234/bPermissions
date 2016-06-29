@@ -27,7 +27,7 @@ public class Permissions extends JavaPlugin {
     private final Mirrors mrs = new Mirrors(mirrors);
     public SuperPermissionHandler handler;
     private Listener loader;
-    
+
     // Change to public for people to hook into if they really need to
     public Map<String, Commands> commands;
     private WorldManager wm;
