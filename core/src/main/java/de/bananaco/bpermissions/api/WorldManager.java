@@ -110,15 +110,16 @@ public class WorldManager {
     @SuppressWarnings({"rawtypes", "unchecked"})
     public Set<World> getAllWorlds() {
         Set<World> worlds = new HashSet();
+        // Add the global world
+        if (useGlobalFiles && getDefaultWorld() != null) {
+            worlds.add(getDefaultWorld());
+        }
+
         for (String key : this.worlds.keySet()) {
             // Fix for mirrors.yml not working properly
             if (!mirrors.containsKey(key)) {
                 worlds.add(this.worlds.get(key));
             }
-        }
-        // Add the global world
-        if (useGlobalFiles && getDefaultWorld() != null) {
-            worlds.add(getDefaultWorld());
         }
 
         return worlds;
