@@ -61,8 +61,10 @@ public class Config {
             track = new MultiGroupPromotion();
         } else if (trackType.equalsIgnoreCase("lump")) {
             track = new LumpGroupPromotion();
-        } else {
+        } else if (trackType.equalsIgnoreCase("single")) {
             track = new SingleGroupPromotion();
+        } else {
+            track = new ReplaceGroupPromotion();
         }
         // Then set the worldmanager
         WorldManager.getInstance().setAutoSave(autoSave);
