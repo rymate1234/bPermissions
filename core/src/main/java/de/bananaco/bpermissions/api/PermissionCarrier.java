@@ -74,11 +74,7 @@ public abstract class PermissionCarrier extends WorldCarrier {
     public Set<String> getPermissionsAsString() {
         Set<String> permissions = new HashSet();
         for (Permission permission : getPermissions()) {
-            if (permission.isTrue()) {
-                permissions.add(permission.name());
-            } else {
-                permissions.add("^" + permission.name());
-            }
+            permissions.add(permission.serialize());
         }
         return permissions;
     }

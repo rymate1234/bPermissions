@@ -128,6 +128,15 @@ public class Permission extends de.bananaco.bpermissions.api.util.Permission {
     }
 
     @Override
+    public String serialize() {
+        if (isTrue()) {
+            return name;
+        } else {
+            return "^" + name;
+        }
+    }
+
+    @Override
     public String toString() {
         return name + ":" + isTrue;
     }

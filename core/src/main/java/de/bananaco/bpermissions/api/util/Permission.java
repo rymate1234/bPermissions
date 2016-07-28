@@ -22,4 +22,6 @@ public abstract class Permission {
     public abstract String name();
 
     public abstract String nameLowerCase();
+
+    public abstract String serialize();
 }

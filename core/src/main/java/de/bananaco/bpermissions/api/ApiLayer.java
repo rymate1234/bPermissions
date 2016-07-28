@@ -348,7 +348,7 @@ public class ApiLayer {
         if (w == null || type == null || name == null || permissionToAdd == null) {
             return;
         }
-        ActionExecutor.execute(name, type, ActionType.ADD_PERMISSION.getName(), permissionToAdd.toString(), world);
+        ActionExecutor.execute(name, type, ActionType.ADD_PERMISSION.getName(), permissionToAdd.serialize(), world);
     }
 
     /**
