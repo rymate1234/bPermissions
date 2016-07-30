@@ -1,5 +1,5 @@
 group 'de.bananaco'
-version '2.12-DEV'
+version '2.12'
 
 apply plugin: 'java'
 
