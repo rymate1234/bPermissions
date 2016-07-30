@@ -3,6 +3,9 @@ package de.bananaco.permissions.fornoobs;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import de.bananaco.bpermissions.api.Group;
+import de.bananaco.bpermissions.api.User;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,54 +28,77 @@ public class ForNoobs {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("Files created!");
     }
 
     private void addDefaults(World world) throws Exception {
+        boolean autosave = wm.getAutoSave();
+        wm.setAutoSave(false);
         ArrayList<String> regPerms = getPermissions();
         // Do the groups first
-        String admin = "admin";
-        String mod = "moderator";
-        String def = world.getDefaultGroup();
+        Group admin = world.getGroup("admin");
+        Group mod = world.getGroup("moderator");
+        Group def = world.getGroup(world.getDefaultGroup());
         // Let's sort the permissions into shizzledizzle
+
         for (String perm : regPerms) {
             if (perm.contains("user") || perm.contains("build")) {
-                world.getGroup(def).addPermission(perm, true);
+                def.addPermission(perm, true);
             } else if (perm.contains(".ban") || perm.contains(".kick") || perm.contains(".mod") || perm.contains(".fly")) {
-                world.getGroup(mod).addPermission(perm, true);
+                mod.addPermission(perm, true);
             } else {
-                world.getGroup(admin).addPermission(perm, true);
+                admin.addPermission(perm, true);
             }
         }
+
         // admin
-        world.getGroup(admin).addGroup(mod);
-        world.getGroup(admin).addPermission("group." + mod, false);
-        world.getGroup(admin).addPermission("group." + admin, true);
-        world.getGroup(admin).setValue("prefix", "&5admin");
+        admin.addGroup(mod.getName());
+        admin.addPermission("group." + mod, false);
+        admin.addPermission("group." + admin, true);
+        admin.setValue("prefix", "&5admin");
+
         // moderator
-        world.getGroup(mod).addGroup(def);
-        world.getGroup(mod).addPermission("group." + def, false);
-        world.getGroup(mod).addPermission("group." + mod, true);
-        world.getGroup(mod).setValue("prefix", "&7moderator");
+        mod.addGroup(def.getName());
+        mod.addPermission("group." + def, false);
+        mod.addPermission("group." + mod, true);
+        mod.setValue("prefix", "&7moderator");
+
         // default
-        world.getGroup(def).addPermission("group." + def, true);
-        world.getGroup(def).setValue("prefix", "&9user");
+        def.addPermission("group." + def, true);
+        def.setValue("prefix", "&9user");
+
         // Now do some example users
         String user1 = "codename_B";
-        String user2 = "Notch";
-        String user3 = "pyraetos";
+        String user2 = "rymate1234";
+        String user3 = "Notch";
+        String user4 = "pyraetos";
+
         // And set their groups
-        // user1
-        world.getUser(user1).getGroupsAsString().clear();
-        world.getUser(user1).addGroup(admin);
-        world.getUser(user1).setValue("prefix", "&8developer");
-        // user2
-        world.getUser(user2).getGroupsAsString().clear();
-        world.getUser(user2).addGroup(mod);
-        world.getUser(user2).setValue("prefix", "&8mojang");
-        // user3
-        world.getUser(user3).setValue("prefix", "&3helper");
+        // user 1
+        User user = world.getUser(user1);
+        user.getGroupsAsString().clear();
+        user.addGroup(admin.getName());
+        user.setValue("prefix", "&8old developer");
+
+        // user 2
+        user = world.getUser(user2);
+        user.getGroupsAsString().clear();
+        user.addGroup(admin.getName());
+        user.setValue("prefix", "&8developer");
+
+        // user 3
+        user = world.getUser(user3);
+        user.getGroupsAsString().clear();
+        user.addGroup(mod.getName());
+        user.setValue("prefix", "&8mojang");
+
+        // user 4
+        user = world.getUser(user4);
+        user.setValue("prefix", "&3helper");
+
         // Finally, save the changes
         world.save();
+        wm.setAutoSave(autosave);
     }
 
     private ArrayList<String> getPermissions() {
