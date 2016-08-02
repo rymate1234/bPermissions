@@ -9,7 +9,7 @@ allprojects {
     apply plugin: 'maven'
     
     group = 'de.bananaco'
-    version '2.12-SNAPSHOT'
+    version '2.13-SNAPSHOT'
     description = """bPermissions"""
     
     sourceCompatibility = 1.7
