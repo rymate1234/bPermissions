@@ -1,9 +1,9 @@
 rootProject.name = 'bPermissions'
 include 'core'
 include 'bukkit'
-include 'sponge'
+//include 'sponge'
 
-project(":sponge").name = "bPermissions-Sponge"
+//project(":sponge").name = "bPermissions-Sponge"
 
 project(":bukkit").name = "bPermissions-Bukkit"
 
