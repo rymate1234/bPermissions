@@ -33,7 +33,6 @@ public class bPermissible extends PermissibleBase {
 
     Map<String, Boolean> bpermissions;
 
-
     public bPermissible(Player player) {
         super(player);
         this.player = player;

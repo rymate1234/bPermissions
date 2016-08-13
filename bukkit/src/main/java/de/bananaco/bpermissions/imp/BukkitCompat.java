@@ -122,6 +122,9 @@ public class BukkitCompat {
             plugin.getServer().getPluginManager().removePermission(negativeCheck);
         }
 
+        positive.recalculatePermissibles();
+        negative.recalculatePermissibles();
+
         plugin.getServer().getPluginManager().addPermission(positive);
         plugin.getServer().getPluginManager().addPermission(negative);
 
