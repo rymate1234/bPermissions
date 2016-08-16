@@ -25,10 +25,13 @@ public class YamlWorld extends World {
     protected static final String USERNAME = "username";
     protected static final String META = "meta";
     protected static final String USERS = "users";
+    private final File root;
     protected YamlConfiguration uconfig = null;//new YamlConfiguration();
     protected YamlConfiguration gconfig = null;//new YamlConfiguration();
-    private final File ufile;
-    private final File gfile;
+
+    private File ufile;
+    private File gfile;
+
     protected final Permissions permissions;
     protected final WorldManager wm = WorldManager.getInstance();
     // If there's an error loading the files, don't save them as it overrides them!
@@ -42,12 +45,9 @@ public class YamlWorld extends World {
     public YamlWorld(String world, Permissions permissions, File root) {
         super(world);
         this.permissions = permissions;
-        if (wm.isUseGlobalUsers())
-            this.ufile = new File(new File("plugins/bPermissions/global/"), "users.yml");
-        else
-            this.ufile = new File(root, "users.yml");
+        this.root = root;
 
-        this.gfile = new File(root, "groups.yml");
+        setFiles();
 
         this.usersArray = new String[0];
         this.groupsArray = new String[0];
@@ -71,6 +71,16 @@ public class YamlWorld extends World {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void setFiles() {
+        if (wm.isUseGlobalUsers())
+            this.ufile = new File(new File("plugins/bPermissions/global/"), "users.yml");
+        else
+            this.ufile = new File(root, "users.yml");
+
+        this.gfile = new File(root, "groups.yml");
     }
 
     public boolean load() {

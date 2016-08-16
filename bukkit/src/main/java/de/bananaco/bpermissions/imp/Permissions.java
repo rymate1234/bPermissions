@@ -464,6 +464,7 @@ public class Permissions extends JavaPlugin {
                         public void run() {
                             for (final World world : wm.getAllWorlds()) {
                                 try {
+                                    world.setFiles();
                                     ((YamlWorld) world).loadUnsafe();
                                 } catch (Exception e) {
                                     e.printStackTrace();

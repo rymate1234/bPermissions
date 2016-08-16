@@ -27,6 +27,8 @@ public abstract class World {
         stripColorPattern = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-OR]");
     }
 
+    public abstract void setFiles();
+
     /**
      * Make sure you call .calculateMappedPermissions for all the users once
      * this is done!

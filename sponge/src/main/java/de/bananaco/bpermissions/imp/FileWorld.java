@@ -39,8 +39,8 @@ public class FileWorld extends World {
     private ConfigurationNode uconfig;
     private ConfigurationNode gconfig;
 
-    private final File ufile;
-    private final File gfile;
+    private File ufile;
+    private File gfile;
     protected final Permissions permissions;
     protected final WorldManager wm = WorldManager.getInstance();
 
@@ -62,16 +62,20 @@ public class FileWorld extends World {
         super(world);
 
         this.permissions = permissions;
+
+        this.usersArray = new String[0];
+        this.groupsArray = new String[0];
+        this.root = root;
+    }
+
+    @Override
+    public void setFiles() {
         if (wm.isUseGlobalUsers())
             this.ufile = new File(new File(permissions.getFolder() + "/global/"), "users." + format);
         else
             this.ufile = new File(root, "users." + format);
 
         this.gfile = new File(root, "groups." + format);
-
-        this.usersArray = new String[0];
-        this.groupsArray = new String[0];
-        this.root = root;
     }
 
     @Override
