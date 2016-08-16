@@ -12,6 +12,11 @@ public class WorldTest extends World {
     }
 
     @Override
+    public void setFiles() {
+        return;
+    }
+
+    @Override
     public boolean load() {
         return true;
     }
