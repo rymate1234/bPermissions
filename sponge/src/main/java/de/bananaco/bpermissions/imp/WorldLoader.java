@@ -20,7 +20,7 @@ public class WorldLoader {
     protected WorldLoader(Permissions permissions, Map<String, String> mirrors) {
         this.mirrors = mirrors;
         this.permissions = permissions;
-        for (World world : permissions.game.getServer().getWorlds()) {
+        for (World world : permissions.getGame().getServer().getWorlds()) {
             createWorld(world);
         }
     }

@@ -1,4 +1,4 @@
-package de.bananaco.bpermissions.imp;
+package de.bananaco.bpermissions.imp.service;
 
 import com.google.common.base.Preconditions;
 import org.spongepowered.api.plugin.PluginContainer;

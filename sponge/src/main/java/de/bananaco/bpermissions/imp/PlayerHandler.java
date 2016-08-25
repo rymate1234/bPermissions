@@ -1,24 +1,17 @@
 package de.bananaco.bpermissions.imp;
 
 import de.bananaco.bpermissions.api.*;
+import de.bananaco.bpermissions.imp.service.bPermissionsSubjectData;
 import de.bananaco.bpermissions.util.Debugger;
 import de.bananaco.bpermissions.util.loadmanager.MainThread;
 import de.bananaco.bpermissions.util.loadmanager.TaskRunnable;
-import org.spongepowered.api.data.key.Key;
-import org.spongepowered.api.data.manipulator.DataManipulator;
-import org.spongepowered.api.data.manipulator.DataManipulatorBuilder;
-import org.spongepowered.api.data.manipulator.mutable.entity.HealthData;
-import org.spongepowered.api.data.value.BaseValue;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.service.context.Context;
-import org.spongepowered.api.service.permission.MemorySubjectData;
 import org.spongepowered.api.service.permission.Subject;
-import org.spongepowered.api.service.permission.SubjectData;
 import org.spongepowered.api.service.permission.option.OptionSubject;
 import org.spongepowered.api.service.permission.option.OptionSubjectData;
-import org.spongepowered.api.util.Tristate;
 
 import java.util.*;
 
@@ -70,7 +63,7 @@ public class PlayerHandler {
     }
 
     private void setupPlayer(Player player, boolean recalculate) {
-        if (!permissions.game.getPluginManager().isLoaded("bpermissions")) {
+        if (!permissions.getGame().getPluginManager().isLoaded("bpermissions")) {
             return;
         }
 

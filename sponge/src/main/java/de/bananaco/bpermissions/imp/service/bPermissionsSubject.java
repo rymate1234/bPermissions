@@ -1,9 +1,9 @@
-package de.bananaco.bpermissions.imp;
+package de.bananaco.bpermissions.imp.service;
 
 import de.bananaco.bpermissions.api.Calculable;
 import de.bananaco.bpermissions.api.MapCalculable;
+import de.bananaco.bpermissions.imp.Permissions;
 import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.service.context.Context;
 import org.spongepowered.api.service.permission.Subject;
 import org.spongepowered.api.service.permission.SubjectCollection;
@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Function;
 
 /**
  * Created by Ryan on 18/03/2016.
@@ -33,7 +32,7 @@ public class bPermissionsSubject implements OptionSubject {
 
     @Override
     public Optional<CommandSource> getCommandSource() {
-        final CommandSource source = Permissions.instance.game.getServer().getPlayer(UUID.fromString(identifier)).get();
+        final CommandSource source = Permissions.instance.getGame().getServer().getPlayer(UUID.fromString(identifier)).get();
         if (source != null) {
             return Optional.of(source);
         } else {

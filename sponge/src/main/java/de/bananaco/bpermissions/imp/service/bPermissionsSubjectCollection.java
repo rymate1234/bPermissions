@@ -1,9 +1,8 @@
-package de.bananaco.bpermissions.imp;
+package de.bananaco.bpermissions.imp.service;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import de.bananaco.bpermissions.api.Calculable;
 import de.bananaco.bpermissions.api.CalculableType;
 import org.spongepowered.api.service.context.Context;
 import org.spongepowered.api.service.permission.PermissionService;

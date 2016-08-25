@@ -4,6 +4,9 @@ import com.google.inject.Inject;
 
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
+import de.bananaco.bpermissions.imp.commands.Commands;
+import de.bananaco.bpermissions.imp.commands.WorldCmdHandler;
+import de.bananaco.bpermissions.imp.service.bPermissionsService;
 import de.bananaco.bpermissions.util.Debugger;
 import de.bananaco.bpermissions.util.loadmanager.MainThread;
 import de.bananaco.bpermissions.util.loadmanager.TaskRunnable;
@@ -12,6 +15,8 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.args.GenericArguments;
+import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
@@ -19,6 +24,7 @@ import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.service.ServiceManager;
 import org.spongepowered.api.service.permission.PermissionService;
+import org.spongepowered.api.text.Text;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -32,7 +38,7 @@ import java.util.HashMap;
 public class Permissions {
     @Inject private Logger log;
     @Inject private ServiceManager services;
-    @Inject protected Game game;
+    @Inject private Game game;
 
     private MainThread mt;
     private WorldManager wm;
@@ -41,9 +47,10 @@ public class Permissions {
     @ConfigDir(sharedRoot = false)
     private Path privateConfigDir;
 
-    bPermissionsService bPermsService;
+    private bPermissionsService bPermsService;
 
-    protected static Permissions instance = null;
+    public static Permissions instance = null;
+    private HashMap<String, Commands> commands;
 
 
     @Listener
@@ -69,6 +76,19 @@ public class Permissions {
         wm.setAutoSave(true);
         wm.setUseGlobalUsers(false);
         Debugger.setDebug(true);
+
+        // Load the default Map for Commands
+        commands = new HashMap<String, Commands>();
+
+        CommandSpec worldSpec = CommandSpec.builder()
+                .description(Text.of("Selects a world to use permission commands on"))
+                .permission("bPermissions.admin")
+                .permission("bPermissions.cmd.world")
+                .executor(new WorldCmdHandler(commands))
+                .arguments(GenericArguments.optional(GenericArguments.world(Text.of("world"))))
+                .build();
+
+        Sponge.getCommandManager().register(this, worldSpec, "world", "w");
 
         // create the default world
         FileWorld defaultWorld = new FileWorld("global", this, new File(getFolder() + "/global/"));
@@ -146,5 +166,9 @@ public class Permissions {
 
     public Path getFolder() {
         return privateConfigDir;
+    }
+
+    public Game getGame() {
+        return game;
     }
 }

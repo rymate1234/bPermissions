@@ -1,4 +1,4 @@
-package de.bananaco.bpermissions.imp;
+package de.bananaco.bpermissions.imp.service;
 
 import de.bananaco.bpermissions.api.Calculable;
 import de.bananaco.bpermissions.api.CalculableType;

@@ -62,7 +62,7 @@ public class FileWorld extends World {
         super(world);
 
         this.permissions = permissions;
-        
+
         this.root = root;
         this.setFiles();
 
@@ -206,7 +206,7 @@ public class FileWorld extends World {
             }
             usersArray = names.toArray(new String[names.size()]);
 
-            for (Player player : permissions.game.getServer().getOnlinePlayers()) {
+            for (Player player : permissions.getGame().getServer().getOnlinePlayers()) {
                 String name = player.getUniqueId().toString();
                 ConfigurationNode permsNode = usersConfig.getNode(name, PERMISSIONS);
                 List<String> nPerm = permsNode.getList(stringToken);
@@ -327,8 +327,8 @@ public class FileWorld extends World {
                     continue;
                 }
 
-                if (isUUID(name) && permissions.game.getServer().getPlayer(UUID.fromString(name)).get() != null) {
-                    String player = permissions.game.getServer().getPlayer(UUID.fromString(name)).get().getName();
+                if (isUUID(name) && permissions.getGame().getServer().getPlayer(UUID.fromString(name)).get() != null) {
+                    String player = permissions.getGame().getServer().getPlayer(UUID.fromString(name)).get().getName();
                     // save their username
                     usaveconfig.getNode(USERS, name, USERNAME).setValue(player);
 

@@ -19,7 +19,7 @@ public class OldUserGroupCommand extends BaseCommand implements CommandExecutor 
     private final Mirrors mrs = new Mirrors(mirrors);
 
     public OldUserGroupCommand(Permissions plugin, Map<String, Commands> commands) {
-        this.plugin = plugin; // Store the plugin in situations where you need it.
+        this.plugin = plugin;
         this.commands = commands;
     }
 

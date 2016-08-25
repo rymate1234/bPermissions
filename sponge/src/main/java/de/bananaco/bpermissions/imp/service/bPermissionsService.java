@@ -1,13 +1,13 @@
-package de.bananaco.bpermissions.imp;
+package de.bananaco.bpermissions.imp.service;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableSet;
 import de.bananaco.bpermissions.api.WorldManager;
+import de.bananaco.bpermissions.imp.Permissions;
 import de.bananaco.bpermissions.util.Debugger;
 import org.spongepowered.api.plugin.PluginContainer;
-import org.spongepowered.api.service.context.Context;
 import org.spongepowered.api.service.context.ContextCalculator;
 import org.spongepowered.api.service.permission.*;
 
@@ -90,7 +90,7 @@ public class bPermissionsService implements PermissionService {
 
     @Override
     public Optional<PermissionDescription.Builder> newDescriptionBuilder(Object plugin) {
-        Optional<PluginContainer> container = Permissions.instance.game.getPluginManager().fromInstance(plugin);
+        Optional<PluginContainer> container = Permissions.instance.getGame().getPluginManager().fromInstance(plugin);
         if (!container.isPresent()) {
             throw new IllegalArgumentException("Error when obtaining a plugin instance.");
         }
