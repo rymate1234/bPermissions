@@ -62,10 +62,12 @@ public class FileWorld extends World {
         super(world);
 
         this.permissions = permissions;
+        
+        this.root = root;
+        this.setFiles();
 
         this.usersArray = new String[0];
         this.groupsArray = new String[0];
-        this.root = root;
     }
 
     @Override
@@ -130,19 +132,19 @@ public class FileWorld extends World {
 
         if (wm.getFileFormat().equalsIgnoreCase("YML")) {
             // YAML format
-            YAMLConfigurationLoader.Builder ubuilder = YAMLConfigurationLoader.builder();
-            ubuilder.setFlowStyle(DumperOptions.FlowStyle.BLOCK).setFile(ufile).setIndent(2);
-            YAMLConfigurationLoader.Builder gbuilder = YAMLConfigurationLoader.builder().setIndent(2);
-            gbuilder.setFlowStyle(DumperOptions.FlowStyle.BLOCK).setFile(gfile).setIndent(2);
+            YAMLConfigurationLoader.Builder ubuilder = YAMLConfigurationLoader.builder()
+                    .setFlowStyle(DumperOptions.FlowStyle.BLOCK).setFile(ufile).setIndent(2);
+            YAMLConfigurationLoader.Builder gbuilder = YAMLConfigurationLoader.builder()
+                    .setFlowStyle(DumperOptions.FlowStyle.BLOCK).setFile(gfile).setIndent(2);
 
             uloader = ubuilder.build();
             gloader = gbuilder.build();
         } else if (wm.getFileFormat().equalsIgnoreCase("HOCON")) {
             // assume HOCON
-            HoconConfigurationLoader.Builder ubuilder = HoconConfigurationLoader.builder();
-            ubuilder.setFile(ufile).setRenderOptions(ConfigRenderOptions.defaults());
-            HoconConfigurationLoader.Builder gbuilder = HoconConfigurationLoader.builder();
-            gbuilder.setFile(gfile).setRenderOptions(ConfigRenderOptions.defaults());
+            HoconConfigurationLoader.Builder ubuilder = HoconConfigurationLoader.builder()
+                    .setFile(ufile).setRenderOptions(ConfigRenderOptions.defaults());
+            HoconConfigurationLoader.Builder gbuilder = HoconConfigurationLoader.builder()
+                    .setFile(gfile).setRenderOptions(ConfigRenderOptions.defaults());
 
             uloader = ubuilder.build();
             gloader = gbuilder.build();
@@ -249,7 +251,7 @@ public class FileWorld extends World {
         }
 
         try {
-            // load async
+            // save async
             TaskRunnable saveTask = new TaskRunnable() {
                 @Override
                 public TaskType getType() {
@@ -268,7 +270,7 @@ public class FileWorld extends World {
 
             MainThread.getInstance().schedule(saveTask);
 
-            // If it loaded correctly cancel the error
+            // If it saved correctly cancel the error
             error = false;
         } catch (Exception e) {
             error = true;
@@ -285,9 +287,15 @@ public class FileWorld extends World {
             if (ufile.getParentFile() != null) {
                 ufile.getParentFile().mkdirs();
             }
-            ufile.createNewFile();
-            gfile.createNewFile();
+
+            try {
+                ufile.createNewFile();
+                gfile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
 
         ConfigurationNode usaveconfig = uconfig;
         ConfigurationNode gsaveconfig = gconfig;

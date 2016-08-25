@@ -28,7 +28,7 @@ import java.util.HashMap;
 /**
  * bPermissions plugin
  */
-@Plugin(id = "bpermissions", name = "bPermissions", version = "EARLY-ALPHA-SPONGE", description = "Permissions manager for Bukkit and Sponge")
+@Plugin(id = "de.bananaco.bpermissions", name = "bPermissions", version = "EARLY-ALPHA-SPONGE", description = "Permissions manager for Bukkit and Sponge")
 public class Permissions {
     @Inject private Logger log;
     @Inject private ServiceManager services;
@@ -49,6 +49,10 @@ public class Permissions {
     @Listener
     public void enable(GamePreInitializationEvent event) throws Exception {
         log.info("Loading bPermissions...");
+
+        if (!privateConfigDir.toFile().exists()) {
+            privateConfigDir.toFile().mkdirs();
+        }
 
         bPermsService = new bPermissionsService();
 
