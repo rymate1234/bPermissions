@@ -30,6 +30,8 @@ public class GroupCommandElement extends CommandElement {
     @Nullable
     @Override
     protected Object parseValue(CommandSource source, CommandArgs args) throws ArgumentParseException {
+        if (args.getAll().size() > 1) throw args.createError(Text.of("Too many arguments!"));
+
         Optional<String> optionalStr = args.nextIfPresent();
         String toReturn;
         if (!optionalStr.isPresent()) return args.createError(Text.of("You need to specify a group!"));

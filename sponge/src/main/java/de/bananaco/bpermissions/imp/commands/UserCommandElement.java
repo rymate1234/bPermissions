@@ -34,6 +34,8 @@ public class UserCommandElement extends CommandElement {
     @Nullable
     @Override
     protected Object parseValue(CommandSource source, CommandArgs args) throws ArgumentParseException {
+        if (args.getAll().size() > 1) throw args.createError(Text.of("Too many arguments!"));
+
         Optional<String> optionalStr = args.nextIfPresent();
 
         String name;

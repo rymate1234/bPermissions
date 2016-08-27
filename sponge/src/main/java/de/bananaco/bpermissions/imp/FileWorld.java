@@ -14,12 +14,15 @@ import ninja.leaping.configurate.loader.AbstractConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
+import org.spongepowered.api.Server;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.profile.GameProfile;
 import org.yaml.snakeyaml.DumperOptions;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 /**
  * This is the file based loader for sponge
@@ -280,7 +283,7 @@ public class FileWorld extends World {
         return true;
     }
 
-    protected synchronized void saveUnsafe(boolean sort) throws IOException {
+    protected synchronized void saveUnsafe(boolean sort) throws IOException, ExecutionException, InterruptedException {
         boolean autoSave = wm.getAutoSave();
         wm.setAutoSave(false);
         if (!ufile.exists()) {
@@ -327,15 +330,17 @@ public class FileWorld extends World {
                     continue;
                 }
 
-                if (isUUID(name) && permissions.getGame().getServer().getPlayer(UUID.fromString(name)).get() != null) {
-                    String player = permissions.getGame().getServer().getPlayer(UUID.fromString(name)).get().getName();
+                Server server = permissions.getGame().getServer();
+                if (isUUID(name)) {
+                    GameProfile profile = server.getGameProfileManager().get(UUID.fromString(name)).get();
+                    String player = profile.getName().orElse("");
                     // save their username
                     usaveconfig.getNode(USERS, name, USERNAME).setValue(player);
-
-                    usaveconfig.getNode(USERS, name, PERMISSIONS).setValue(user.serialisePermissions());
-                    usaveconfig.getNode(USERS, name, GROUPS).setValue(user.serialiseGroups());
-                    usaveconfig.getNode(USERS, name, META).setValue(user.getMeta());
                 }
+
+                usaveconfig.getNode(USERS, name, PERMISSIONS).setValue(user.serialisePermissions());
+                usaveconfig.getNode(USERS, name, GROUPS).setValue(user.serialiseGroups());
+                usaveconfig.getNode(USERS, name, META).setValue(user.getMeta());
             }
         }
 

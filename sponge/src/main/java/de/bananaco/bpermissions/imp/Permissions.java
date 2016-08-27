@@ -91,17 +91,16 @@ public class Permissions {
         CommandElement userOrString = GenericArguments.optional(
             GenericArguments.firstParsing(
                 GenericArguments.onlyOne(new UserCommandElement(Text.of("player"))),
-                GenericArguments.string(Text.of("action"))
+                GenericArguments.onlyOne(new ArgsCommandHandler(Text.of("action")))
             )
         );
 
         CommandElement groupOrString = GenericArguments.optional(
             GenericArguments.firstParsing(
                 GenericArguments.onlyOne(new GroupCommandElement(Text.of("group"), commands)),
-                GenericArguments.string(Text.of("action"))
+                GenericArguments.onlyOne(new ArgsCommandHandler(Text.of("action")))
             )
         );
-
 
         CommandSpec userSpec = CommandSpec.builder()
                 .description(Text.of("Longform commands used when modifying users"))
@@ -112,7 +111,7 @@ public class Permissions {
                 .build();
 
         CommandSpec groupSpec = CommandSpec.builder()
-                .description(Text.of("Longform commands used when modifying users"))
+                .description(Text.of("Longform commands used when modifying groups"))
                 .permission("bPermissions.admin")
                 .permission("bPermissions.cmd.group")
                 .executor(new GroupCmdHandler(commands))
