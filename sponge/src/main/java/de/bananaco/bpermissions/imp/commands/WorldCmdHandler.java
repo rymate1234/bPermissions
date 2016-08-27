@@ -15,7 +15,7 @@ import java.util.Optional;
 public class WorldCmdHandler extends BaseCmdHandler {
 
     public WorldCmdHandler(HashMap<String, Commands> commands) {
-        this.commands = commands;
+        super(commands);
     }
 
     @Override

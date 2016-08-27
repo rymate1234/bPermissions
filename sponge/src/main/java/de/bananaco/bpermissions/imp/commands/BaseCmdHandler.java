@@ -19,6 +19,10 @@ public abstract class BaseCmdHandler implements CommandExecutor {
 
     public HashMap<String, Commands> commands;
 
+    public BaseCmdHandler(HashMap<String, Commands> commands) {
+        this.commands = commands;
+    }
+
     public static Text format(String message) {
         TextColor vary = TextColors.GREEN;
         if (message.contains("!")) {
@@ -52,7 +56,7 @@ public abstract class BaseCmdHandler implements CommandExecutor {
         sender.sendMessage(format(message));
     }
 
-    private String getName(CommandSource src) {
+    public static String getName(CommandSource src) {
         if (src instanceof Player) {
             return src.getName();
         }

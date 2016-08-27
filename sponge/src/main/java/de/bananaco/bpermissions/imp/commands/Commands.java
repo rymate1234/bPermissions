@@ -8,14 +8,13 @@ package de.bananaco.bpermissions.imp.commands;
 import java.util.*;
 
 import de.bananaco.bpermissions.api.*;
+import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.World;
-import de.bananaco.bpermissions.imp.Permissions;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.command.spec.CommandExecutor;
-import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.*;
+import org.spongepowered.api.profile.GameProfile;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.world.*;
 
 public class Commands {
     private final WorldManager instance = WorldManager.getInstance();
@@ -61,7 +60,7 @@ public class Commands {
         return world;
     }
 
-    public void setCalculable(CalculableType type, String c, CommandSource sender) {
+    public void checkWorld(CalculableType type, CommandSource sender) {
         // If the world does not exist
         if (world == null) {
             sender.sendMessage(format("No world selected, selecting the default world"));
@@ -72,11 +71,24 @@ public class Commands {
             else
                 setWorld(getDefaultWorld().getName(), sender);
         }
+    }
+
+    public void setCalculable(CalculableType type, GameProfile c, CommandSource sender) {
+        checkWorld(type, sender);
 
         calc = type;
-        name = c;
+        name = c.getUniqueId().toString();
+        sender.sendMessage(format(c.getName().orElse("") + " (UUID: " + getCalculable().getName() + ") selected."));
+    }
+
+    public void setCalculable(CalculableType type, String s, CommandSource sender) {
+        checkWorld(type, sender);
+
+        calc = type;
+        name = s;
         sender.sendMessage(format(getCalculable().getName() + " selected."));
     }
+
 
     public Calculable getCalculable() {
         if (name == null) {

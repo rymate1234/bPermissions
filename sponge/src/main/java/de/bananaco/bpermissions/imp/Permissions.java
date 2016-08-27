@@ -1,20 +1,17 @@
 package de.bananaco.bpermissions.imp;
 
 import com.google.inject.Inject;
-
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
-import de.bananaco.bpermissions.imp.commands.Commands;
-import de.bananaco.bpermissions.imp.commands.WorldCmdHandler;
+import de.bananaco.bpermissions.imp.commands.*;
 import de.bananaco.bpermissions.imp.service.bPermissionsService;
 import de.bananaco.bpermissions.util.Debugger;
 import de.bananaco.bpermissions.util.loadmanager.MainThread;
 import de.bananaco.bpermissions.util.loadmanager.TaskRunnable;
-
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
-
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.args.CommandElement;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
@@ -36,9 +33,12 @@ import java.util.HashMap;
  */
 @Plugin(id = "de.bananaco.bpermissions", name = "bPermissions", version = "EARLY-ALPHA-SPONGE", description = "Permissions manager for Bukkit and Sponge")
 public class Permissions {
-    @Inject private Logger log;
-    @Inject private ServiceManager services;
-    @Inject private Game game;
+    @Inject
+    private Logger log;
+    @Inject
+    private ServiceManager services;
+    @Inject
+    private Game game;
 
     private MainThread mt;
     private WorldManager wm;
@@ -88,7 +88,41 @@ public class Permissions {
                 .arguments(GenericArguments.optional(GenericArguments.world(Text.of("world"))))
                 .build();
 
+        CommandElement userOrString = GenericArguments.optional(
+            GenericArguments.firstParsing(
+                GenericArguments.onlyOne(new UserCommandElement(Text.of("player"))),
+                GenericArguments.string(Text.of("action"))
+            )
+        );
+
+        CommandElement groupOrString = GenericArguments.optional(
+            GenericArguments.firstParsing(
+                GenericArguments.onlyOne(new GroupCommandElement(Text.of("group"), commands)),
+                GenericArguments.string(Text.of("action"))
+            )
+        );
+
+
+        CommandSpec userSpec = CommandSpec.builder()
+                .description(Text.of("Longform commands used when modifying users"))
+                .permission("bPermissions.admin")
+                .permission("bPermissions.cmd.user")
+                .executor(new UserCmdHandler(commands))
+                .arguments(userOrString)
+                .build();
+
+        CommandSpec groupSpec = CommandSpec.builder()
+                .description(Text.of("Longform commands used when modifying users"))
+                .permission("bPermissions.admin")
+                .permission("bPermissions.cmd.group")
+                .executor(new GroupCmdHandler(commands))
+                .arguments(groupOrString)
+                .build();
+
+
         Sponge.getCommandManager().register(this, worldSpec, "world", "w");
+        Sponge.getCommandManager().register(this, userSpec, "user", "u");
+        Sponge.getCommandManager().register(this, groupSpec, "group", "g");
 
         // create the default world
         FileWorld defaultWorld = new FileWorld("global", this, new File(getFolder() + "/global/"));
