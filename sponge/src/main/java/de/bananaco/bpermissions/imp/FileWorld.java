@@ -170,9 +170,7 @@ public class FileWorld extends World {
             }
             groupsArray = names.toArray(new String[names.size()]);
 
-            //for (Player player : permissions.game.getServer().getOnlinePlayers()) {
             for (String name : groupsArray) {
-                //String name = player.getUniqueId().toString();
                 ConfigurationNode permsNode = groupsConfig.getNode(name, PERMISSIONS);
                 List<String> nPerm = permsNode.getList(stringToken);
                 List<String> nGroup = groupsConfig.getNode(name, GROUPS).getList(stringToken);
@@ -298,7 +296,6 @@ public class FileWorld extends World {
                 e.printStackTrace();
             }
         }
-
 
         ConfigurationNode usaveconfig = uconfig;
         ConfigurationNode gsaveconfig = gconfig;
@@ -498,6 +495,11 @@ public class FileWorld extends World {
 
     @Override
     public boolean storeContains(String name, CalculableType type) {
+        if (type == CalculableType.USER) {
+            return Arrays.asList(usersArray).contains(name);
+        } else if (type == CalculableType.GROUP) {
+            return Arrays.asList(groupsArray).contains(name);
+        }
         return false;
     }
 
@@ -517,7 +519,13 @@ public class FileWorld extends World {
 
     @Override
     public boolean setupPlayer(String player) {
-        return false;
+        permissions.handler.setupPlayer(permissions.getGame().getServer().getPlayer(UUID.fromString(player)).get(), true);
+        return true;
+    }
+
+    @Override
+    public boolean isOnline(User user) {
+        return permissions.getGame().getServer().getPlayer(UUID.fromString(user.getName())).isPresent();
     }
 
     @Override

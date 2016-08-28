@@ -164,7 +164,8 @@ public class Commands {
     }
 
     public void listPermissions(CommandSource sender, int page) {
-        List<Permission> permissionsSet = (getCalculable()).getEffectivePermissions();
+        Calculable c = getCalculable();
+        List<Permission> permissionsSet = c.getEffectivePermissions();
         Permission[] permissions = permissionsSet.toArray(new Permission[permissionsSet.size()]);
         int length = (int) (Math.round((permissions.length + 5) / 10.0) * 10.0);
         int maxPages = length / 10;

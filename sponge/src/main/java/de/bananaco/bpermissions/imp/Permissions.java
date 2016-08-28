@@ -51,7 +51,7 @@ public class Permissions {
 
     public static Permissions instance = null;
     private HashMap<String, Commands> commands;
-
+    public PlayerHandler handler;
 
     @Listener
     public void enable(GamePreInitializationEvent event) throws Exception {
@@ -83,7 +83,6 @@ public class Permissions {
         CommandSpec worldSpec = CommandSpec.builder()
                 .description(Text.of("Selects a world to use permission commands on"))
                 .permission("bPermissions.admin")
-                .permission("bPermissions.cmd.world")
                 .executor(new WorldCmdHandler(commands))
                 .arguments(GenericArguments.optional(GenericArguments.world(Text.of("world"))))
                 .build();
@@ -105,7 +104,6 @@ public class Permissions {
         CommandSpec userSpec = CommandSpec.builder()
                 .description(Text.of("Longform commands used when modifying users"))
                 .permission("bPermissions.admin")
-                .permission("bPermissions.cmd.user")
                 .executor(new UserCmdHandler(commands))
                 .arguments(userOrString)
                 .build();
@@ -113,7 +111,6 @@ public class Permissions {
         CommandSpec groupSpec = CommandSpec.builder()
                 .description(Text.of("Longform commands used when modifying groups"))
                 .permission("bPermissions.admin")
-                .permission("bPermissions.cmd.group")
                 .executor(new GroupCmdHandler(commands))
                 .arguments(groupOrString)
                 .build();
@@ -121,7 +118,6 @@ public class Permissions {
         CommandSpec execSpec = CommandSpec.builder()
                 .description(Text.of("Shortform /exec command - great for scripts!"))
                 .permission("bPermissions.admin")
-                .permission("bPermissions.cmd.exec")
                 .executor(new ExecCmdHandler(commands))
                 .arguments(GenericArguments.onlyOne(new ArgsCommandHandler(Text.of("args"))))
                 .build();
@@ -139,7 +135,8 @@ public class Permissions {
         HashMap<String, String> mirrors = new HashMap<String, String>();
 
         Sponge.getEventManager().registerListeners(this, new WorldLoader(this, mirrors));
-        Sponge.getEventManager().registerListeners(this, new PlayerHandler(this));
+        handler = new PlayerHandler(this);
+        Sponge.getEventManager().registerListeners(this, handler);
 
         // Register bPermissions as the permissions service, assuming there isn't one already
         if (!services.isRegistered(PermissionService.class)) {

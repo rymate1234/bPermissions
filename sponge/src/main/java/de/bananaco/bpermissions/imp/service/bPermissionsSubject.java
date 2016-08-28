@@ -76,6 +76,7 @@ public class bPermissionsSubject implements OptionSubject {
     @Override
     public Tristate getPermissionValue(Set<Context> contexts, String permission) {
         Tristate ret = Tristate.UNDEFINED;
+        permission = permission.toLowerCase();
 
         Calculable c = ((bPermissionsSubjectData) getSubjectData()).getCalculableWithContext(contexts);
 

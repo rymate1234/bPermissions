@@ -12,6 +12,7 @@ import org.spongepowered.api.service.context.Context;
 import org.spongepowered.api.service.permission.Subject;
 import org.spongepowered.api.service.permission.option.OptionSubject;
 import org.spongepowered.api.service.permission.option.OptionSubjectData;
+import org.spongepowered.api.text.Text;
 
 import java.util.*;
 
@@ -31,27 +32,23 @@ public class PlayerHandler {
     // load the players data into the API
     @Listener
     public void playerLoader(final ClientConnectionEvent.Auth event) {
+        MainThread mt = MainThread.getInstance();
+        if (!mt.getStarted()) {
+            event.setMessage(Text.of("Unable to join server."), Text.of("bPermissions not enabled"));
+            return; // don't touch the bPerms
+        }
+
         final String uuid = event.getProfile().getUniqueId().toString();
         for (final de.bananaco.bpermissions.api.World world : wm.getAllWorlds()) {
-            TaskRunnable r = new TaskRunnable() {
-                @Override
-                public TaskType getType() {
-                    return TaskType.SERVER;
-                }
+            world.loadIfExists(uuid, CalculableType.USER);
 
-                public void run() {
-                    world.loadIfExists(uuid, CalculableType.USER);
-
-                    User user = (User) world.get(uuid, CalculableType.USER);
-                    try {
-                        user.calculateMappedPermissions();
-                        user.calculateEffectiveMeta();
-                    } catch (RecursiveGroupException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            MainThread.getInstance().schedule(r);
+            User user = (User) world.get(uuid, CalculableType.USER);
+            try {
+                user.calculateMappedPermissions();
+                user.calculateEffectiveMeta();
+            } catch (RecursiveGroupException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -62,8 +59,8 @@ public class PlayerHandler {
         setupPlayer(player, true);
     }
 
-    private void setupPlayer(Player player, boolean recalculate) {
-        if (!permissions.getGame().getPluginManager().isLoaded("bpermissions")) {
+    public void setupPlayer(Player player, boolean recalculate) {
+        if (!permissions.getGame().getPluginManager().isLoaded("de.bananaco.bpermissions")) {
             return;
         }
 
@@ -89,9 +86,10 @@ public class PlayerHandler {
             bPermsSubject.setWorld(player.getWorld().getName());
         }
 
-        String testPerm = (String) perms.keySet().toArray()[0];
-
-        Debugger.log("Does player have permission? " + testPerm +  " is " + player.hasPermission(testPerm));
+        if (perms.keySet().size() > 0) {
+            String testPerm = (String) perms.keySet().toArray()[0];
+            Debugger.log("Does player have permission? " + testPerm + " is " + player.hasPermission(testPerm));
+        }
 
         Subject testSubject = player.getContainingCollection().get(player.getIdentifier());
         if (testSubject instanceof OptionSubject) {
