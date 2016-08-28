@@ -522,6 +522,14 @@ public class FileWorld extends World {
 
     @Override
     public UUID getUUID(String player) {
+        try {
+            GameProfile profile = permissions.getGame().getServer().getGameProfileManager().get(player).get();
+            return profile.getUniqueId();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }
