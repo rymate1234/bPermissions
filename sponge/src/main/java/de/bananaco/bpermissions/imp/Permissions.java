@@ -122,10 +122,18 @@ public class Permissions {
                 .arguments(GenericArguments.onlyOne(new ArgsCommandHandler(Text.of("args"))))
                 .build();
 
+        CommandSpec permsSpec = CommandSpec.builder()
+                .description(Text.of("Miscellaneous management commands"))
+                .permission("bPermissions.admin")
+                .executor(new PermsCommandHandler(commands))
+                .arguments(new StringListCommandElement(Text.of("option"), PermsCommandHandler.options, true))
+                .build();
+
         Sponge.getCommandManager().register(this, worldSpec, "world", "w");
         Sponge.getCommandManager().register(this, userSpec, "user", "u");
         Sponge.getCommandManager().register(this, groupSpec, "group", "g");
         Sponge.getCommandManager().register(this, execSpec, "exec", "e");
+        Sponge.getCommandManager().register(this, permsSpec, "permissions", "p", "bp", "perms");
 
         // create the default world
         FileWorld defaultWorld = new FileWorld("global", this, new File(getFolder() + "/global/"));

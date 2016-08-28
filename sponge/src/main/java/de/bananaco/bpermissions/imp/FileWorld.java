@@ -120,7 +120,7 @@ public class FileWorld extends World {
         return true;
     }
 
-    protected synchronized void loadUnsafe() throws IOException, ObjectMappingException {
+    public synchronized void loadUnsafe() throws IOException, ObjectMappingException {
         if (!ufile.exists()) {
             if (ufile.getParentFile() != null) {
                 ufile.getParentFile().mkdirs();
