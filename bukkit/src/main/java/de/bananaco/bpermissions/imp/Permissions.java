@@ -147,16 +147,10 @@ public class Permissions extends JavaPlugin {
         getServer().getPluginManager().registerEvents(handler, this);
         // Setup all online players
         //handler.setupAllPlayers();
-        // Load our custom nodes (if any)
-        mt.schedule(new TaskRunnable() {
-            public void run() {
-                CustomNodes.getInstance().load();
-            }
 
-            public TaskRunnable.TaskType getType() {
-                return TaskType.LOAD;
-            }
-        });
+        // Load our custom nodes (if any)
+        CustomNodes.getInstance().load();
+
         // REMOVED
         // getServer().getScheduler().scheduleSyncRepeatingTask(this, new SuperPermissionHandler.SuperPermissionReloader(handler), 5, 5);
         // And print a nice little message ;)
