@@ -14,47 +14,31 @@ public class ReplaceGroupPromotion extends BasePromotionTrack {
         List<String> groups = trackmap.get(track.toLowerCase());
         if (world == null) {
             for (World w : wm.getAllWorlds()) {
-                User user = w.getUser(player);
-                boolean promoted = false;
-                // If they don't have the group, set it to their group
-                for (int i = 0; i < groups.size() && !promoted; i++) {
-                    if (user.getGroupsAsString().contains(groups.get(i))) {
-                        if (i + 1 == groups.size()) {
-                            break;
-                        }
-
-                        String oldGroup = groups.get(i);
-                        String newGroup = groups.get(i + 1);
-                        // Remove the old group
-                        user.removeGroup(oldGroup);
-                        // Add the new group
-                        user.addGroup(newGroup);
-                        // We've promoted successfully
-                        promoted = true;
-                        w.save();
-                    }
-                }
+                promoteUser(w, player, groups);
             }
         } else {
-            User user = wm.getWorld(world).getUser(player);
-            boolean promoted = false;
-            // If they don't have the group, set it to their group
-            for (int i = 0; i < groups.size() && !promoted; i++) {
-                if (!user.getGroupsAsString().contains(groups.get(i))) {
-                    if (i + 1 == groups.size()) {
-                        break;
-                    }
+            World w = wm.getWorld(world);
+            promoteUser(w, player, groups);
+        }
+    }
 
-                    String oldGroup = groups.get(i);
-                    String newGroup = groups.get(i + 1);
-                    // Remove the old group
-                    user.removeGroup(oldGroup);
-                    // Add the new group
-                    user.addGroup(newGroup);
-                    // We've promoted successfully
-                    promoted = true;
-                    wm.getWorld(world).save();
+    private void promoteUser(World w, String player, List<String> groups) {
+        User user = w.getUser(player);
+        boolean promoted = false;
+        // If they don't have the group, set it to their group
+        for (int i = 0; i < groups.size() && !promoted; i++) {
+            if (user.getGroupsAsString().contains(groups.get(i))) {
+                if (i + 1 == groups.size()) {
+                    break;
                 }
+
+                String oldGroup = groups.get(i);
+                String newGroup = groups.get(i + 1);
+                // Replace the old group
+                user.replaceGroup(oldGroup, newGroup);
+                // We've promoted successfully
+                promoted = true;
+                w.save();
             }
         }
     }
@@ -64,49 +48,35 @@ public class ReplaceGroupPromotion extends BasePromotionTrack {
         List<String> groups = trackmap.get(track.toLowerCase());
         if (world == null) {
             for (World w : wm.getAllWorlds()) {
-                User user = w.getUser(player);
-                boolean demoted = false;
-                // If they don't have the group, set it to their group
-                for (int i = groups.size() - 1; i > 0 && !demoted; i--) {
-                    if (user.getGroupsAsString().contains(groups.get(i))) {
-                        if (i - 1 == -1) {
-                            break;
-                        }
-
-                        String oldGroup = groups.get(i);
-                        String newGroup = groups.get(i - 1);
-                        // Remove the old group
-                        user.removeGroup(oldGroup);
-                        // Add the new group
-                        user.addGroup(newGroup);
-                        // We've demoted successfully
-                        demoted = true;
-                        w.save();
-                    }
-                }
+                demoteUser(w, player, groups);
             }
         } else {
-            User user = wm.getWorld(world).getUser(player);
-            boolean demoted = false;
-            // If they don't have the group, set it to their group
-            for (int i = groups.size() - 1; i > 0 && !demoted; i--) {
-                if (user.getGroupsAsString().contains(groups.get(i))) {
-                    if (i - 1 == -1) {
-                        break;
-                    }
+            World w = wm.getWorld(world);
+            demoteUser(w, player, groups);
+        }
+    }
 
-                    String oldGroup = groups.get(i);
-                    String newGroup = groups.get(i - 1);
-                    // Remove the old group
-                    user.removeGroup(oldGroup);
-                    // Add the new group
-                    user.addGroup(newGroup);
-                    // We've demoted successfully
-                    demoted = true;
-                    wm.getWorld(world).save();
+    private void demoteUser(World w, String player, List<String> groups) {
+        User user = w.getUser(player);
+        boolean demoted = false;
+        // If they don't have the group, set it to their group
+        for (int i = groups.size() - 1; i > 0 && !demoted; i--) {
+            if (user.getGroupsAsString().contains(groups.get(i))) {
+                if (i - 1 == -1) {
+                    break;
                 }
+
+                String oldGroup = groups.get(i);
+                String newGroup = groups.get(i - 1);
+                // Replace the old group
+                user.replaceGroup(oldGroup, newGroup);
+
+                // We've demoted successfully
+                demoted = true;
+                w.save();
             }
         }
     }
+
 
 }

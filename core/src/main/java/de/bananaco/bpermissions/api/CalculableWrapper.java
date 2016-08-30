@@ -36,6 +36,12 @@ public abstract class CalculableWrapper extends MapCalculable {
         updateCalculable();
     }
 
+    public void replaceGroup(String oldGroup, String newGroup) {
+        super.removeGroup(oldGroup);
+        super.addGroup(newGroup);
+        updateCalculable();
+    }
+
     @Override
     public void setGroup(String group) {
         super.setGroup(group);
