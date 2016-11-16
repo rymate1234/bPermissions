@@ -76,15 +76,10 @@ public class BukkitCompat {
         String uuid = player.getUniqueId().toString();
 
 
-        Permission positive = plugin.getServer().getPluginManager().getPermission(uuid);
-        Permission negative = plugin.getServer().getPluginManager().getPermission("^" + uuid);
+        Permission positive;
+        Permission negative;
 
-        if (positive != null) {
-            plugin.getServer().getPluginManager().removePermission(positive);
-        }
-        if (negative != null) {
-            plugin.getServer().getPluginManager().removePermission(negative);
-        }
+        checkPerms(plugin, uuid);
 
         Map<String, Boolean> po = new HashMap<String, Boolean>();
         Map<String, Boolean> ne = new HashMap<String, Boolean>();
@@ -110,17 +105,7 @@ public class BukkitCompat {
         negativeChildren.clear();
         negativeChildren.putAll(ne);
 
-        Permission positiveCheck = plugin.getServer().getPluginManager().getPermission(uuid);
-        Permission negativeCheck = plugin.getServer().getPluginManager().getPermission("^" + uuid);
-
-        // sometimes we have to double check this
-        if (positiveCheck != null) {
-            plugin.getServer().getPluginManager().removePermission(positiveCheck);
-        }
-        // i blame threads
-        if (negativeCheck != null) {
-            plugin.getServer().getPluginManager().removePermission(negativeCheck);
-        }
+        checkPerms(plugin, uuid);
 
         positive.recalculatePermissibles();
         negative.recalculatePermissibles();
@@ -147,6 +132,22 @@ public class BukkitCompat {
         player.recalculatePermissions();
 
         return att;
+    }
+
+    private synchronized static void checkPerms(Plugin plugin, String uuid) {
+        synchronized (plugin.getServer().getPluginManager()) {
+            Permission positiveCheck = plugin.getServer().getPluginManager().getPermission(uuid);
+            Permission negativeCheck = plugin.getServer().getPluginManager().getPermission("^" + uuid);
+
+            // sometimes we have to double check this
+            if (positiveCheck != null) {
+                plugin.getServer().getPluginManager().removePermission(positiveCheck);
+            }
+            // i blame threads
+            if (negativeCheck != null) {
+                plugin.getServer().getPluginManager().removePermission(negativeCheck);
+            }
+        }
     }
 
     /**
