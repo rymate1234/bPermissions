@@ -42,6 +42,8 @@ public class YamlWorld extends World {
     private String[] usersArray;
     private String[] groupsArray;
 
+    private String defaultGroup = "default";
+
     public YamlWorld(String world, Permissions permissions, File root) {
         super(world);
         this.permissions = permissions;
@@ -55,10 +57,7 @@ public class YamlWorld extends World {
 
     @Override
     public String getDefaultGroup() {
-        if (gconfig != null) {
-            return gconfig.getString("default", "default");
-        }
-        return "default";
+        return defaultGroup;
     }
 
     @Override
@@ -137,6 +136,8 @@ public class YamlWorld extends World {
         long t = System.currentTimeMillis();
         uconfig.load(ufile);
         gconfig.load(gfile);
+
+        defaultGroup = gconfig.getString("default", defaultGroup);
 
         /*
          * Load the users
