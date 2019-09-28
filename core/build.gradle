@@ -1,7 +1,7 @@
 group 'de.bananaco'
 def buildNumber = System.getenv('BUILD_NUMBER')
 
-version '2.12.2-$buildNumber'
+version '2.12.2-' + buildNumber
 
 apply plugin: 'java'
 
