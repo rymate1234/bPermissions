@@ -4,7 +4,7 @@ version '2.12'
 buildscript {
     repositories { jcenter() }
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
     }
 }
 
@@ -25,7 +25,7 @@ repositories {
 
 dependencies {
     compile project(":bPermissions-API")
-    compile group: 'org.bukkit', name: 'bukkit', version: '1.9-R0.1-SNAPSHOT'
+    compile group: 'org.bukkit', name: 'bukkit', version: '1.14.4-R0.1-SNAPSHOT'
 }
 
 shadowJar {
