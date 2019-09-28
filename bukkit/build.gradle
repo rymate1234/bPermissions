@@ -1,5 +1,5 @@
 group 'de.banaco'
-version '2.12'
+version '2.12.2'
 
 buildscript {
     repositories { jcenter() }

@@ -173,7 +173,7 @@ public class SuperPermissionHandler implements Listener {
 
         final String uuid = event.getUniqueId().toString();
         for (final de.bananaco.bpermissions.api.World world : wm.getAllWorlds()) {
-            world.loadIfExists(uuid, CalculableType.USER);
+            world.loadUserWithFallback(event.getName(), uuid);
 
             User user = (User) world.get(uuid, CalculableType.USER);
             try {

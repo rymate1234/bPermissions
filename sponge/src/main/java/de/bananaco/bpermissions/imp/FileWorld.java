@@ -196,7 +196,6 @@ public class FileWorld extends World {
             Debugger.log("Empty ConfigurationSection:" + GROUPS + ":" + gfile.getPath());
         }
 
-
         // load users
         ConfigurationNode usersConfig = uconfig.getNode(USERS);
         Map<String, ConfigurationNode> uchildren = (Map<String, ConfigurationNode>) usersConfig.getValue();
@@ -208,33 +207,19 @@ public class FileWorld extends World {
             usersArray = names.toArray(new String[names.size()]);
 
             for (Player player : permissions.getGame().getServer().getOnlinePlayers()) {
-                String name = player.getUniqueId().toString();
-                ConfigurationNode permsNode = usersConfig.getNode(name, PERMISSIONS);
-                List<String> nPerm = permsNode.getList(stringToken);
-                List<String> nGroup = usersConfig.getNode(name, GROUPS).getList(stringToken);
-                Set<Permission> perms = Permission.loadFromString(nPerm);
-                // Create the new user
-                User user = new User(name, nGroup, perms, getName(), this);
-                // MetaData
-                ConfigurationNode meta = usersConfig.getNode(name, META);
-                if (meta != null) {
-                    Map<String, String> keys = (Map<String, String>) meta.getValue();
-                    if (keys != null && keys.size() > 0) {
-                        for (String key : keys.keySet()) {
-                            user.setValue(key, keys.get(key));
-                        }
-                    }
-                }
-                // Upload to API
-                remove(user);
-                add(user);
-                user.setLoaded();
+                String uuid = player.getUniqueId().toString();
+                String username = player.getName();
 
-                try {
-                    user.calculateMappedPermissions();
-                    user.calculateEffectiveMeta();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (storeContains(uuid, CalculableType.USER)) {
+                    ConfigurationNode permsNode = usersConfig.getNode(uuid, PERMISSIONS);
+                    List<String> nPerm = permsNode.getList(stringToken);
+                    List<String> nGroup = usersConfig.getNode(uuid, GROUPS).getList(stringToken);
+                    getUser(uuid, uuid, usersConfig, nPerm, nGroup);
+                } else {
+                    ConfigurationNode permsNode = usersConfig.getNode(username, PERMISSIONS);
+                    List<String> nPerm = permsNode.getList(stringToken);
+                    List<String> nGroup = usersConfig.getNode(username, GROUPS).getList(stringToken);
+                    getUser(username, uuid, usersConfig, nPerm, nGroup);
                 }
             }
         } else {
@@ -433,6 +418,11 @@ public class FileWorld extends World {
 
     @Override
     public boolean loadOne(String name, CalculableType type) {
+        return loadCalculableWithLookup(name, name, type);
+    }
+
+    @Override
+    public boolean loadCalculableWithLookup(String lookupName, String name, CalculableType type) {
         long t = System.currentTimeMillis();
 
         if (contains(name, type))
@@ -445,40 +435,17 @@ public class FileWorld extends World {
             ConfigurationNode usersConfig = uconfig.getNode(USERS);
             Map<String, ConfigurationNode> uchildren = (Map<String, ConfigurationNode>) usersConfig.getValue();
             if (uchildren != null) {
-                ConfigurationNode permsNode = usersConfig.getNode(name, PERMISSIONS);
+                ConfigurationNode permsNode = usersConfig.getNode(lookupName, PERMISSIONS);
                 List<String> nPerm;
                 List<String> nGroup;
                 try {
                     nPerm = permsNode.getList(stringToken);
-                    nGroup = usersConfig.getNode(name, GROUPS).getList(stringToken);
+                    nGroup = usersConfig.getNode(lookupName, GROUPS).getList(stringToken);
                 } catch (ObjectMappingException e) {
                     e.printStackTrace();
                     return false;
                 }
-                Set<Permission> perms = Permission.loadFromString(nPerm);
-                // Create the new user
-                User user = new User(name, nGroup, perms, getName(), this);
-                // MetaData
-                ConfigurationNode meta = usersConfig.getNode(name, META);
-                if (meta != null) {
-                    Map<String, String> keys = (Map<String, String>) meta.getValue();
-                    if (keys != null && keys.size() > 0) {
-                        for (String key : keys.keySet()) {
-                            user.setValue(key, keys.get(key));
-                        }
-                    }
-                }
-                // Upload to API
-                remove(user);
-                add(user);
-                user.setLoaded();
-
-                try {
-                    user.calculateMappedPermissions();
-                    user.calculateEffectiveMeta();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                User user = getUser(lookupName, name, usersConfig, nPerm, nGroup);
 
                 if (isOnline(user)) {
                     setupPlayer(name);
@@ -491,6 +458,34 @@ public class FileWorld extends World {
         }
 
         return true;
+    }
+
+    private User getUser(String lookupName, String name, ConfigurationNode usersConfig, List<String> nPerm, List<String> nGroup) {
+        Set<Permission> perms = Permission.loadFromString(nPerm);
+        // Create the new user
+        User user = new User(name, nGroup, perms, getName(), this);
+        // MetaData
+        ConfigurationNode meta = usersConfig.getNode(lookupName, META);
+        if (meta != null) {
+            Map<String, String> keys = (Map<String, String>) meta.getValue();
+            if (keys != null && keys.size() > 0) {
+                for (String key : keys.keySet()) {
+                    user.setValue(key, keys.get(key));
+                }
+            }
+        }
+        // Upload to API
+        remove(user);
+        add(user);
+        user.setLoaded();
+
+        try {
+            user.calculateMappedPermissions();
+            user.calculateEffectiveMeta();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 
     @Override

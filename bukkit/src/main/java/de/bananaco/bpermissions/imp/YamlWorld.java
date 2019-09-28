@@ -149,22 +149,25 @@ public class YamlWorld extends World {
             // for (String name : names) {
             // experiment - only load online users
             for (Player player : this.permissions.getServer().getOnlinePlayers()) {
-                String name = player.getUniqueId().toString();
-                List<String> nPerm = usersConfig.getStringList(name + "." + PERMISSIONS);
-                List<String> nGroup = usersConfig.getStringList(name + "." + GROUPS);
-                Set<Permission> perms = Permission.loadFromString(nPerm);
-                // Create the new user
-                User user = new User(name, nGroup, perms, getName(), this);
-                // MetaData
-                ConfigurationSection meta = usersConfig.getConfigurationSection(name + "." + META);
-                if (meta != null) {
-                    Set<String> keys = meta.getKeys(false);
-                    if (keys != null && keys.size() > 0) {
-                        for (String key : keys) {
-                            user.setValue(key, meta.get(key).toString());
-                        }
+                String uuid = player.getUniqueId().toString();
+                String name = player.getName();
+
+                // lookup UUID and name with UUID
+                User user;
+                if (storeContains(uuid, CalculableType.USER)) {
+                    user = getUser(uuid, uuid, usersConfig);
+                } else {
+                    // not in the config as UUID, so lookup with username but name with UUID
+                    user = getUser(name, uuid, usersConfig);
+
+                    Object configUser = usersConfig.get(name);
+                    if (configUser != null) {
+                        usersConfig.set(uuid, configUser);
                     }
                 }
+
+                usersConfig.set(name, null);
+
                 // Upload to API
                 remove(user);
                 add(user);
@@ -190,23 +193,7 @@ public class YamlWorld extends World {
             groupsArray = names.toArray(new String[0]);
 
             for (String name : names) {
-                List<String> nPerm = groupsConfig.getStringList(name + "." + PERMISSIONS);
-                List<String> nGroup = groupsConfig.getStringList(name + "." + GROUPS);
-
-                Set<Permission> perms = Permission.loadFromString(nPerm);
-                // Create the new group
-                Group group = new Group(name, nGroup, perms, getName(), this);
-                // MetaData
-                ConfigurationSection meta = groupsConfig
-                        .getConfigurationSection(name + "." + META);
-                if (meta != null) {
-                    Set<String> keys = meta.getKeys(false);
-                    if (keys != null && keys.size() > 0) {
-                        for (String key : keys) {
-                            group.setValue(key, meta.get(key).toString());
-                        }
-                    }
-                }
+                Group group = getGroup(name, groupsConfig);
                 // Upload to API
                 remove(group);
                 add(group);
@@ -363,12 +350,16 @@ public class YamlWorld extends World {
     }
 
     public boolean loadOne(String name, CalculableType type) {
+        return loadCalculableWithLookup(name, name, type);
+    }
+
+    public boolean loadCalculableWithLookup(String lookupName, String name, CalculableType type) {
         long t = System.currentTimeMillis();
 
-        if (contains(name, type))
+        if (contains(lookupName, type))
             return true;
 
-        if (!storeContains(name, type))
+        if (!storeContains(lookupName, type))
             return false;
 
         if (type == CalculableType.USER) {
@@ -377,20 +368,15 @@ public class YamlWorld extends World {
              */
             ConfigurationSection usersConfig = uconfig.getConfigurationSection(USERS);
             if (usersConfig != null) {
-                List<String> nPerm = usersConfig.getStringList(name + "." + PERMISSIONS);
-                List<String> nGroup = usersConfig.getStringList(name + "." + GROUPS);
-                Set<Permission> perms = Permission.loadFromString(nPerm);
-                // Create the new user
-                User user = new User(name, nGroup, perms, getName(), this);
-                // MetaData
-                ConfigurationSection meta = usersConfig.getConfigurationSection(name + "." + META);
-                if (meta != null) {
-                    Set<String> keys = meta.getKeys(false);
-                    if (keys != null && keys.size() > 0) {
-                        for (String key : keys) {
-                            user.setValue(key, meta.get(key).toString());
-                        }
+                User user = getUser(lookupName, name, usersConfig);
+
+                if (!lookupName.equals(name)) {
+                    Object configUser = usersConfig.get(lookupName);
+                    if (configUser != null) {
+                        usersConfig.set(name, configUser);
                     }
+
+                    usersConfig.set(lookupName, null);
                 }
 
                 user.setLoaded();
@@ -417,22 +403,7 @@ public class YamlWorld extends World {
              */
             ConfigurationSection groupsConfig = gconfig.getConfigurationSection(GROUPS);
             if (groupsConfig != null) {
-                List<String> nPerm = groupsConfig.getStringList(name + "." + PERMISSIONS);
-                List<String> nGroup = groupsConfig.getStringList(name + "." + GROUPS);
-
-                Set<Permission> perms = Permission.loadFromString(nPerm);
-                // Create the new group
-                Group group = new Group(name, nGroup, perms, getName(), this);
-                // MetaData
-                ConfigurationSection meta = groupsConfig.getConfigurationSection(name + "." + META);
-                if (meta != null) {
-                    Set<String> keys = meta.getKeys(false);
-                    if (keys != null && keys.size() > 0) {
-                        for (String key : keys) {
-                            group.setValue(key, meta.get(key).toString());
-                        }
-                    }
-                }
+                Group group = getGroup(lookupName, groupsConfig);
                 // Upload to API
                 remove(group);
                 add(group);
@@ -444,6 +415,41 @@ public class YamlWorld extends World {
         long f = System.currentTimeMillis();
         Debugger.log("Loading single Calculable for " + getName() + " took " + (f - t) + "ms");
         return true;
+    }
+
+    private User getUser(String lookupName, String name, ConfigurationSection usersConfig) {
+        List<String> nPerm = usersConfig.getStringList(lookupName + "." + PERMISSIONS);
+        List<String> nGroup = usersConfig.getStringList(lookupName + "." + GROUPS);
+        Set<Permission> perms = Permission.loadFromString(nPerm);
+        // Create the new user
+        User user = new User(name, nGroup, perms, getName(), this);
+        // MetaData
+        getMetadata(lookupName, usersConfig, user);
+        return user;
+    }
+
+    private Group getGroup(String name, ConfigurationSection groupsConfig) {
+        List<String> nPerm = groupsConfig.getStringList(name + "." + PERMISSIONS);
+        List<String> nGroup = groupsConfig.getStringList(name + "." + GROUPS);
+
+        Set<Permission> perms = Permission.loadFromString(nPerm);
+        // Create the new group
+        Group group = new Group(name, nGroup, perms, getName(), this);
+        // MetaData
+        getMetadata(name, groupsConfig, group);
+        return group;
+    }
+
+    private void getMetadata(String name, ConfigurationSection config, CalculableWrapper calculableWrapper) {
+        ConfigurationSection meta = config.getConfigurationSection(name + "." + META);
+        if (meta != null) {
+            Set<String> keys = meta.getKeys(false);
+            if (keys != null && keys.size() > 0) {
+                for (String key : keys) {
+                    calculableWrapper.setValue(key, meta.get(key).toString());
+                }
+            }
+        }
     }
 
     //public boolean saveOne(String name, CalculableType type) {

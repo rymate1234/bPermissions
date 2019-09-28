@@ -61,6 +61,17 @@ public abstract class World {
     public abstract boolean loadOne(String name, CalculableType type);
 
     /**
+     * This loads a single Calculable into the API
+     * <p/>
+     * Similar to loadOne() except this one allows an additional lookup string
+     * <p/>
+     * You can just call add(Calculable) here with the objects you create.
+     *
+     * @return boolean
+     */
+    public abstract boolean loadCalculableWithLookup(String lookupName, String name, CalculableType type);
+
+    /**
      * This saves a single Calculable into the storage
      *
      * This should be as efficient as possible, can even be threaded if you
@@ -427,13 +438,11 @@ public abstract class World {
         users.clear();
     }
 
-
     public boolean isUUID(String string) {
         // use the uuid check from the java source code
         String[] components = string.split("-");
         return components.length == 5;
     }
-
 
     /**
      * Method to load a Calculable into the memory if it exists and isn't loaded already
@@ -448,6 +457,23 @@ public abstract class World {
     }
 
     /**
+     * Method to load a User into the memory if it exists and isn't loaded already, falling back to a username
+     * if the UUID doesn't exist in the config
+     *
+     * @param username The name of the User
+     * @param uuid The UUID of the user
+     */
+    public void loadUserWithFallback(String username, String uuid) {
+        if (!contains(uuid, CalculableType.USER) && storeContains(uuid, CalculableType.USER)) {
+            loadOne(uuid, CalculableType.USER);
+        }
+
+        if (storeContains(username, CalculableType.USER)) {
+            loadCalculableWithLookup(username, uuid, CalculableType.USER);
+        }
+    }
+
+    /**
      * Abstract method to get a players UUID given their username using whatever
      * method is used in the implementation of a World
      *
@@ -455,7 +481,6 @@ public abstract class World {
      * @return uuid The UUID of the Player
      */
     public abstract UUID getUUID(String player);
-
 
     /**
      * Strips the given message of all color codes - taken from the Bukkit source

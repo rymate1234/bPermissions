@@ -41,7 +41,7 @@ public class PlayerHandler {
 
         final String uuid = event.getProfile().getUniqueId().toString();
         for (final de.bananaco.bpermissions.api.World world : wm.getAllWorlds()) {
-            world.loadIfExists(uuid, CalculableType.USER);
+            world.loadUserWithFallback(event.getProfile().getName().orElse(""), uuid);
 
             User user = (User) world.get(uuid, CalculableType.USER);
             try {
