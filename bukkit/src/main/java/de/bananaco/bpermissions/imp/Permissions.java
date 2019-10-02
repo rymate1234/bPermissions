@@ -484,7 +484,7 @@ public class Permissions extends JavaPlugin {
                     sendMessage(sender, "Cleaning up files!");
                     wm.cleanup();
                     return true;
-                } else if (action.equalsIgnoreCase("examplefiles")) {
+                } else if (action.equalsIgnoreCase("examplefiles") || action.equalsIgnoreCase("helpme")) {
                     sendMessage(sender, "Created example files!");
                     // Create the example file
                     new ForNoobs(this).addAll();
