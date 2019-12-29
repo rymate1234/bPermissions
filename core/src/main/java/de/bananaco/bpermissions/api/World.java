@@ -18,6 +18,7 @@ public abstract class World {
     private final String world;
     private char COLOR_CHAR = '\u00A7';
     private Pattern stripColorPattern;
+    private List<CalculableChangeListener> changeListeners;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public World(String world) {
@@ -499,4 +500,13 @@ public abstract class World {
         return stripColorPattern.matcher(input).replaceAll("");
     }
 
+    public void addChangeListener(CalculableChangeListener listener) {
+        changeListeners.add(listener);
+    }
+
+    public void runChangeListeners(CalculableWrapper calculableWrapper) {
+        for (CalculableChangeListener listener : changeListeners) {
+            listener.onChange(calculableWrapper);
+        }
+    }
 }

@@ -76,11 +76,12 @@ public abstract class CalculableWrapper extends MapCalculable {
         this.loading = false;
     }
 
-
     private void updateCalculable() {
         if (loading) {
             return;
         }
+
+        getWorldObject().runChangeListeners(this);
 
         setDirty(true);
 

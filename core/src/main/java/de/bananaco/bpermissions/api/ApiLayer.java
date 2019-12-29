@@ -428,4 +428,20 @@ public class ApiLayer {
         }
         ActionExecutor.execute(name, type, ActionType.REMOVE_META.getName() + ":" + key, value, world);
     }
+
+    /**
+     * Used to add a listener to a world that runs when a calculable changes
+     *
+     * @param world the world to add the listener to
+     * @param listener An instance of CalculableChangeListener
+     */
+    public static void addChangeListener(String world, CalculableChangeListener listener) {
+        World w = wm.getWorld(world);
+        // NPE FIX
+        if (w == null || listener == null) {
+            return;
+        }
+
+        w.addChangeListener(listener);
+    }
 }
