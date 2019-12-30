@@ -504,9 +504,9 @@ public abstract class World {
         changeListeners.add(listener);
     }
 
-    public void runChangeListeners(CalculableWrapper calculableWrapper) {
+    public void runChangeListeners(CalculableChange change) {
         for (CalculableChangeListener listener : changeListeners) {
-            listener.onChange(calculableWrapper);
+            listener.onChange(change);
         }
     }
 }

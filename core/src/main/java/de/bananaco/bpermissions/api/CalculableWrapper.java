@@ -21,67 +21,111 @@ public abstract class CalculableWrapper extends MapCalculable {
         return hasPermission(node, getMappedPermissions());
     }
 
+    private CalculableChange createChange() {
+        CalculableChange change = new CalculableChange();
+        change.setWorld(this.getWorld());
+        change.setCalculable(this);
+
+        return change;
+    }
+
     /*
      * These methods are added to allow auto-saving of the World on any changes
      */
     @Override
     public void addGroup(String group) {
         super.addGroup(group);
-        updateCalculable();
+
+        CalculableChange change = createChange();
+        change.setType(ChangeType.ADD_GROUP);
+        change.setGroup(group);
+        updateCalculable(change);
     }
 
     @Override
     public void removeGroup(String group) {
         super.removeGroup(group);
-        updateCalculable();
+
+        CalculableChange change = createChange();
+        change.setType(ChangeType.REMOVE_GROUP);
+        change.setGroup(group);
+        updateCalculable(change);
     }
 
     public void replaceGroup(String oldGroup, String newGroup) {
         super.removeGroup(oldGroup);
         super.addGroup(newGroup);
-        updateCalculable();
+
+        CalculableChange change = createChange();
+        change.setType(ChangeType.REPLACE_GROUP);
+        change.setGroup(newGroup);
+        change.setReplacedGroup(oldGroup);
+        updateCalculable(change);
     }
 
     @Override
     public void setGroup(String group) {
         super.setGroup(group);
-        updateCalculable();
+
+        CalculableChange change = createChange();
+        change.setType(ChangeType.SET_GROUP);
+        change.setGroup(group);
+        updateCalculable(change);
     }
 
     @Override
     public void addPermission(String permission, boolean isTrue) {
         super.addPermission(permission, isTrue);
-        updateCalculable();
+
+        CalculableChange change = createChange();
+        change.setType(ChangeType.ADD_PERMISSION);
+        change.setPermission((isTrue ? "" : "^") + permission);
+        updateCalculable(change);
     }
 
     @Override
     public void removePermission(String permission) {
         super.removePermission(permission);
-        updateCalculable();
+
+        CalculableChange change = createChange();
+        change.setType(ChangeType.REMOVE_PERMISSION);
+        change.setPermission(permission);
+        updateCalculable(change);
     }
 
     @Override
     public void setValue(String key, String value) {
         super.setValue(key, value);
-        updateCalculable();
+
+        CalculableChange change = createChange();
+        change.setType(ChangeType.SET_VALUE);
+        change.setMetaKey(key);
+        change.setMetaValue(value);
+        updateCalculable(change);
     }
 
     @Override
     public void removeValue(String key) {
+        CalculableChange change = createChange();
+        change.setType(ChangeType.REMOVE_VALUE);
+        change.setMetaKey(key);
+        change.setMetaValue(this.getValue(key));
+
         super.removeValue(key);
-        updateCalculable();
+
+        updateCalculable(change);
     }
 
     public void setLoaded() {
         this.loading = false;
     }
 
-    private void updateCalculable() {
+    private void updateCalculable(CalculableChange change) {
         if (loading) {
             return;
         }
 
-        getWorldObject().runChangeListeners(this);
+        getWorldObject().runChangeListeners(change);
 
         setDirty(true);
 
