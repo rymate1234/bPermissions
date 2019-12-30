@@ -18,13 +18,15 @@ public abstract class World {
     private final String world;
     private char COLOR_CHAR = '\u00A7';
     private Pattern stripColorPattern;
-    private List<CalculableChangeListener> changeListeners;
+    private final List<CalculableChangeListener> changeListeners;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public World(String world) {
         this.world = world;
         this.users = new HashMap();
         this.groups = new HashMap();
+        this.changeListeners = new ArrayList<>();
+
         stripColorPattern = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-OR]");
     }
 
