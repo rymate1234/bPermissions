@@ -176,14 +176,6 @@ public class Permissions extends JavaPlugin {
                 return TaskRunnable.TaskType.SERVER;
             }
         });
-
-        ApiLayer.addChangeListener("world", new CalculableChangeListener() {
-            @Override
-            public void onChange(CalculableChange change) {
-                System.out.println(change.getCalculable());
-                System.out.println(change.getType());
-            }
-        });
     }
 
     public static String blankFormat(String message) {
